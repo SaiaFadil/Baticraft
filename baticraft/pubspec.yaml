@@ -1,0 +1,49 @@
+name: baticraft
+description: "Project A1 Semester 4"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_launcher_icons: ^0.13.1
+  flutter_svg: ^2.0.9
+  fluttericon: ^2.0.0
+  flutter_bloc: ^8.1.3
+  cupertino_icons: ^1.0.2
+  flutter_sticky_header: ^0.6.0
+  http: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Arvo
+      fonts:
+        - asset: assets/fonts/Arvo-Regular.ttf
+        - asset: assets/fonts/Arvo-Bold.ttf
+        - asset: assets/fonts/Arvo-BoldItalic.ttf
+        - asset: assets/fonts/Arvo-Italic.ttf
+          weight: 700
+
+    - family: Chewy
+      fonts:
+        - asset: assets/fonts/Chewy-Regular.ttf
+          weight: 700
+# flutter_icons:
+#   remove_alpha_ios: true
+#   android: true
+#   ios: true
+#   image_path: "assets/images/logoapps.png"
