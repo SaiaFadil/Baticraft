@@ -45,6 +45,15 @@ class CustomText {
       color: colors,
     );
   }
+  static TextStyle TextArvoBoldItalic(double fontSize,Color colors) {
+    return TextStyle(
+      fontSize: fontSize,
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.italic,
+      fontFamily: 'Arvo',
+      color: colors,
+    );
+  }
 
   static TextStyle TextChewyItalic(double fontSize,Color colors) {
     return TextStyle(
@@ -52,6 +61,18 @@ class CustomText {
       fontStyle: FontStyle.italic,
       fontFamily: 'Chewy',
       color: colors,
+    );
+  }
+
+
+  static TextStyle TextRoboto(double fontSize,Color colors) {
+    return TextStyle(
+      fontSize: fontSize,
+      fontStyle: FontStyle.normal,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Roboto',
+      color: colors,
+      letterSpacing: 15.0
     );
   }
 }

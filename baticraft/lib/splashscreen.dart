@@ -1,4 +1,5 @@
 import 'package:baticraft/page/page_login.dart';
+import 'package:baticraft/page/page_wellcome.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 400), () {
+    Timer(Duration(milliseconds: 2000), () {
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => page_login(),
+          pageBuilder: (_, __, ___) => SliderP(),
           transitionsBuilder: (_, animation, __, child) {
             return FadeTransition(
               opacity: animation,
