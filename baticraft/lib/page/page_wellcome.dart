@@ -28,6 +28,23 @@ class _SliderPState extends State<SliderP> {
     "KELOLA\nDATA PRODUK",
     "KELOLA\nDATA PRODUK"
   ];
+Future<void> Pindah() async {
+  await Navigator.push(
+    context,
+    PageRouteBuilder(
+      transitionDuration: Duration(milliseconds: 1500), // Durasi transisi 1.5 detik
+      pageBuilder: (context, animation, secondaryAnimation) => page_login(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    ),
+  );
+  print("Transisi Selesai"); // Ini akan dicetak setelah transisi selesai
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +95,8 @@ class _SliderPState extends State<SliderP> {
                       style:
                           CustomButton.DefaultButton(CustomColors.primaryColor),
                       onPressed: () {
-                        setState(() {
-                          Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,SecondaryAnimation)=>page_login(),transitionsBuilder: (context,animation,SecondaryAnimation,child){
-                            return FadeTransition(opacity: animation,child: child,);
-                          }));
-                        });
-                        print("Login presseedd");
+                        Pindah();
+                        print(" presseedd");
                       },
                       child: Text("Mulai",
                           style: CustomText.TextArvoBold(
@@ -150,9 +163,10 @@ Widget buildImage(String urlImage, String Judul, int index) => Container(
     child: Container(
       child: Card(
         color: CustomColors.whiteColor,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           side: BorderSide(width: 2, color: CustomColors.primaryColor),
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(35),
         ),
         child: SingleChildScrollView(
           child: Column(

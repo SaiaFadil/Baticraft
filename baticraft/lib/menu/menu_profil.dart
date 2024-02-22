@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 
-class menu_profile extends StatefulWidget {
-  const menu_profile({super.key});
+class menu_profil extends StatefulWidget {
+  const menu_profil({super.key});
 
   @override
-  State<menu_profile> createState() => _menu_profileState();
+  State<menu_profil> createState() => _menu_profilState();
 }
 
-class _menu_profileState extends State<menu_profile> {
+class _menu_profilState extends State<menu_profil> {
   String profil = "", nama = "", email = "", alamat = "";
   String jsonProfil = "{}";
   Map<String, dynamic> listProfil = {};

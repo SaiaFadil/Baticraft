@@ -9,10 +9,8 @@ import 'package:flutter/services.dart';
 
 import 'dart:async';
 
-import 'dart:convert';
-
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
 class page_login extends StatefulWidget {
   static String id_user = "";
@@ -24,6 +22,19 @@ class _page_login extends State<page_login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   Future _ceklogin() async {
+    //NNTI DI HAPUS
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => utama(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            }));
+    //NNTI DI HAPUS
     String email = "fadil@gmail.com";
     String password = "gatau123";
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
@@ -453,7 +464,7 @@ class _page_login extends State<page_login> {
                       top: (isEmailFocused && isPasswordFocused) ||
                               statusKeyboard == "Aktif"
                           ? -190
-                          : 90,
+                          : 100,
                       right: 20,
                       child: Image.asset(Server.urlGambar('anim12.png'))),
                 ],

@@ -7,6 +7,12 @@ static Color secondaryColor = Color.fromRGBO(56, 135, 190, 1);
 static Color primaryColor = Color.fromRGBO(82, 211, 216, 1);
 
 
+static Color card1 = Color.fromRGBO(56, 65, 157, 1);
+static Color card2= Color.fromRGBO(56, 135, 190, 1);
+static Color card3 = Color.fromRGBO(82, 211, 216, 1);
+static Color card4 = Color.fromRGBO(66, 133, 244, 1);
+
+
 
 
 static Color whiteColor= Color.fromRGBO(255, 255, 255, 1);
