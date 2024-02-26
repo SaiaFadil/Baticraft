@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:baticraft/page/page_lupa_katasandi.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +8,13 @@ import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/navigation/utama.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter/foundation.dart';
 import 'dart:async';
 
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:http/http.dart' as http;
+import 'package:google_sign_in/google_sign_in.dart';
+
+import 'package:http/http.dart' as http;
 
 class page_login extends StatefulWidget {
   static String id_user = "";
@@ -68,6 +72,15 @@ class _page_login extends State<page_login> {
     }
   }
 
+  late GoogleSignIn _googleSignIn;
+  GoogleSignInAccount? _currentUser;
+  List<String> scopes = <String>[
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ];
+  bool _isAuthorized = false;
+  String _contactText = '';
+
   String errorText = "";
   bool isObscured = true;
   bool isHovered = true;
@@ -80,6 +93,26 @@ class _page_login extends State<page_login> {
   @override
   void initState() {
     super.initState();
+    _googleSignIn = GoogleSignIn(
+      // Initialization of _googleSignIn here
+      scopes: scopes,
+    );
+
+    _googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount? account) async {
+      bool isAuthorized = account != null;
+      if (kIsWeb && account != null) {
+        isAuthorized = await _googleSignIn.canAccessScopes(scopes);
+      }
+      setState(() {
+        _currentUser = account;
+        _isAuthorized = isAuthorized;
+      });
+      if (isAuthorized) {
+        unawaited(_handleGetContact(account!));
+      }
+    });
+    _googleSignIn.signInSilently();
 
     RawKeyboard.instance.addListener(_handleKeyEvent);
   }
@@ -117,7 +150,7 @@ class _page_login extends State<page_login> {
         isWrong = false;
         FocusScope.of(context).unfocus();
 
-        return false;
+        return true;
       },
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -414,7 +447,7 @@ class _page_login extends State<page_login> {
                               Padding(
                                 padding: EdgeInsets.fromLTRB(30, 10, 30, 25),
                                 child: OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: _handleSignIn, // Panggil metode _handleSignIn() saat tombol ditekan
                                   style: ElevatedButton.styleFrom(
                                     primary: CustomColors
                                         .whiteColor, // Warna latar belakang tombol
@@ -495,5 +528,66 @@ class _page_login extends State<page_login> {
         isKeyboardActive = true;
       });
     }
+  }
+
+  // Metode untuk menangani masuk dengan akun Google
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+      print('Fadil sedang memilih Akun....');
+    } catch (error) {
+      print('Error signing in with Google: $error');
+    }
+  }
+
+  Future<void> _handleGetContact(GoogleSignInAccount user) async {
+    setState(() {
+      
+      print("Email yang dipilih : "+user.email);
+      _contactText = 'Loading contact info...';
+    });
+    final http.Response response = await http.get(
+      Uri.parse('https://people.googleapis.com/v1/people/me/connections'
+          '?requestMask.includeField=person.names'),
+      headers: await user.authHeaders,
+    );
+    if (response.statusCode != 200) {
+      setState(() {
+        _contactText = 'People API gave a ${response.statusCode} '
+            'response. Check logs for details.';
+      });
+      // print('People API ${response.statusCode} response: ${response.body}');
+      return;
+    }
+    final Map<String, dynamic> data =
+        json.decode(response.body) as Map<String, dynamic>;
+    final String? namedContact = _pickFirstNamedContact(data);
+    setState(() {
+      if (namedContact != null) {
+        _contactText = 'I see you know $namedContact!';
+      } else {
+        _contactText = 'No contacts to display.';
+      }
+    });
+  }
+
+  String? _pickFirstNamedContact(Map<String, dynamic> data) {
+    final List<dynamic>? connections = data['connections'] as List<dynamic>?;
+    final Map<String, dynamic>? contact = connections?.firstWhere(
+      (dynamic contact) => (contact as Map<Object?, dynamic>)['names'] != null,
+      orElse: () => null,
+    ) as Map<String, dynamic>?;
+    if (contact != null) {
+      final List<dynamic> names = contact['names'] as List<dynamic>;
+      final Map<String, dynamic>? name = names.firstWhere(
+        (dynamic name) =>
+            (name as Map<Object?, dynamic>)['displayName'] != null,
+        orElse: () => null,
+      ) as Map<String, dynamic>?;
+      if (name != null) {
+        return name['displayName'] as String?;
+      }
+    }
+    return null;
   }
 }

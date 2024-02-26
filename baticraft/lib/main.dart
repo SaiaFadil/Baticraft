@@ -13,7 +13,7 @@ class Fresh_Harvest extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) =>
-            SplashScreen(), //Class yang pertama di eksekusi ketika aplikasi di jalankan
+            SplashScreen(), 
       },
     );
   }

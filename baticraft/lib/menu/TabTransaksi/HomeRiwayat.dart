@@ -13,11 +13,10 @@ class _HomeRiwayatState extends State<HomeRiwayat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Text(
-        "Riwayat",
-        style: CustomText.TextArvoBold(40, CustomColors.blackColor),
-      )),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [],
+      ),
     );
   }
 }
