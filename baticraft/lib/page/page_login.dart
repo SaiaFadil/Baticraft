@@ -97,6 +97,7 @@ class _page_login extends State<page_login> {
       // Initialization of _googleSignIn here
       scopes: scopes,
     );
+    _googleSignIn.disconnect();
 
     _googleSignIn.onCurrentUserChanged
         .listen((GoogleSignInAccount? account) async {
@@ -186,12 +187,12 @@ class _page_login extends State<page_login> {
                         Text(
                           "Halo..",
                           style: CustomText.TextArvoBold(
-                              50, CustomColors.whiteColor),
+                               mediaQuery.textScaler.scale(30), CustomColors.whiteColor),
                         ),
                         Text(
                           "Selamat Datang",
                           style: CustomText.TextArvoBold(
-                              25, CustomColors.whiteColor),
+                              mediaQuery.textScaler.scale(22), CustomColors.whiteColor),
                         ),
                       ],
                     ),
@@ -447,7 +448,8 @@ class _page_login extends State<page_login> {
                               Padding(
                                 padding: EdgeInsets.fromLTRB(30, 10, 30, 25),
                                 child: OutlinedButton(
-                                  onPressed: _handleSignIn, // Panggil metode _handleSignIn() saat tombol ditekan
+                                  onPressed:
+                                      _handleSignIn, // Panggil metode _handleSignIn() saat tombol ditekan
                                   style: ElevatedButton.styleFrom(
                                     primary: CustomColors
                                         .whiteColor, // Warna latar belakang tombol
@@ -497,7 +499,7 @@ class _page_login extends State<page_login> {
                       top: (isEmailFocused && isPasswordFocused) ||
                               statusKeyboard == "Aktif"
                           ? -190
-                          : 100,
+                          : 80,
                       right: 20,
                       child: Image.asset(Server.urlGambar('anim12.png'))),
                 ],
@@ -542,8 +544,7 @@ class _page_login extends State<page_login> {
 
   Future<void> _handleGetContact(GoogleSignInAccount user) async {
     setState(() {
-      
-      print("Email yang dipilih : "+user.email);
+      print("Email yang dipilih : " + user.email);
       _contactText = 'Loading contact info...';
     });
     final http.Response response = await http.get(

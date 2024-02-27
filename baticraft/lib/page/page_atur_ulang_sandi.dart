@@ -76,7 +76,7 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                     child: Text(
                       "Buat Sandi\nYang Mudah\nDiingat",
                       style:
-                          CustomText.TextArvoBold(40, CustomColors.whiteColor),
+                          CustomText.TextArvoBold(30, CustomColors.whiteColor),
                     ),
                   ),
                   Positioned(
@@ -106,7 +106,7 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                     child: Text(
                                       "Atur Ulang Kata Sandi",
                                       style: CustomText.TextArvoBold(
-                                          30, CustomColors.blackColor),
+                                          20, CustomColors.blackColor),
                                     ),
                                   ),
                                   Container(
@@ -114,7 +114,7 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                     child: Text(
                                       "Silahkan masukkan kata sandi baru",
                                       style: CustomText.TextArvo(
-                                          22, CustomColors.blackColor),
+                                          14, CustomColors.blackColor),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -125,7 +125,7 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                       child: Text('Kata Sandi',
                                           textAlign: TextAlign.left,
                                           style: CustomText.TextArvoBold(
-                                              20, CustomColors.blackColor)),
+                                              18, CustomColors.blackColor)),
                                     ),
                                   ),
                                   Container(
@@ -202,7 +202,7 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                       child: Text('Konfirmasi Kata Sandi',
                                           textAlign: TextAlign.left,
                                           style: CustomText.TextArvoBold(
-                                              20, CustomColors.blackColor)),
+                                              18, CustomColors.blackColor)),
                                     ),
                                   ),
                                   Container(
@@ -357,7 +357,7 @@ class KonfirmasiAturUlang extends StatelessWidget {
                       child: Text(
                         "YEY\nBERHASIL !",
                         style:
-                            CustomText.TextArvoBold(40, CustomColors.whiteColor),
+                            CustomText.TextArvoBold(30, CustomColors.whiteColor),
                       ),
                     ),
               Positioned(
@@ -381,11 +381,11 @@ class KonfirmasiAturUlang extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                padding: EdgeInsets.only(top: 20),
+                                padding: EdgeInsets.only(top: 3 0),
                                 child: Text(
                                   "Berhasil !!",
                                   style: CustomText.TextArvoBold(
-                                      30, CustomColors.blackColor),
+                                      20, CustomColors.blackColor),
                                 ),
                               ),
                               Container(
@@ -393,7 +393,7 @@ class KonfirmasiAturUlang extends StatelessWidget {
                                 child: Text(
                                   "Kata sandi anda berhasil di ubah\nSilahkan masuk ke akun anda",
                                   style: CustomText.TextArvo(
-                                      20, CustomColors.blackColor),
+                                      18, CustomColors.blackColor),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -407,7 +407,7 @@ class KonfirmasiAturUlang extends StatelessWidget {
                                       child: Text(
                                         "Halaman Login",
                                         style: CustomText.TextArvoBold(
-                                            20, CustomColors.whiteColor),
+                                            18, CustomColors.whiteColor),
                                       ),
                                       onPressed: () {
                                         Navigator.push(

@@ -19,12 +19,11 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
   String statusKeyboard = "tidak aktif";
   bool isKeyboardActive = false;
   bool isWrong = false;
-    String errorText = "";
-
+  String errorText = "";
 
   @override
   Widget build(BuildContext context) {
-     MediaQueryData mediaQuery = MediaQuery.of(context);
+    MediaQueryData mediaQuery = MediaQuery.of(context);
     isKeyboardActive = mediaQuery.viewInsets.bottom > 0;
     return WillPopScope(
       onWillPop: () async {
@@ -33,7 +32,7 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
           statusKeyboard = "tidak aktif";
           isEmailFocused = false;
         });
-         isWrong = false;
+        isWrong = false;
         FocusScope.of(context).unfocus();
 
         return true;
@@ -45,7 +44,7 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
           body: GestureDetector(
             onTap: () {
               setState(() {
-                   isWrong = false;
+                isWrong = false;
                 statusKeyboard = "tidak aktif";
                 isEmailFocused = false;
                 FocusScope.of(context).unfocus();
@@ -61,22 +60,22 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
                     child: Text(
                       "Lupa\nKata\nSandi?",
                       style:
-                          CustomText.TextArvoBold(40, CustomColors.whiteColor),
+                          CustomText.TextArvoBold(30, CustomColors.whiteColor),
                     ),
                   ),
-                   Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
-                                  child: Visibility(
-                                    visible: isWrong,
-                                    child: Text(errorText,
-                                        textAlign: TextAlign.center,
-                                        style: CustomText.TextArvoBold(
-                                            16, CustomColors.redColor)),
-                                  ),
-                                ),
-                              ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
+                      child: Visibility(
+                        visible: isWrong,
+                        child: Text(errorText,
+                            textAlign: TextAlign.center,
+                            style: CustomText.TextArvoBold(
+                                14, CustomColors.redColor)),
+                      ),
+                    ),
+                  ),
                   Positioned(
                       bottom: -5,
                       left: -5,
@@ -99,13 +98,12 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                  
                                     Container(
                                       padding: EdgeInsets.only(top: 60),
                                       child: Text(
                                         "Silahkan atur ulang\nkata sandi anda !",
                                         style: CustomText.TextArvo(
-                                            32, CustomColors.blackColor),
+                                            22, CustomColors.blackColor),
                                         textAlign: TextAlign.center,
                                       ),
                                     ),

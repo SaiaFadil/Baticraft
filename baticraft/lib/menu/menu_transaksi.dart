@@ -12,6 +12,9 @@ class menu_transaksi extends StatefulWidget {
 }
 
 class _menu_transaksiState extends State<menu_transaksi> {
+
+
+  late MediaQueryData mediaQuery= MediaQuery.of(context);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +36,11 @@ class _menu_transaksiState extends State<menu_transaksi> {
                             
                             Padding(
                               padding: const EdgeInsets.fromLTRB(40, 8, 20, 8),
-                              child: Text("Transaksi",style: CustomText.TextArvoBold(20, CustomColors.card1),),
+                              child: Text("Transaksi",style: CustomText.TextArvoBold(16 * mediaQuery.textScaleFactor, CustomColors.card1),),
                             ) ,
                             Padding(
                               padding: const EdgeInsets.fromLTRB(20, 8, 40, 8),
-                              child: Text("Riwayat",style: CustomText.TextArvoBold(20, CustomColors.card1),),
+                              child: Text("Riwayat",style: CustomText.TextArvoBold(16 * mediaQuery.textScaleFactor, CustomColors.card1),),
                             ) ,
                           ],
                         )),

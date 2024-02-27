@@ -75,7 +75,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         child: Text(
                           '${listPesanan[index]['nomor']}.',
                           style: CustomText.TextArvoBold(
-                          18,
+                          16,
                             CustomColors.blackColor,
                           ),
                         ),
@@ -85,7 +85,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         child: Text(
                           listPesanan[index]['nama'],
                           style: CustomText.TextArvoBold(
-                            18,
+                            16,
                             CustomColors.blackColor,
                           ),
                         ),
@@ -125,14 +125,14 @@ class _MenuDashboardState extends State<MenuDashboard> {
                 Text(
                   "Hai ..",
                   style: CustomText.TextArvoBold(
-                    25 * mediaQuery.textScaleFactor,
+                    16 * mediaQuery.textScaleFactor,
                     CustomColors.whiteColor,
                   ),
                 ),
                 Text(
                   "Fadillah Wahyu",
                   style: CustomText.TextArvoBold(
-                    30 * mediaQuery.textScaleFactor,
+                    18 * mediaQuery.textScaleFactor,
                     CustomColors.whiteColor,
                   ),
                 )
@@ -153,18 +153,131 @@ class _MenuDashboardState extends State<MenuDashboard> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CustomWidget.cardhome(),
+                    Stack(
+      fit: StackFit.loose,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 140, 20, 0),
+          child: Card(
+            surfaceTintColor: CustomColors.whiteColor,
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Text(
+                      'Pendapatan Hari Ini',
+                      style:
+                          CustomText.TextArvoBold(16, CustomColors.blackColor),
+                    ),
+                  ),
+                  subtitle: Text(
+                    'RP 2.430.000',
+                    style: CustomText.TextArvoBoldItalic(
+                        25, CustomColors.blackColor),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom:8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        child: Card(
+                          color: CustomColors.secondaryColor,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Produk Terjual Hari Ini",
+                                        style: CustomText.TextArvo(
+                                            12*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
+                                    Row(
+                                      children: [
+                                        Text("243",
+                                            style: CustomText.TextArvoBoldItalic(
+                                                20*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
+                                        SizedBox(width: 5),
+                                        Text("PCS  ",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: CustomText.TextArvo(
+                                                18*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Card(
+                          color: CustomColors.secondaryColor,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Pembeli Hari Ini",
+                                        style: CustomText.TextArvo(
+                                            12*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
+                                    Row(
+                                      children: [
+                                        Text("243",
+                                            style: CustomText.TextArvoBoldItalic(
+                                                20*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
+                                        SizedBox(width: 5),
+                                        Text("orang  ",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: CustomText.TextArvo(
+                                                18*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: 100,
+          right: 50,
+          child: Image.asset(Server.urlGambar("koinhome.png")),
+        )
+      ],
+    ),
                     Padding(
                       padding: EdgeInsets.only(
                         left: mediaQuery.size.width * 0.05,
-                        top: 20 * mediaQuery.textScaleFactor,
+                        top: 25 * mediaQuery.textScaleFactor,
                       ),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Pesanan Masuk",
                           style: CustomText.TextArvoBold(
-                            18 * mediaQuery.textScaleFactor,
+                            14 * mediaQuery.textScaleFactor,
                             CustomColors.blackColor,
                           ),
                         ),
@@ -173,7 +286,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(
                         mediaQuery.size.width * 0.01,
-                        10 * mediaQuery.textScaleFactor,
+                        5 * mediaQuery.textScaleFactor,
                         mediaQuery.size.width * 0.01,
                         0,
                       ),
@@ -190,7 +303,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                           child: Text(
                             "Lihat Semua ..",
                             style: CustomText.TextArvoItalic(
-                              18 * mediaQuery.textScaleFactor,
+                              14 * mediaQuery.textScaleFactor,
                               CustomColors.HintColor,
                             ),
                           ),
@@ -198,121 +311,123 @@ class _MenuDashboardState extends State<MenuDashboard> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              Card(
-                                elevation: 5,
-                                surfaceTintColor: CustomColors.whiteColor,
-                                color: CustomColors.card1,
-                                child: Column(children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(20),
-                                    child: Text(
-                                      "KELOLA\nPRODUK",
-                                      textAlign: TextAlign.center,
-                                      style: CustomText.TextArvoBold(
-                                        25 * mediaQuery.textScaleFactor,
-                                        CustomColors.whiteColor,
+                      padding: EdgeInsets.all(0),
+                      child: SingleChildScrollView(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Card(
+                                  elevation: 5,
+                                  surfaceTintColor: CustomColors.whiteColor,
+                                  color: CustomColors.card1,
+                                  child: Column(children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(20),
+                                      child: Text(
+                                        "KELOLA\nPRODUK",
+                                        textAlign: TextAlign.center,
+                                        style: CustomText.TextArvoBold(
+                                          16 * mediaQuery.textScaleFactor,
+                                          CustomColors.whiteColor,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                                    child: Image.asset(
-                                      Server.urlGambar("imgcard1.png"),
-                                      fit: BoxFit.contain,
-                                    ),
-                                  )
-                                ]),
-                              ),
-                              SizedBox(height: 10),
-                              Card(
-                                elevation: 5,
-                                surfaceTintColor: CustomColors.whiteColor,
-                                color: CustomColors.card3,
-                                child: Column(children: [
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
-                                    child: Text(
-                                      "KELOLA\nPENGGUNA",
-                                      textAlign: TextAlign.center,
-                                      style: CustomText.TextArvoBold(
-                                        25 * mediaQuery.textScaleFactor,
-                                        CustomColors.whiteColor,
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                      child: Image.asset(
+                                        Server.urlGambar("imgcard1.png"),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    )
+                                  ]),
+                                ),
+                                SizedBox(height: 10),
+                                Card(
+                                  elevation: 5,
+                                  surfaceTintColor: CustomColors.whiteColor,
+                                  color: CustomColors.card3,
+                                  child: Column(children: [
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
+                                      child: Text(
+                                        "KELOLA\nPENGGUNA",
+                                        textAlign: TextAlign.center,
+                                        style: CustomText.TextArvoBold(
+                                          16 * mediaQuery.textScaleFactor,
+                                          CustomColors.whiteColor,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                                    child: Image.asset(
-                                      Server.urlGambar("imgcard3.png"),
-                                      fit: BoxFit.contain,
-                                    ),
-                                  )
-                                ]),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Card(
-                                elevation: 5,
-                                surfaceTintColor: CustomColors.whiteColor,
-                                color: CustomColors.card2,
-                                child: Column(children: [
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(40, 20, 40, 10),
-                                    child: Text(
-                                      "STATUS\nPESANAN",
-                                      textAlign: TextAlign.center,
-                                      style: CustomText.TextArvoBold(
-                                        25 * mediaQuery.textScaleFactor,
-                                        CustomColors.whiteColor,
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                      child: Image.asset(
+                                        Server.urlGambar("imgcard3.png"),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    )
+                                  ]),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Card(
+                                  elevation: 5,
+                                  surfaceTintColor: CustomColors.whiteColor,
+                                  color: CustomColors.card2,
+                                  child: Column(children: [
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(40, 20, 40, 10),
+                                      child: Text(
+                                        "STATUS\nPESANAN",
+                                        textAlign: TextAlign.center,
+                                        style: CustomText.TextArvoBold(
+                                          16 * mediaQuery.textScaleFactor,
+                                          CustomColors.whiteColor,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-                                    child: Image.asset(
-                                      Server.urlGambar("imgcard2.png"),
-                                      fit: BoxFit.contain,
-                                    ),
-                                  )
-                                ]),
-                              ),
-                              SizedBox(height: 10),
-                              Card(
-                                elevation: 5,
-                                surfaceTintColor: CustomColors.whiteColor,
-                                color: CustomColors.card4,
-                                child: Column(children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(20),
-                                    child: Text(
-                                      "LAPORAN\nPENJUALAN",
-                                      textAlign: TextAlign.center,
-                                      style: CustomText.TextArvoBold(
-                                        25 * mediaQuery.textScaleFactor,
-                                        CustomColors.whiteColor,
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                                      child: Image.asset(
+                                        Server.urlGambar("imgcard2.png"),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    )
+                                  ]),
+                                ),
+                                SizedBox(height: 10),
+                                Card(
+                                  elevation: 5,
+                                  surfaceTintColor: CustomColors.whiteColor,
+                                  color: CustomColors.card4,
+                                  child: Column(children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(20),
+                                      child: Text(
+                                        "LAPORAN\nPENJUALAN",
+                                        textAlign: TextAlign.center,
+                                        style: CustomText.TextArvoBold(
+                                          16 * mediaQuery.textScaleFactor,
+                                          CustomColors.whiteColor,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                                    child: Image.asset(
-                                      Server.urlGambar("imgcard4.png"),
-                                      fit: BoxFit.contain,
-                                    ),
-                                  )
-                                ]),
-                              ),
-                            ],
-                          ),
-                        ],
+                                    Padding(
+                                      padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                      child: Image.asset(
+                                        Server.urlGambar("imgcard4.png"),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    )
+                                  ]),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Padding(
@@ -376,7 +491,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
                                           style: CustomText.TextArvoBoldItalic(
-                                            16 * mediaQuery.textScaleFactor,
+                                            14 * mediaQuery.textScaleFactor,
                                             CustomColors.blackColor,
                                           ),
                                         ),
@@ -394,7 +509,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                     child: Text(
                                       "Edit Alamat Toko?",
                                       style: CustomText.TextArvoItalic(
-                                        16 * mediaQuery.textScaleFactor,
+                                        12 * mediaQuery.textScaleFactor,
                                         CustomColors.HintColor,
                                       ),
                                     ),

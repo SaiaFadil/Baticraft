@@ -56,7 +56,7 @@ class page_kodeotpState extends State<page_kodeotp> {
                     child: Text(
                       "Yuk Cek\nEmail\nDulu",
                       style:
-                          CustomText.TextArvoBold(40, CustomColors.whiteColor),
+                          CustomText.TextArvoBold(30, CustomColors.whiteColor),
                     ),
                   ),
                   Positioned(
@@ -86,7 +86,7 @@ class page_kodeotpState extends State<page_kodeotp> {
                                       child: Text(
                                         "Kode OTP",
                                         style: CustomText.TextArvoBold(
-                                            30, CustomColors.blackColor),
+                                            20, CustomColors.blackColor),
                                       ),
                                     ),
                                     Container(
@@ -94,7 +94,7 @@ class page_kodeotpState extends State<page_kodeotp> {
                                       child: Text(
                                         "Silahkan masukkan kode OTP\nyang dikirim melalui email anda",
                                         style: CustomText.TextArvo(
-                                            25, CustomColors.blackColor),
+                                            16, CustomColors.blackColor),
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -108,7 +108,7 @@ class page_kodeotpState extends State<page_kodeotp> {
                                             child: Text(
                                               "Konfirmasi",
                                               style: CustomText.TextArvoBold(
-                                                  25, CustomColors.whiteColor),
+                                                  18, CustomColors.whiteColor),
                                             ),
                                             onPressed: () {
                                               Navigator.push(

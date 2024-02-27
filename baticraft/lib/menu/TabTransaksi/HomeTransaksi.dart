@@ -10,6 +10,10 @@ class HomeTransaksi extends StatefulWidget {
 }
 
 class _HomeTransaksiState extends State<HomeTransaksi> {
+
+
+  
+  late MediaQueryData mediaQuery= MediaQuery.of(context);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +45,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                                 textAlign: TextAlign.center,
                                 "Total Harga",
                                 style: CustomText.TextArvo(
-                                  25,
+                                  20* mediaQuery.textScaleFactor,
                                   CustomColors.blackColor,
                                 ),
                               ),
@@ -53,12 +57,12 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(top: 30, bottom: 40),
+                              padding: EdgeInsets.only(top: 10, bottom: 20),
                               child: Text(
                                 textAlign: TextAlign.center,
                                 "RP 430.000",
                                 style: CustomText.TextArvoBold(
-                                  50,
+                                  40* mediaQuery.textScaleFactor,
                                   CustomColors.blackColor,
                                 ),
                               ),
@@ -82,7 +86,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                           child: Text(
                             "Kode Tr:",
                             style: CustomText.TextArvoBold(
-                              18,
+                              16* mediaQuery.textScaleFactor,
                               CustomColors.blackColor,
                             ),
                           ),
@@ -92,7 +96,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                           child: Text(
                             "0001",
                             style: CustomText.TextArvoBold(
-                              18,
+                              16* mediaQuery.textScaleFactor,
                               CustomColors.blackColor,
                             ),
                           ),
