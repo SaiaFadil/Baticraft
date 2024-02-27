@@ -381,7 +381,7 @@ class KonfirmasiAturUlang extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                padding: EdgeInsets.only(top: 3 0),
+                                padding: EdgeInsets.only(top: 30),
                                 child: Text(
                                   "Berhasil !!",
                                   style: CustomText.TextArvoBold(
