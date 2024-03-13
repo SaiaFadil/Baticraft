@@ -41,7 +41,7 @@ class _utamaPageState extends State<utamaPage> {
     menu_transaksi(),
     menu_profil(),
   ];
-
+  
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BottomNavCubit, int>(

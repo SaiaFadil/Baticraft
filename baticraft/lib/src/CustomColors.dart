@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 class CustomColors {
 
-static Color fourtyColor = Color.fromRGBO(56, 65, 157, 1);
+static Color fourtyColor = Color.fromRGBO(56, 65, 157, 100);
 static Color threertyColor= Color.fromRGBO(66, 84, 146, 1);
 static Color secondaryColor = Color.fromRGBO(56, 135, 190, 1);
 static Color primaryColor = Color.fromRGBO(82, 211, 216, 1);

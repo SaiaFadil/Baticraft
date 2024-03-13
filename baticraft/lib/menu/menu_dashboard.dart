@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:baticraft/page/page_kelola_produk.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
-import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class MenuDashboard extends StatefulWidget {
 }
 
 class _MenuDashboardState extends State<MenuDashboard> {
-  late MediaQueryData mediaQuery= MediaQuery.of(context);
+  late MediaQueryData mediaQuery = MediaQuery.of(context);
 
   String jsonPesanan = """[
     {"nomor": 120, "nama": "Fadillah Wahyu"},
@@ -75,7 +75,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         child: Text(
                           '${listPesanan[index]['nomor']}.',
                           style: CustomText.TextArvoBold(
-                          16,
+                            16,
                             CustomColors.blackColor,
                           ),
                         ),
@@ -101,6 +101,41 @@ class _MenuDashboardState extends State<MenuDashboard> {
     );
   }
 
+  Widget KumpulanProdukTerlaris() {
+    return Container(
+      height: 190,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(
+            listPesanan.length,
+            (index) => Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+              ),
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  width: 150,
+                  child: Card(
+                    color: CustomColors.primaryColor,
+                    elevation: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        children: [],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
@@ -110,9 +145,9 @@ class _MenuDashboardState extends State<MenuDashboard> {
         fit: StackFit.expand,
         children: [
           Positioned(
-            top: 0,
-            right: 0,
-            left: 0,
+            top: -5,
+            right: -5,
+            left: -5,
             child: Image.asset(Server.urlGambar("lingkaran.png")),
           ),
           Positioned(
@@ -143,130 +178,167 @@ class _MenuDashboardState extends State<MenuDashboard> {
             child: Stack(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top:230),
+                  padding: const EdgeInsets.only(top: 230),
                   child: Container(
                     color: CustomColors.whiteColor,
                     width: double.infinity,
-                    height:mediaQuery.textScaleFactor* (1000% double.infinity),
+                    height:
+                        mediaQuery.textScaleFactor * (1000 % double.infinity),
                   ),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Stack(
-      fit: StackFit.loose,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 140, 20, 0),
-          child: Card(
-            surfaceTintColor: CustomColors.whiteColor,
-            elevation: 10,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              children: [
-                ListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Text(
-                      'Pendapatan Hari Ini',
-                      style:
-                          CustomText.TextArvoBold(16, CustomColors.blackColor),
+                      fit: StackFit.loose,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 140, 20, 0),
+                          child: Card(
+                            surfaceTintColor: CustomColors.whiteColor,
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.only(top: 30),
+                                    child: Text(
+                                      'Pendapatan Hari Ini',
+                                      style: CustomText.TextArvoBold(
+                                          16, CustomColors.blackColor),
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    'RP 2.430.000',
+                                    style: CustomText.TextArvoBoldItalic(
+                                        25, CustomColors.blackColor),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        child: Card(
+                                          color: CustomColors.secondaryColor,
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        "Produk Terjual Hari Ini",
+                                                        style: CustomText.TextArvo(
+                                                            12 *
+                                                                mediaQuery
+                                                                    .textScaleFactor,
+                                                            CustomColors
+                                                                .whiteColor)),
+                                                    Row(
+                                                      children: [
+                                                        Text("243",
+                                                            style: CustomText
+                                                                .TextArvoBoldItalic(
+                                                                    20 *
+                                                                        mediaQuery
+                                                                            .textScaleFactor,
+                                                                    CustomColors
+                                                                        .whiteColor)),
+                                                        SizedBox(width: 5),
+                                                        Text("PCS  ",
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: CustomText.TextArvo(
+                                                                18 *
+                                                                    mediaQuery
+                                                                        .textScaleFactor,
+                                                                CustomColors
+                                                                    .whiteColor)),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        child: Card(
+                                          color: CustomColors.secondaryColor,
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 10, 10, 10),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text("Pembeli Hari Ini",
+                                                        style: CustomText.TextArvo(
+                                                            12 *
+                                                                mediaQuery
+                                                                    .textScaleFactor,
+                                                            CustomColors
+                                                                .whiteColor)),
+                                                    Row(
+                                                      children: [
+                                                        Text("243",
+                                                            style: CustomText
+                                                                .TextArvoBoldItalic(
+                                                                    20 *
+                                                                        mediaQuery
+                                                                            .textScaleFactor,
+                                                                    CustomColors
+                                                                        .whiteColor)),
+                                                        SizedBox(width: 5),
+                                                        Text("orang  ",
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: CustomText.TextArvo(
+                                                                18 *
+                                                                    mediaQuery
+                                                                        .textScaleFactor,
+                                                                CustomColors
+                                                                    .whiteColor)),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 100,
+                          right: 50,
+                          child: Image.asset(Server.urlGambar("koinhome.png")),
+                        )
+                      ],
                     ),
-                  ),
-                  subtitle: Text(
-                    'RP 2.430.000',
-                    style: CustomText.TextArvoBoldItalic(
-                        25, CustomColors.blackColor),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom:8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        child: Card(
-                          color: CustomColors.secondaryColor,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Produk Terjual Hari Ini",
-                                        style: CustomText.TextArvo(
-                                            12*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
-                                    Row(
-                                      children: [
-                                        Text("243",
-                                            style: CustomText.TextArvoBoldItalic(
-                                                20*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
-                                        SizedBox(width: 5),
-                                        Text("PCS  ",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: CustomText.TextArvo(
-                                                18*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Card(
-                          color: CustomColors.secondaryColor,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Pembeli Hari Ini",
-                                        style: CustomText.TextArvo(
-                                            12*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
-                                    Row(
-                                      children: [
-                                        Text("243",
-                                            style: CustomText.TextArvoBoldItalic(
-                                                20*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
-                                        SizedBox(width: 5),
-                                        Text("orang  ",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: CustomText.TextArvo(
-                                                18*mediaQuery.textScaleFactor, CustomColors.whiteColor)),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          top: 100,
-          right: 50,
-          child: Image.asset(Server.urlGambar("koinhome.png")),
-        )
-      ],
-    ),
                     Padding(
                       padding: EdgeInsets.only(
                         left: mediaQuery.size.width * 0.05,
@@ -318,30 +390,51 @@ class _MenuDashboardState extends State<MenuDashboard> {
                           children: [
                             Column(
                               children: [
-                                Card(
-                                  elevation: 5,
-                                  surfaceTintColor: CustomColors.whiteColor,
-                                  color: CustomColors.card1,
-                                  child: Column(children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(20),
-                                      child: Text(
-                                        "KELOLA\nPRODUK",
-                                        textAlign: TextAlign.center,
-                                        style: CustomText.TextArvoBold(
-                                          16 * mediaQuery.textScaleFactor,
-                                          CustomColors.whiteColor,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation,
+                                                  secondaryAnimation) =>
+                                              KelolaProduk(),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            return SizeTransition(
+                                              sizeFactor: animation,
+                                              child: child,
+                                            );
+                                          },
+                                        ));
+                                  },
+                                  child: Card(
+                                    elevation: 5,
+                                    surfaceTintColor: CustomColors.whiteColor,
+                                    color: CustomColors.card1,
+                                    child: Column(children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(20),
+                                        child: Text(
+                                          "KELOLA\nPRODUK",
+                                          textAlign: TextAlign.center,
+                                          style: CustomText.TextArvoBold(
+                                            16 * mediaQuery.textScaleFactor,
+                                            CustomColors.whiteColor,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                                      child: Image.asset(
-                                        Server.urlGambar("imgcard1.png"),
-                                        fit: BoxFit.contain,
-                                      ),
-                                    )
-                                  ]),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                        child: Image.asset(
+                                          Server.urlGambar("imgcard1.png"),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      )
+                                    ]),
+                                  ),
                                 ),
                                 SizedBox(height: 10),
                                 Card(
@@ -350,7 +443,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                   color: CustomColors.card3,
                                   child: Column(children: [
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
+                                      padding:
+                                          EdgeInsets.fromLTRB(30, 20, 30, 10),
                                       child: Text(
                                         "KELOLA\nPENGGUNA",
                                         textAlign: TextAlign.center,
@@ -361,7 +455,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 0, 10, 20),
                                       child: Image.asset(
                                         Server.urlGambar("imgcard3.png"),
                                         fit: BoxFit.contain,
@@ -379,7 +474,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                   color: CustomColors.card2,
                                   child: Column(children: [
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(40, 20, 40, 10),
+                                      padding:
+                                          EdgeInsets.fromLTRB(40, 20, 40, 10),
                                       child: Text(
                                         "STATUS\nPESANAN",
                                         textAlign: TextAlign.center,
@@ -390,7 +486,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                                      padding:
+                                          EdgeInsets.fromLTRB(20, 0, 20, 20),
                                       child: Image.asset(
                                         Server.urlGambar("imgcard2.png"),
                                         fit: BoxFit.contain,
@@ -416,7 +513,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 0, 10, 20),
                                       child: Image.asset(
                                         Server.urlGambar("imgcard4.png"),
                                         fit: BoxFit.contain,
@@ -445,7 +543,6 @@ class _MenuDashboardState extends State<MenuDashboard> {
                           ),
                           shadowColor: CustomColors.blackColor,
                           elevation: 15,
-                          
                           surfaceTintColor: CustomColors.whiteColor,
                           child: Stack(
                             fit: StackFit.expand,
@@ -455,20 +552,23 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                 child: Padding(
                                   padding:
                                       const EdgeInsets.only(top: 20, right: 20),
-                                  child:
-                                      Image.asset(Server.urlGambar("maphome.png")),
+                                  child: Image.asset(
+                                      Server.urlGambar("maphome.png")),
                                 ),
                               ),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(10, 40, 0, 40),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 40, 0, 40),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
-                                        margin: EdgeInsets.only(left: 10, top: 10),
+                                        margin:
+                                            EdgeInsets.only(left: 10, top: 10),
                                         child: Text(
                                           "Alamat Toko:",
                                           style: CustomText.TextArvo(
@@ -503,7 +603,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
                               Align(
                                 alignment: Alignment.bottomRight,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 20, right: 5),
+                                  padding:
+                                      const EdgeInsets.only(top: 20, right: 5),
                                   child: TextButton(
                                     onPressed: () {},
                                     child: Text(
@@ -521,6 +622,26 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: mediaQuery.size.width * 0.05,
+                          top: 25 * mediaQuery.textScaleFactor,
+                          bottom: 10),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Produk Terlaris",
+                          style: CustomText.TextArvoBold(
+                            14 * mediaQuery.textScaleFactor,
+                            CustomColors.blackColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: KumpulanProdukTerlaris(),
+                    )
                   ],
                 ),
               ],

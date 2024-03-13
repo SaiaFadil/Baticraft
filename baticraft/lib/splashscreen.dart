@@ -1,4 +1,3 @@
-import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/page/page_wellcome.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -9,7 +8,6 @@ class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
-
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {

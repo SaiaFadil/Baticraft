@@ -73,13 +73,13 @@ class _page_login extends State<page_login> {
   }
 
   late GoogleSignIn _googleSignIn;
-  GoogleSignInAccount? _currentUser;
+  GoogleSignInAccount? currentUser;
   List<String> scopes = <String>[
     'email',
     'https://www.googleapis.com/auth/contacts.readonly',
   ];
-  bool _isAuthorized = false;
-  String _contactText = '';
+  bool isAuthorized = false;
+  String contactText = '';
 
   String errorText = "";
   bool isObscured = true;
@@ -106,8 +106,8 @@ class _page_login extends State<page_login> {
         isAuthorized = await _googleSignIn.canAccessScopes(scopes);
       }
       setState(() {
-        _currentUser = account;
-        _isAuthorized = isAuthorized;
+        currentUser = account;
+        isAuthorized = isAuthorized;
       });
       if (isAuthorized) {
         unawaited(_handleGetContact(account!));
@@ -545,7 +545,7 @@ class _page_login extends State<page_login> {
   Future<void> _handleGetContact(GoogleSignInAccount user) async {
     setState(() {
       print("Email yang dipilih : " + user.email);
-      _contactText = 'Loading contact info...';
+      contactText = 'Loading contact info...';
     });
     final http.Response response = await http.get(
       Uri.parse('https://people.googleapis.com/v1/people/me/connections'
@@ -554,7 +554,7 @@ class _page_login extends State<page_login> {
     );
     if (response.statusCode != 200) {
       setState(() {
-        _contactText = 'People API gave a ${response.statusCode} '
+        contactText = 'People API gave a ${response.statusCode} '
             'response. Check logs for details.';
       });
       // print('People API ${response.statusCode} response: ${response.body}');
@@ -565,9 +565,9 @@ class _page_login extends State<page_login> {
     final String? namedContact = _pickFirstNamedContact(data);
     setState(() {
       if (namedContact != null) {
-        _contactText = 'I see you know $namedContact!';
+        contactText = 'I see you know $namedContact!';
       } else {
-        _contactText = 'No contacts to display.';
+        contactText = 'No contacts to display.';
       }
     });
   }
