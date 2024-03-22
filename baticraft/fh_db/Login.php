@@ -25,10 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // $response = $user;
         $response =  Array();
     }
+    echo json_encode($response);
+    mysqli_close($konek);
 } else {
     die("Method is not post");
 }
-
-echo json_encode($response);
-mysqli_close($konek);
-?>
+    

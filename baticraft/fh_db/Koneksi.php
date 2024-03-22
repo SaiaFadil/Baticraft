@@ -2,7 +2,7 @@
 $host = "localhost"; 
 $username = "root"; 
 $password = ""; 
-$database = "fresh_harvest"; 
+$database = "db_baticraft"; 
 
 // Membuat koneksi
 $konek = new mysqli($host, $username, $password, $database);
@@ -11,6 +11,5 @@ $konek = new mysqli($host, $username, $password, $database);
 if ($konek->connect_error) {
     die("Koneksi gagal: " . $konek->connect_error);
 }
-
 
 ?>

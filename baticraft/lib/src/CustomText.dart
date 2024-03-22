@@ -1,3 +1,4 @@
+import 'package:baticraft/src/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 class CustomText {
@@ -21,10 +22,27 @@ class CustomText {
 
   static TextStyle TextArvoBold(double fontSize,Color colors) {
     return TextStyle(
+      
       fontSize: fontSize,
       fontWeight: FontWeight.bold,
       fontFamily: 'Arvo',
       color: colors,
+      
+    );
+  }
+  static TextStyle TextArvoBoldShadow(double fontSize,Color colors) {
+    return TextStyle(
+      
+      fontSize: fontSize,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Arvo',
+      color: colors,
+      shadows: [ Shadow(
+        offset: Offset(3.0, 3.0),
+        blurRadius: 10.0,
+        color: Colors.black.withOpacity(0.5),
+        
+      ),]
     );
   }
 

@@ -140,14 +140,15 @@ class _MenuDashboardState extends State<MenuDashboard> {
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
     return Scaffold(
+      
       backgroundColor: CustomColors.whiteColor,
       body: Stack(
         fit: StackFit.expand,
         children: [
           Positioned(
-            top: -5,
-            right: -5,
-            left: -5,
+            top: 0,
+            right: 0,
+            left: 0,
             child: Image.asset(Server.urlGambar("lingkaran.png")),
           ),
           Positioned(

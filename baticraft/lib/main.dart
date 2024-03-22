@@ -14,8 +14,8 @@ class Fresh_Harvest extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) =>
-            // SplashScreen(), 
-            utama()
+            SplashScreen(), 
+            // utama()
       },
     );
   }
