@@ -1,9 +1,9 @@
 <?php
 require 'Koneksi.php';
 
-$id_user = $_GET['id_user'];
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $sql = "SELECT * FROM users";
+$id_user = $_POST['id_user'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $sql = "SELECT * FROM users where id =  '$id_user'";
     $result = $konek->query($sql);
     $DetailUser = $result->fetch_assoc();
     $response = $DetailUser;
@@ -11,5 +11,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     mysqli_close($konek);
 
 } else {
-    die ("Method is not get");
+    die ("Method is not POST");
 }

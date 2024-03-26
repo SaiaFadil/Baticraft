@@ -26,21 +26,10 @@ class _page_login extends State<page_login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   Future _ceklogin() async {
-    //NNTI DI HAPUS
-    Navigator.push(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => utama(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            }));
-    //NNTI DI HAPUS
-    String email = "fadil@gmail.com";
-    String password = "gatau123";
+    final response = await http.post(Server.url("Login.php"), body: {
+      "email": emailController.text,
+      "password": passwordController.text
+    });
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       setState(() {
         isWrong = true;
@@ -48,20 +37,25 @@ class _page_login extends State<page_login> {
         errorText = "Masukkan Email dan Password\ndengan benar!";
       });
     } else {
-      if (emailController.text == email &&
-          passwordController.text == password) {
-        Navigator.push(
-            context,
-            PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    utama(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                }));
+      if (response.statusCode == 200) {
+        String jsonData = response.body.toString();
+        print(jsonData);
+        if (jsonData != "[]") {
+          Map<String, dynamic> detailUser = json.decode(response.body);
+          print(response.body);
+          isWrong = false;
+          Navigator.push(
+              context,
+              PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      utama(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  }));
+          page_login.id_user = detailUser['id'];
+          print("id user = "+detailUser['id']);
+        }
       } else {
         setState(() {
           isWrong = true;
@@ -187,12 +181,14 @@ class _page_login extends State<page_login> {
                         Text(
                           "Halo..",
                           style: CustomText.TextArvoBold(
-                               mediaQuery.textScaler.scale(30), CustomColors.whiteColor),
+                              mediaQuery.textScaler.scale(30),
+                              CustomColors.whiteColor),
                         ),
                         Text(
                           "Selamat Datang",
                           style: CustomText.TextArvoBold(
-                              mediaQuery.textScaler.scale(22), CustomColors.whiteColor),
+                              mediaQuery.textScaler.scale(22),
+                              CustomColors.whiteColor),
                         ),
                       ],
                     ),

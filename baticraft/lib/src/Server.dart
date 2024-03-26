@@ -1,6 +1,6 @@
 class Server {
   static Uri url(url) {
-    Uri Server = Uri.parse("http://ip/Baticraft/baticraft/fh_db/" + url);
+    Uri Server = Uri.parse("http://localhost/Baticraft/baticraft/fh_db/" + url);
     return Server;
   }
 

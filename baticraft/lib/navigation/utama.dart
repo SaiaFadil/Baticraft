@@ -8,6 +8,22 @@ import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 
 class utama extends StatelessWidget {
+  static String id = "";
+  static String name = "";
+  static String no_telpon = "";
+  static String alamat = "";
+  static String jenis_kelamin = "";
+  static String tempat_lahir = "";
+  static String tanggal_lahir = "";
+  static String role = "";
+  static String email = "";
+  static String email_verified_at = "";
+  static String password = "";
+  static String remember_token = "";
+  static String created_at = "";
+  static String updated_at = "";
+  static String image = "";
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -41,7 +57,7 @@ class _utamaPageState extends State<utamaPage> {
     menu_transaksi(),
     menu_profil(),
   ];
-  
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BottomNavCubit, int>(

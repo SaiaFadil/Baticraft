@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $result->fetch_assoc();
     if ($result->num_rows == 1) {
         $role_db = $user['role'];
-        if ($role_db == 'pembeli') {
+        if ($role_db == 'admin') {
             $response = $user;
         } else {
             // $response = $user;

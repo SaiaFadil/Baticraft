@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:async';
-
 import 'package:baticraft/page/page_kelola_produk.dart';
+import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class MenuDashboard extends StatefulWidget {
   const MenuDashboard({Key? key}) : super(key: key);
@@ -17,6 +18,68 @@ class MenuDashboard extends StatefulWidget {
 class _MenuDashboardState extends State<MenuDashboard> {
   late MediaQueryData mediaQuery = MediaQuery.of(context);
 
+  String jsonDetailUser = "{}"; // Initialize as an empty JSON object
+  Map<String, dynamic> detailUser = {}; // Initialize as an empty map
+  String alamat = ""; // Renamed from Alamat to follow naming convention
+
+  Future<void> getDetailUser() async {
+    try {
+      final response = await http.post(Server.url("ShowDetailProfil.php"),
+          body: {"id_user": page_login.id_user});
+
+      if (response.statusCode == 200) {
+        print("ALAMAT ====== " + detailUser['alamat']);
+        jsonDetailUser = response.body.toString();
+        // detailUser = json.decode(jsonDetailUser); // Parse as a map
+        if (detailUser.isNotEmpty) {
+          setState(() {
+            print("Alamat = " + alamat);
+            print("Json = " + jsonDetailUser);
+            alamat =
+                detailUser['alamat']; // Update alamat with the fetched value
+          });
+          if (alamat.isEmpty) {
+            _startTimer();
+          }
+        } else {
+          print("No data available");
+        }
+      } else {
+        print("HTTP Request failed with status: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error:: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      print("testingggggggggggggggggggg");
+      print("Alamat = " + alamat);
+      // getDetailUser(); // Start fetching data immediately
+    });
+    // mediaQuery = MediaQuery.of(context);
+    showPesanan();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(milliseconds: 100), (Timer timer) {
+      setState(() {
+        showPesanan();
+        getDetailUser();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel(); // Cancel the timer to prevent memory leaks
+    super.dispose();
+  }
+
   String jsonPesanan = """[
     {"nomor": 120, "nama": "Fadillah Wahyu"},
     {"nomor": 122, "nama": "Tria Yunita"},
@@ -25,33 +88,13 @@ class _MenuDashboardState extends State<MenuDashboard> {
 
   String jsonPesananMasuk = "[]";
   List<Map<String, dynamic>> listPesanan = [];
-
+  String Alamat = "";
   Future<void> showPesanan() async {
     listPesanan = List<Map<String, dynamic>>.from(json.decode(jsonPesanan));
   }
 
   bool Refresh = false;
   late Timer _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    // mediaQuery = MediaQuery.of(context);
-    setState(() {
-      showPesanan();
-      if (!Refresh) {
-        _startTimer();
-      }
-    });
-  }
-
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(milliseconds: 100), (Timer timer) {
-      Refresh = true;
-      showPesanan();
-      setState(() {});
-    });
-  }
 
   Widget KumpulanPesanan() {
     return Column(
@@ -140,7 +183,6 @@ class _MenuDashboardState extends State<MenuDashboard> {
   Widget build(BuildContext context) {
     mediaQuery = MediaQuery.of(context);
     return Scaffold(
-      
       backgroundColor: CustomColors.whiteColor,
       body: Stack(
         fit: StackFit.expand,
@@ -587,7 +629,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                           left: 10,
                                         ),
                                         child: Text(
-                                          "Perumnas Candirejo Blok GG No. 10, Gejagan,Kec. Nganjuk, Kabupaten Nganjuk, Jawa Timur 64471",
+                                          '${detailUser['nomor']}.',
                                           maxLines: 5,
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.left,
