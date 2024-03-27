@@ -446,17 +446,7 @@ class _page_login extends State<page_login> {
                                 child: OutlinedButton(
                                   onPressed:
                                       _handleSignIn, // Panggil metode _handleSignIn() saat tombol ditekan
-                                  style: ElevatedButton.styleFrom(
-                                    primary: CustomColors
-                                        .whiteColor, // Warna latar belakang tombol
-                                    onPrimary:
-                                        CustomColors.blackColor, // Warna teks
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 0, horizontal: 1),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
+                                  style: CustomButton.DefaultButton(CustomColors.whiteColor),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
