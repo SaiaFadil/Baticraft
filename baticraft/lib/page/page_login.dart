@@ -442,7 +442,7 @@ class _page_login extends State<page_login> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.fromLTRB(30, 10, 30, 25),
+                                padding: EdgeInsets.fromLTRB(20, 10, 20, 25),
                                 child: OutlinedButton(
                                   onPressed:
                                       _handleSignIn, // Panggil metode _handleSignIn() saat tombol ditekan

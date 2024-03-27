@@ -20,23 +20,22 @@ class _MenuDashboardState extends State<MenuDashboard> {
 
   String jsonDetailUser = "{}"; // Initialize as an empty JSON object
   Map<String, dynamic> detailUser = {}; // Initialize as an empty map
-  String alamat = ""; // Renamed from Alamat to follow naming convention
+ 
 
   Future<void> getDetailUser() async {
-    try {
       final response = await http.post(Server.url("ShowDetailProfil.php"),
           body: {"id_user": page_login.id_user});
-
+   
       if (response.statusCode == 200) {
-        print("ALAMAT ====== " + detailUser['alamat']);
         jsonDetailUser = response.body.toString();
-        // detailUser = json.decode(jsonDetailUser); // Parse as a map
+        detailUser =json.decode(jsonDetailUser); // Parse as a map
+        // print("AAA ====== " + detailUser['alamat']);
         if (detailUser.isNotEmpty) {
           setState(() {
-            print("Alamat = " + alamat);
-            print("Json = " + jsonDetailUser);
-            alamat =
-                detailUser['alamat']; // Update alamat with the fetched value
+            // print("Alamat = " + alamat);
+            // print("Json = " + jsonDetailUser);
+            alamat = 
+            detailUser['alamat'].toString(); // Update alamat with the fetched value
           });
           if (alamat.isEmpty) {
             _startTimer();
@@ -47,22 +46,22 @@ class _MenuDashboardState extends State<MenuDashboard> {
       } else {
         print("HTTP Request failed with status: ${response.statusCode}");
       }
-    } catch (e) {
-      print("Error:: $e");
-    }
+    
   }
-
+ String alamat = ''; // Renamed from Alamat to follow naming convention
   @override
   void initState() {
     super.initState();
     setState(() {
+      getDetailUser();  // Start fetching data immediately
       print("testingggggggggggggggggggg");
       print("Alamat = " + alamat);
-      // getDetailUser(); // Start fetching data immediately
     });
     // mediaQuery = MediaQuery.of(context);
     showPesanan();
     _startTimer();
+       getDetailUser();// Start fetching data immediately
+    
   }
 
   void _startTimer() {
@@ -76,7 +75,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
 
   @override
   void dispose() {
-    _timer.cancel(); // Cancel the timer to prevent memory leaks
+    // _timer.cancel(); // Cancel the timer to prevent memory leaks
     super.dispose();
   }
 
@@ -628,16 +627,21 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                         margin: EdgeInsets.only(
                                           left: 10,
                                         ),
-                                        child: Text(
-                                          '${detailUser['nomor']}.',
-                                          maxLines: 5,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.left,
-                                          style: CustomText.TextArvoBoldItalic(
-                                            14 * mediaQuery.textScaleFactor,
-                                            CustomColors.blackColor,
-                                          ),
-                                        ),
+                                        child: alamat.isEmpty
+                                            ? Text(
+                                                '${detailUser['alamat']}.',
+                                                maxLines: 5,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.left,
+                                                style: CustomText
+                                                    .TextArvoBoldItalic(
+                                                  14 *
+                                                      mediaQuery
+                                                          .textScaleFactor,
+                                                  CustomColors.blackColor,
+                                                ),
+                                              )
+                                            : CircularProgressIndicator(),
                                       ),
                                     ],
                                   ),
