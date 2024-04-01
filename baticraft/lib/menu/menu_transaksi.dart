@@ -1,5 +1,6 @@
 import 'package:baticraft/menu/TabTransaksi/HomeRiwayat.dart';
 import 'package:baticraft/menu/TabTransaksi/HomeTransaksi.dart';
+import 'package:baticraft/src/CustomButton.dart';
 import 'package:flutter/material.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -29,82 +30,87 @@ class _menu_transaksiState extends State<menu_transaksi> {
           ),
           Positioned(
               top: 70,
-              left: 10,
-              right: 10,
+              left: 15,
+              right: 15,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 210,
-                    width: double.infinity,
-                    child: Stack(
-                      children: [
-                        Card(
-                          margin: EdgeInsets.only(top: 60,bottom: 10),
-                          color: CustomColors.secondaryColor,
-                          surfaceTintColor: CustomColors.primaryColor,
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                      height: 300,
+                      width: double.infinity,
+                      child: Card(
+                        margin: EdgeInsets.only(top: 60, bottom: 10),
+                        color: CustomColors.secondaryColor,
+                        surfaceTintColor: CustomColors.primaryColor,
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ElevatedButton(
+                          style: CustomButton.DefaultButton(
+                              CustomColors.secondaryColor),
+                          onPressed: () {},
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 30),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "TRANSAKSI",
-                                  style: CustomText.TextArvoBoldShadow(
-                                      22, CustomColors.whiteColor),
-                                )),
+                            padding: const EdgeInsets.all(0),
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  Server.urlGambar("imgtr1.png"),
+                                  height: 150,
+                                  alignment: Alignment.center,
+                                ),
+                                Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "TRANSAKSI",
+                                      style: CustomText.TextArvoBoldShadow(
+                                          22, CustomColors.whiteColor),
+                                    )),
+                              ],
+                            ),
                           ),
                         ),
-                        Positioned(
-                            top: -10,
-                            right: -15,
-                            child: Image.asset(
-                              Server.urlGambar("imgtr1.png"),
-                              height: 200,
-                              alignment: Alignment.centerRight,
-                            ))
-                      ],
-                    ),
-                  ),
+                      )),
                   Container(
-                    height: 210,
-                    width: double.infinity,
-                    child: Stack(
-                      children: [
-                        Card(
-                          margin: EdgeInsets.only(top: 60),
-                          color: CustomColors.secondaryColor,
-                          surfaceTintColor: CustomColors.primaryColor,
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                      height: 300,
+                      width: double.infinity,
+                      child: Card(
+                        margin: EdgeInsets.only(top: 30, bottom: 40),
+                        color: CustomColors.secondaryColor,
+                        surfaceTintColor: CustomColors.primaryColor,
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: CustomButton.DefaultButton(
+                              CustomColors.secondaryColor),
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 30),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "RIWAYAT\nTRANSAKSI",
-                                  style: CustomText.TextArvoBoldShadow(
-                                      22, CustomColors.whiteColor),
-                                )),
+                            padding: const EdgeInsets.all(0),
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  Server.urlGambar("imgtr2.png"),
+                                  height: 150,
+                                  alignment: Alignment.center,
+                                ),
+                                Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Text(
+                                        "RIWAYAT TRANSAKSI",
+                                        style: CustomText.TextArvoBoldShadow(
+                                            22, CustomColors.whiteColor),
+                                      ),
+                                    )),
+                              ],
+                            ),
                           ),
                         ),
-                        Positioned(
-                            top: 0,
-                            right: 10,
-                            child: Image.asset(
-                              Server.urlGambar("imgtr2.png"),
-                              height: 200,
-                              alignment: Alignment.centerRight,
-                            ))
-                      ],
-                    ),
-                  )
+                      )),
                 ],
               ))
         ]));

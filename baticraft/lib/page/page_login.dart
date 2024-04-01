@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:baticraft/page/page_lupa_katasandi.dart';
+import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:baticraft/src/CustomButton.dart';
@@ -37,32 +38,26 @@ class _page_login extends State<page_login> {
         errorText = "Masukkan Email dan Password\ndengan benar!";
       });
     } else {
+      String jsonData = "[]";
       if (response.statusCode == 200) {
-        String jsonData = response.body.toString();
-        print(jsonData);
+        jsonData = response.body.toString();
         if (jsonData != "[]") {
           Map<String, dynamic> detailUser = json.decode(response.body);
-          print(response.body);
+          print("JsonData");
           isWrong = false;
-          Navigator.push(
-              context,
-              PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      utama(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(opacity: animation, child: child);
-                  }));
+          CustomWidget.NotifBerhasilLogin(context,utama());
+         
           page_login.id_user = detailUser['id'];
-          print("id user = "+detailUser['id']);
+          print("id user = " + detailUser['id']);
+        } else {
+          setState(() {
+            print("kesalahan");
+            isWrong = true;
+            errorText = "Email atau Password Salah!";
+            sizeerror = 18;
+          });
         }
-      } else {
-        setState(() {
-          isWrong = true;
-          errorText = "Email atau Password Salah!";
-          sizeerror = 18;
-        });
-      }
+      } else {}
     }
   }
 
@@ -404,9 +399,9 @@ class _page_login extends State<page_login> {
                                         CustomColors.secondaryColor),
                                     onPressed: () {
                                       setState(() {
+                                        print("Login presseedd");
                                         _ceklogin();
                                       });
-                                      print("Login presseedd");
                                     },
                                     child: Text("Masuk",
                                         style: CustomText.TextArvoBold(
@@ -446,7 +441,8 @@ class _page_login extends State<page_login> {
                                 child: OutlinedButton(
                                   onPressed:
                                       _handleSignIn, // Panggil metode _handleSignIn() saat tombol ditekan
-                                  style: CustomButton.DefaultButton(CustomColors.whiteColor),
+                                  style: CustomButton.DefaultButton(
+                                      CustomColors.whiteColor),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

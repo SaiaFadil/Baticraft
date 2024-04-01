@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>49058563383-79nbd1r25kh0lutjbjrm55dlv28c9d79.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBeSb0iV1L5QnANDnr_bb2ChFkJfZ9MYxc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>49058563383</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.baticraft.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>baticraftmobile</string>
+	<key>STORAGE_BUCKET</key>
+	<string>baticraftmobile.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:49058563383:ios:248a5e085a242c9cbf86b2</string>
+</dict>
+</plist>

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:baticraft/page/page_kelola_produk.dart';
+import 'package:baticraft/menu/SubMenuHome/page_informasi_toko.dart';
+import 'package:baticraft/menu/SubMenuHome/page_kelola_produk.dart';
 import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -20,74 +21,80 @@ class _MenuDashboardState extends State<MenuDashboard> {
 
   String jsonDetailUser = "{}"; // Initialize as an empty JSON object
   Map<String, dynamic> detailUser = {}; // Initialize as an empty map
- 
 
-  Future<void> getDetailUser() async {
-      final response = await http.post(Server.url("ShowDetailProfil.php"),
-          body: {"id_user": page_login.id_user});
-   
-      if (response.statusCode == 200) {
-        jsonDetailUser = response.body.toString();
-        detailUser =json.decode(jsonDetailUser); // Parse as a map
-        // print("AAA ====== " + detailUser['alamat']);
-        if (detailUser.isNotEmpty) {
-          setState(() {
-            // print("Alamat = " + alamat);
-            // print("Json = " + jsonDetailUser);
-            alamat = 
-            detailUser['alamat'].toString(); // Update alamat with the fetched value
-          });
-          if (alamat.isEmpty) {
-            _startTimer();
-          }
-        } else {
-          print("No data available");
-        }
+  Future getDetailUser() async {
+    final response = await http.post(Server.url("ShowDetailProfil.php"),
+        body: {"id_user": page_login.id_user});
+
+    if (response.statusCode == 200) {
+      jsonDetailUser = response.body.toString();
+      detailUser = json.decode(jsonDetailUser);
+      if (detailUser.isNotEmpty) {
+        setState(() {
+          print("alamatnya = " + detailUser['alamat']);
+          alamat = detailUser['alamat']
+              .toString(); // Update alamat with the fetched value
+        });
       } else {
-        print("HTTP Request failed with status: ${response.statusCode}");
+        print("No data available");
       }
-    
+    } else {
+      print("HTTP Request failed with status: ${response.statusCode}");
+    }
   }
- String alamat = ''; // Renamed from Alamat to follow naming convention
+
+  String alamat = "";
   @override
   void initState() {
     super.initState();
-    setState(() {
-      getDetailUser();  // Start fetching data immediately
-      print("testingggggggggggggggggggg");
-      print("Alamat = " + alamat);
-    });
-    // mediaQuery = MediaQuery.of(context);
-    showPesanan();
-    _startTimer();
-       getDetailUser();// Start fetching data immediately
-    
-  }
 
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(milliseconds: 100), (Timer timer) {
-      setState(() {
-        showPesanan();
-        getDetailUser();
-      });
+    showProduk();
+    showPesanan();
+    // _startTimer();
+    getDetailUser();
+    setState(() {
+      print("Alamat = " + alamat);
+      showProduk();
+      print(listProdukTerlaris[0]['image_path'].toString());
+      print(listProdukTerlaris[0]['nama'].toString());
+      print(listProdukTerlaris[0]['harga'].toString());
     });
   }
+  // void _startTimer() {
+  //   _timer = Timer.periodic(Duration(milliseconds: 100), (Timer timer) {
+  //     setState(() {
+  //       showPesanan();
+  //       // getDetailUser();
+  //     });
+  //   });
+  // }
 
   @override
   void dispose() {
-    // _timer.cancel(); // Cancel the timer to prevent memory leaks
+    // _timer.cancel(); // Cancel the timer to pr  event memory leaks
     super.dispose();
   }
 
+  String jsonProduk = """[
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"}
+    
+  ]""";
   String jsonPesanan = """[
     {"nomor": 120, "nama": "Fadillah Wahyu"},
     {"nomor": 122, "nama": "Tria Yunita"},
     {"nomor": 121, "nama": "Evita Sianturi"}
   ]""";
 
-  String jsonPesananMasuk = "[]";
+  List<Map<String, dynamic>> listProdukTerlaris = [];
   List<Map<String, dynamic>> listPesanan = [];
   String Alamat = "";
+  Future<void> showProduk() async {
+    listProdukTerlaris =
+        List<Map<String, dynamic>>.from(json.decode(jsonProduk));
+  }
+
   Future<void> showPesanan() async {
     listPesanan = List<Map<String, dynamic>>.from(json.decode(jsonPesanan));
   }
@@ -145,12 +152,12 @@ class _MenuDashboardState extends State<MenuDashboard> {
 
   Widget KumpulanProdukTerlaris() {
     return Container(
-      height: 190,
+      height: 230,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: List.generate(
-            listPesanan.length,
+            listProdukTerlaris.length,
             (index) => Padding(
               padding: const EdgeInsets.only(
                 left: 10,
@@ -158,14 +165,56 @@ class _MenuDashboardState extends State<MenuDashboard> {
               child: GestureDetector(
                 onTap: () {},
                 child: Container(
-                  width: 150,
+                  width: 170,
                   child: Card(
-                    color: CustomColors.primaryColor,
-                    elevation: 5,
+                    surfaceTintColor: CustomColors.whiteColor,
+                    color: CustomColors.whiteColor,
+                    elevation: 10,
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(5),
                       child: Column(
-                        children: [],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Image.network(
+                              fit: BoxFit.fitWidth,
+                              height: 120,
+                              Server.urlImageDatabase(
+                                  listProdukTerlaris[index]['image_path']),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: Text(
+                              listProdukTerlaris[index]['nama'],
+                              style: CustomText.TextArvoBold(
+                                  14, CustomColors.blackColor),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Rp." + listProdukTerlaris[index]['harga'],
+                                    style: CustomText.TextArvoBold(
+                                        12, CustomColors.blackColor)),
+                                Container(
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: Image.asset(
+                                        Server.urlGambar("icons_sampah.png"),
+                                        height: 20,
+                                      )),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -570,101 +619,109 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 10,),
                     Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 220,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              width: 1,
-                              color: CustomColors.HintColor,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          shadowColor: CustomColors.blackColor,
-                          elevation: 15,
-                          surfaceTintColor: CustomColors.whiteColor,
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 20, right: 20),
-                                  child: Image.asset(
-                                      Server.urlGambar("maphome.png")),
-                                ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      InformasiToko()));
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 220,
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                width: 1,
+                                color: CustomColors.HintColor,
                               ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 40, 0, 40),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(left: 10, top: 10),
-                                        child: Text(
-                                          "Alamat Toko:",
-                                          style: CustomText.TextArvo(
-                                            14 * mediaQuery.textScaleFactor,
-                                            CustomColors.blackColor,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Container(
-                                        width: 270,
-                                        margin: EdgeInsets.only(
-                                          left: 10,
-                                        ),
-                                        child: alamat.isEmpty
-                                            ? Text(
-                                                '${detailUser['alamat']}.',
-                                                maxLines: 5,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.left,
-                                                style: CustomText
-                                                    .TextArvoBoldItalic(
-                                                  14 *
-                                                      mediaQuery
-                                                          .textScaleFactor,
-                                                  CustomColors.blackColor,
-                                                ),
-                                              )
-                                            : CircularProgressIndicator(),
-                                      ),
-                                    ],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            shadowColor: CustomColors.blackColor,
+                            elevation: 15,
+                            surfaceTintColor: CustomColors.whiteColor,
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20, right: 20),
+                                    child: Image.asset(
+                                        Server.urlGambar("maphome.png")),
                                   ),
                                 ),
-                              ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 20, right: 5),
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      "Edit Alamat Toko?",
-                                      style: CustomText.TextArvoItalic(
-                                        12 * mediaQuery.textScaleFactor,
-                                        CustomColors.HintColor,
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 40, 0, 40),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: 10, top: 10),
+                                          child: Text(
+                                            "Alamat Toko:",
+                                            style: CustomText.TextArvo(
+                                              14 * mediaQuery.textScaleFactor,
+                                              CustomColors.blackColor,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Container(
+                                            width: 270,
+                                            margin: EdgeInsets.only(
+                                              left: 10,
+                                            ),
+                                            child: Text(
+                                              // '${detailUser['alamat']}',
+                                              "Jl.Bengawan No.57 Perumahan Candi, Kabupaten Nganjuk",
+                                              maxLines: 5,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                              style:
+                                                  CustomText.TextArvoBoldItalic(
+                                                14 * mediaQuery.textScaleFactor,
+                                                CustomColors.blackColor,
+                                              ),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20, right: 5),
+                                    child: TextButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        "Edit Alamat Toko?",
+                                        style: CustomText.TextArvoItalic(
+                                          12 * mediaQuery.textScaleFactor,
+                                          CustomColors.HintColor,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -686,7 +743,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 20),
                       child: KumpulanProdukTerlaris(),
                     )
                   ],

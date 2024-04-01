@@ -17,275 +17,132 @@ class List_Kelola_Produk extends StatefulWidget {
 }
 
 class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
-  bool Refresh = false;
-  String jsonKemeja = "{[]}";
-  String jsonBaju = "{[]}";
-  String jsonKain = "{[]}";
+  String jsonProdukKemeja = """[
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"}
+    
+  ]""";
+  String jsonProdukBaju = """[
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"}
+
+  ]""";
+  String jsonProdukKain = """[
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"}
+  ]""";
+
+  List<Map<String, dynamic>> listProdukKemeja = [];
+  List<Map<String, dynamic>> listProdukBaju = [];
+  List<Map<String, dynamic>> listProdukKain = [];
+  Future<void> showProdukKemeja() async {
+    listProdukKemeja =
+        List<Map<String, dynamic>>.from(json.decode(jsonProdukKemeja));
+  }
+
+  Future<void> showProdukBaju() async {
+    listProdukBaju =
+        List<Map<String, dynamic>>.from(json.decode(jsonProdukBaju));
+  }
+
+  Future<void> showProdukKain() async {
+    listProdukKain =
+        List<Map<String, dynamic>>.from(json.decode(jsonProdukKain));
+  }
+
   List<Map<String, dynamic>> listKemeja = [];
   List<Map<String, dynamic>> listBaju = [];
   List<Map<String, dynamic>> listKain = [];
 
-  Future showKemeja() async {
-    final response = await http.get(Server.url("ShowBuah.php"));
-    jsonKemeja = response.body.toString();
+  // Future showKemeja() async {
+  //   final response = await http.get(Server.url("ShowBuah.php"));
+  //   jsonKemeja = response.body.toString();
 
-    listKemeja = List<Map<String, dynamic>>.from(json.decode(jsonKemeja));
-  }
+  //   listKemeja = List<Map<String, dynamic>>.from(json.decode(jsonKemeja));
+  // }
 
-  Future showBaju() async {
-    final response = await http.get(Server.url("ShowSayur.php"));
-    jsonBaju = response.body.toString();
-    listBaju = List<Map<String, dynamic>>.from(json.decode(jsonBaju));
-  }
- 
-  Future showKain() async {
-    final response = await http.get(Server.url("ShowSayur.php"));
-    jsonKain = response.body.toString();
-    listKain = List<Map<String, dynamic>>.from(json.decode(jsonKain));
-  }
+  // Future showBaju() async {
+  //   final response = await http.get(Server.url("ShowSayur.php"));
+  //   jsonBaju = response.body.toString();
+  //   listBaju = List<Map<String, dynamic>>.from(json.decode(jsonBaju));
+  // }
+
+  // Future showKain() async {
+  //   final response = await http.get(Server.url("ShowSayur.php"));
+  //   jsonKain = response.body.toString();
+  //   listKain = List<Map<String, dynamic>>.from(json.decode(jsonKain));
+  // }
 
   Widget KumpulanKemeja() {
     return Container(
-      height: 190,
+      height: 230,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: List.generate(
-            listKemeja.length,
+            listProdukKemeja.length,
             (index) => Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: GestureDetector(
-                onTap: () {
-                  List_Kelola_Produk.kategori = "Kemeja";
-                  List_Kelola_Produk.id_produk = listKemeja[index]['id_produk'];
-                  // Navigator.push(
-                  //     context,
-                  //     PageRouteBuilder(
-                  //         pageBuilder:
-                  //             (context, animation, secondaryAnimation) =>
-                  //                 page_detail_produk(),
-                  //         transitionsBuilder:
-                  //             (context, animation, secondaryAnimation, child) {
-                  //           return FadeTransition(
-                  //             opacity: animation,
-                  //             child: child,
-                  //           );
-                  //         }));
-                  print("id produk = " + List_Kelola_Produk.id_produk);
-                },
-                child: Container(
-                  width: 150,
-                  child: Card(
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Container(
-                              height: 75,
-                              child: Image.asset(
-                                Server.urlGambar(listKemeja[index]['image']),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
-                              listKemeja[index]['nama_produk'],
-                              style: CustomText.TextArvoBold(
-                                16,
-                                CustomColors.blackColor,
-                              ),
-                            ),
-                          ),
-                         
-                          Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Rp." + listKemeja[index]['harga'],
-                                  style: CustomText.TextArvoBold(
-                                    12,
-                                    CustomColors.primaryColor,
-                                  ),
-                                ),
-                                Text(
-                                  "/ " + listKemeja[index]['satuan'],
-                                  style: CustomText.TextArvoBold(
-                                    12,
-                                    CustomColors.primaryColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+              padding: const EdgeInsets.only(
+                left: 10,
               ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-  Widget KumpulanBaju() {
-    return Container(
-      height: 190,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: List.generate(
-            listBaju.length,
-            (index) => Padding(
-              padding: const EdgeInsets.only(left: 10),
               child: GestureDetector(
                 onTap: () {
-                  List_Kelola_Produk.kategori = "Baju";
-                  List_Kelola_Produk.id_produk = listBaju[index]['id_produk'];
-                  // Navigator.push(
-                  //     context,
-                  //     PageRouteBuilder(
-                  //         pageBuilder:
-                  //             (context, animation, secondaryAnimation) =>
-                  //                 page_detail_produk(),
-                  //         transitionsBuilder:
-                  //             (context, animation, secondaryAnimation, child) {
-                  //           return FadeTransition(
-                  //             opacity: animation,
-                  //             child: child,
-                  //           );
-                  //         }));
-                  print("id produk = " + List_Kelola_Produk.id_produk);
+
+                  
                 },
                 child: Container(
-                  width: 150,
+                  width: 170,
                   child: Card(
-                    elevation: 5,
+                    surfaceTintColor: CustomColors.whiteColor,
+                    color: CustomColors.whiteColor,
+                    elevation: 10,
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(5),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          
-                          Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
-                              listBaju[index]['nama'],
-                              style: CustomText.TextArvoBold(
-                                  16, CustomColors.blackColor),
+                          Container(
+                            child: Image.network(
+                              fit: BoxFit.fitWidth,
+                              height: 120,
+                              Server.urlImageDatabase(
+                                  listProdukKemeja[index]['image_path']),
                             ),
                           ),
-                         
-                          Padding(
-                            padding: EdgeInsets.only(top: 20),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: Text(
+                              listProdukKemeja[index]['nama'],
+                              style: CustomText.TextArvoBold(
+                                  14, CustomColors.blackColor),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "Rp." + listBaju[index]['harga'],
-                                  style: CustomText.TextArvoBold(
-                                      12, CustomColors.primaryColor),
-                                ),
-                                Text(
-                                  "/ " + listBaju[index]['satuan'],
-                                  style: CustomText.TextArvoBold(
-                                      12, CustomColors.primaryColor),
-                                ),
+                                Text("Rp." + listProdukKemeja[index]['harga'],
+                                    style: CustomText.TextArvoBold(
+                                        12, CustomColors.blackColor)),
+                                Container(
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: Image.asset(
+                                        Server.urlGambar("icons_sampah.png"),
+                                        height: 20,
+                                      )),
+                                )
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-  Widget KumpulanKain() {
-    return Container(
-      height: 190,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: List.generate(
-            listKain.length,
-            (index) => Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: GestureDetector(
-                onTap: () {
-                  List_Kelola_Produk.kategori = "Kain";
-                  List_Kelola_Produk.id_produk = listKain[index]['id_produk'];
-                  // Navigator.push(
-                  //     context,
-                  //     PageRouteBuilder(
-                  //         pageBuilder:
-                  //             (context, animation, secondaryAnimation) =>
-                  //                 page_detail_produk(),
-                  //         transitionsBuilder:
-                  //             (context, animation, secondaryAnimation, child) {
-                  //           return FadeTransition(
-                  //             opacity: animation,
-                  //             child: child,
-                  //           );
-                  //         }));
-                  print("id produk = " + List_Kelola_Produk.id_produk);
-                },
-                child: Container(
-                  width: 150,
-                  child: Card(
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Container(
-                                  height: 75,
-                                  child: Image.asset(
-                                    Server.urlGambar(
-                                        listKain[index]['image'] != null
-                                            ? listKain[index]['image']
-                                            : "default.png"),
-                                  ))),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
-                              listKain[index]['nama'],
-                              style: CustomText.TextArvoBold(
-                                  16, CustomColors.blackColor),
-                            ),
-                          ),
-                          
-                          Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Rp." + listKain[index]['harga'],
-                                  style: CustomText.TextArvoBold(
-                                      12, CustomColors.primaryColor),
-                                ),
-                                Text(
-                                  "/ " + listKain[index]['satuan'],
-                                  style: CustomText.TextArvoBold(
-                                      12, CustomColors.primaryColor),
-                                ),
-                              ],
-                            ),
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -299,38 +156,173 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
     );
   }
 
-  late Timer _timer;
+  Widget KumpulanBaju() {
+    return Container(
+      height: 230,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(
+            listProdukBaju.length,
+            (index) => Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+              ),
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  width: 170,
+                  child: Card(
+                    surfaceTintColor: CustomColors.whiteColor,
+                    color: CustomColors.whiteColor,
+                    elevation: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Image.network(
+                              fit: BoxFit.fitWidth,
+                              height: 120,
+                              Server.urlImageDatabase(
+                                  listProdukBaju[index]['image_path']),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: Text(
+                              listProdukBaju[index]['nama'],
+                              style: CustomText.TextArvoBold(
+                                  14, CustomColors.blackColor),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Rp." + listProdukBaju[index]['harga'],
+                                    style: CustomText.TextArvoBold(
+                                        12, CustomColors.blackColor)),
+                                Container(
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: Image.asset(
+                                        Server.urlGambar("icons_sampah.png"),
+                                        height: 20,
+                                      )),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget KumpulanKain() {
+    return Container(
+      height: 230,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(
+            listProdukKain.length,
+            (index) => Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+              ),
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  width: 170,
+                  child: Card(
+                    surfaceTintColor: CustomColors.whiteColor,
+                    color: CustomColors.whiteColor,
+                    elevation: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Image.network(
+                              fit: BoxFit.fitWidth,
+                              height: 120,
+                              Server.urlImageDatabase(
+                                  listProdukKain[index]['image_path']),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: Text(
+                              listProdukKain[index]['nama'],
+                              style: CustomText.TextArvoBold(
+                                  14, CustomColors.blackColor),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Rp." + listProdukKain[index]['harga'],
+                                    style: CustomText.TextArvoBold(
+                                        12, CustomColors.blackColor)),
+                                Container(
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: Image.asset(
+                                        Server.urlGambar("icons_sampah.png"),
+                                        height: 20,
+                                      )),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     setState(() {
-      showKemeja();
-      showBaju();
-      showKain();
+      showProdukKemeja();
+      showProdukBaju();
+      showProdukKain();
     });
-    if (!Refresh) {
-      _startTimer();
-      print(page_login.id_user);
-      print("SUCCESSSSSSSSSSSSSSSSSS");
-    }
   }
 
   @override
   void dispose() {
-    _timer.cancel();
     super.dispose();
-  }
-
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(milliseconds: 100), (Timer timer) {
-      Refresh = true;
-      
-      setState(() {
-        showKemeja();
-      showBaju();
-      showKain();
-      });
-    });
   }
 
   @override
@@ -347,23 +339,32 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                   textAlign: TextAlign.start,
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),
         ),
-        KumpulanKemeja(),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: KumpulanKemeja(),
+        ),
         Align(
-             alignment: Alignment.centerLeft,
+          alignment: Alignment.centerLeft,
           child: Padding(
               padding: EdgeInsets.only(left: 25, right: 25, top: 10),
               child: Text("Kategori : Baju",
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),
         ),
-        KumpulanBaju(),
+        Padding(
+           padding: const EdgeInsets.only(top: 10),
+          child: KumpulanBaju(),
+        ),
         Align(
-             alignment: Alignment.centerLeft,
+          alignment: Alignment.centerLeft,
           child: Padding(
               padding: EdgeInsets.only(left: 25, right: 25, top: 10),
               child: Text("Kategori : Kain",
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),
         ),
-        KumpulanKain(),
+        Padding(
+           padding: const EdgeInsets.only(top: 10,bottom: 30),
+          child: KumpulanKain(),
+        ),
       ],
     );
   }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "49058563383",
+    "project_id": "baticraftmobile",
+    "storage_bucket": "baticraftmobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49058563383:android:a0ac44a9192071f6bf86b2",
+        "android_client_info": {
+          "package_name": "com.example.baticraft"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvcUl-YE2Bgv05mJJ-EJqLMgk9TJizq1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

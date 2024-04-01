@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   firebase_core: ^2.25.4
+  google_maps_flutter: ^2.0.0
   hydrated_bloc: ^9.0.0
   intl: ^0.17.0
   path_provider: ^2.0.9
@@ -32,6 +33,9 @@ dependencies:
   get: ^4.6.6
   carousel_slider: ^4.2.1
   smooth_page_indicator: ^1.1.0
+  url_launcher: ^6.2.5
+  shimmer: ^3.0.0
+  image_picker: ^0.8.3
 
 dev_dependencies:
   flutter_test:
