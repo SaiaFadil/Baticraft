@@ -1,15 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditInformasiToko extends StatefulWidget {
   const EditInformasiToko({super.key});
@@ -19,18 +20,19 @@ class EditInformasiToko extends StatefulWidget {
 }
 
 class _EditInformasiTokoState extends State<EditInformasiToko> {
-  // ImagePicke _imagePicker = ImagePicker();
-  // File? _profileImage;
+  ImagePicker _imagePicker = ImagePicker();
+  File? _profileImage;
 
-  // Future<void> _getImage() async {
-  //   final PickedFile =
-  //       await _imagePicker.pickImage(source: ImageSource.gallery);
-  //   if (PickedFile != null) {
-  //     setState(() {
-  //       _profileImage = File(PickedFile.path);
-  //     });
-  //   }
-  // }
+  Future<void> _getImage() async {
+    final PickedFile =
+        await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (PickedFile != null) {
+      setState(() {
+        _profileImage = File(PickedFile.path);
+         ImageSaatIni = PickedFile.name; 
+      });
+    }
+  }
 
 //Awal Backend
   String jsonDetailInformasi = "{}";
@@ -69,6 +71,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
     getDetailUser();
   }
 
+  String ImageSaatIni = "";
 //Akhir Backend
 
   void openLink() async {
@@ -106,14 +109,12 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
           fit: StackFit.expand,
           children: [
             Positioned(
-                top: 50,
+                top: 0,
                 left: 0,
                 right: 0,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(Server.urlGambar("pickimage.png")),
-                  alignment: Alignment.center,
-                )),
+                child: ImageSaatIni != ""
+                    ? Image(image: FileImage(_profileImage!),fit: BoxFit.contain,)
+                    : Image.asset(Server.urlGambar("gambarawal.png"))),
             Positioned(
               top: 0,
               bottom: -5,
@@ -135,49 +136,67 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Card(child: Row(children: [])),
-                            Container(
-                              height: 50,
-                              padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                              child: TextField(
-                                onTap: () {},
-                                keyboardType: TextInputType.emailAddress,
-                                textAlign: TextAlign.start,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                  hintText: "Masukkan Email Anda",
-                                  border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    borderSide: BorderSide(
-                                      color: CustomColors
-                                          .primaryColor, // Warna border saat aktif
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    borderSide: BorderSide(
-                                      color: CustomColors
-                                          .blackColor, // Warna border saat tidak aktif
-                                    ),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10.0),
-                                  hintStyle: CustomText.TextArvo(
-                                      14, CustomColors.HintColor),
-                                ),
-                                style: CustomText.TextArvo(
-                                  16,
-                                  CustomColors.blackColor,
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                margin: EdgeInsets.only(top: 30),
+                                child: Text(
+                                  "Foto Toko",
+                                  style: CustomText.TextArvoBold(
+                                      16, CustomColors.blackColor),
                                 ),
                               ),
                             ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                width: 140,
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          10.0), // Adjust as needed
+                                    ),
+                                    elevation:
+                                        5.0, // Adjust as needed for shadow
 
+                                    color: CustomColors.whiteColor,
+                                    surfaceTintColor: CustomColors.whiteColor,
+                                    shadowColor: CustomColors.blackColor,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.whiteColor,
+                                        borderRadius: BorderRadius.circular(
+                                            10.0), // Match shape with borderRadius
+                                        border: Border.all(
+                                          color: CustomColors
+                                              .secondaryColor, // Set your stroke color
+                                          width:
+                                              2.0, // Adjust stroke width as needed
+                                        ),
+                                      ),
+                                      child: InkWell(
+                                         onTap: _getImage,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(children: [
+                                            Icon(
+                                              Icons.camera_alt_outlined,
+                                              color: CustomColors.HintColor,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "Pilih File",
+                                              style: CustomText.TextArvoBold(
+                                                  14, CustomColors.HintColor),
+                                            )
+                                          ]),
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                            ),
                             // Data Awal
                             Container(
                               child: Column(
@@ -185,625 +204,442 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.person_2_sharp,
-                                            size: 30,
-                                            color: CustomColors.blackColor),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Nama Pemilik",
-                                          style: CustomText.TextArvoBold(
-                                              14, CustomColors.blackColor),
-                                        )
-                                      ],
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Nama Pemilik",
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.blackColor),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
-                                              ? Text(
-                                                  detailInformasi[
-                                                      'nama_pemilik'],
-                                                  style: CustomText.TextArvo(
-                                                    14,
-                                                    CustomColors.blackColor,
-                                                  ),
-                                                  textAlign: TextAlign.start,
-                                                )
-                                              : Shimmer.fromColors(
-                                                  baseColor: Color.fromARGB(
-                                                      255, 104, 102, 102)!,
-                                                  highlightColor:
-                                                      const Color.fromARGB(
-                                                          255, 202, 200, 200)!,
-                                                  child: Text(
-                                                    'Loading...',
-                                                    style: CustomText.TextArvo(
-                                                      14,
-                                                      CustomColors.blackColor,
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                  ),
-                                                ),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: TextField(
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      textInputAction: TextInputAction.next,
+                                      controller: TextEditingController(
+                                          text:
+                                              detailInformasi['nama_pemilik']),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
                                         ),
-                                        Container(
-                                          height: 1,
-                                          color: CustomColors.blackColor,
-                                        )
-                                      ],
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CustomColors.secondaryColor),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color: CustomColors.blackColor),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                      ),
+                                      style: CustomText.TextArvo(
+                                          14, CustomColors.blackColor),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                  SizedBox(
+                                    height: 1,
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.home_work,
-                                            size: 30,
-                                            color: CustomColors.blackColor),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Alamat",
-                                          style: CustomText.TextArvoBold(
-                                              14, CustomColors.blackColor),
-                                        )
-                                      ],
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Alamat",
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.blackColor),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
-                                              ? Text(
-                                                  detailInformasi['alamat'],
-                                                  style: CustomText.TextArvo(
-                                                    14,
-                                                    CustomColors.blackColor,
-                                                  ),
-                                                  textAlign: TextAlign.start,
-                                                )
-                                              : Shimmer.fromColors(
-                                                  baseColor: Color.fromARGB(
-                                                      255, 104, 102, 102)!,
-                                                  highlightColor:
-                                                      const Color.fromARGB(
-                                                          255, 202, 200, 200)!,
-                                                  child: Text(
-                                                    'Loading...',
-                                                    style: CustomText.TextArvo(
-                                                      14,
-                                                      CustomColors.blackColor,
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                  ),
-                                                ),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: TextField(
+                                      maxLines: 4,
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      textInputAction: TextInputAction.next,
+                                      controller: TextEditingController(
+                                          text: detailInformasi['alamat']),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
                                         ),
-                                        Container(
-                                          height: 1,
-                                          color: CustomColors.blackColor,
-                                        )
-                                      ],
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CustomColors.secondaryColor),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color: CustomColors.blackColor),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                      ),
+                                      style: CustomText.TextArvo(
+                                          14, CustomColors.blackColor),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                  SizedBox(
+                                    height: 1,
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      children: [
-                                        Image.asset(
-                                            Server.urlGambar(
-                                                "ic_deskripsi.png"),
-                                            fit: BoxFit.contain,
-                                            height: 25,
-                                            width: 25),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Deskripsi",
-                                          style: CustomText.TextArvoBold(
-                                              14, CustomColors.blackColor),
-                                        )
-                                      ],
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Deskripsi",
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.blackColor),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
-                                              ? Text(
-                                                  detailInformasi['deskripsi'],
-                                                  style: CustomText.TextArvo(
-                                                    14,
-                                                    CustomColors.blackColor,
-                                                  ),
-                                                  textAlign: TextAlign.start,
-                                                )
-                                              : Shimmer.fromColors(
-                                                  baseColor: Color.fromARGB(
-                                                      255, 104, 102, 102)!,
-                                                  highlightColor:
-                                                      const Color.fromARGB(
-                                                          255, 202, 200, 200)!,
-                                                  child: Text(
-                                                    'Loading...',
-                                                    style: CustomText.TextArvo(
-                                                      14,
-                                                      CustomColors.blackColor,
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                  ),
-                                                ),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: TextField(
+                                      maxLines: 7,
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      textInputAction: TextInputAction.next,
+                                      controller: TextEditingController(
+                                          text: detailInformasi['deskripsi']),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
                                         ),
-                                        Container(
-                                          height: 1,
-                                          color: CustomColors.blackColor,
-                                        )
-                                      ],
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CustomColors.secondaryColor),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color: CustomColors.blackColor),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                      ),
+                                      style: CustomText.TextArvo(
+                                          14, CustomColors.blackColor),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                  SizedBox(
+                                    height: 1,
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.call,
-                                            size: 30,
-                                            color: CustomColors.blackColor),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Nomor Telepon",
-                                          style: CustomText.TextArvoBold(
-                                              14, CustomColors.blackColor),
-                                        )
-                                      ],
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Nomor Telepon",
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.blackColor),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
-                                              ? Text(
-                                                  detailInformasi['no_telpon'],
-                                                  style: CustomText.TextArvo(
-                                                    14,
-                                                    CustomColors.blackColor,
-                                                  ),
-                                                  textAlign: TextAlign.start,
-                                                )
-                                              : Shimmer.fromColors(
-                                                  baseColor: Color.fromARGB(
-                                                      255, 104, 102, 102)!,
-                                                  highlightColor:
-                                                      const Color.fromARGB(
-                                                          255, 202, 200, 200)!,
-                                                  child: Text(
-                                                    'Loading...',
-                                                    style: CustomText.TextArvo(
-                                                      14,
-                                                      CustomColors.blackColor,
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                  ),
-                                                ),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: TextField(
+                                      minLines: 1,
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      textInputAction: TextInputAction.next,
+                                      controller: TextEditingController(
+                                          text: detailInformasi['no_telpon']),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
                                         ),
-                                        Container(
-                                          height: 1,
-                                          color: CustomColors.blackColor,
-                                        )
-                                      ],
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CustomColors.secondaryColor),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color: CustomColors.blackColor),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                      ),
+                                      style: CustomText.TextArvo(
+                                          14, CustomColors.blackColor),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                  SizedBox(
+                                    height: 1,
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.mail,
-                                            size: 30,
-                                            color: CustomColors.blackColor),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Email",
-                                          style: CustomText.TextArvoBold(
-                                              14, CustomColors.blackColor),
-                                        )
-                                      ],
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Email",
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.blackColor),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
-                                              ? Text(
-                                                  detailInformasi['email'],
-                                                  style: CustomText.TextArvo(
-                                                    14,
-                                                    CustomColors.blackColor,
-                                                  ),
-                                                  textAlign: TextAlign.start,
-                                                )
-                                              : Shimmer.fromColors(
-                                                  baseColor: Color.fromARGB(
-                                                      255, 104, 102, 102)!,
-                                                  highlightColor:
-                                                      const Color.fromARGB(
-                                                          255, 202, 200, 200)!,
-                                                  child: Text(
-                                                    'Loading...',
-                                                    style: CustomText.TextArvo(
-                                                      14,
-                                                      CustomColors.blackColor,
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                  ),
-                                                ),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: TextField(
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      textInputAction: TextInputAction.next,
+                                      controller: TextEditingController(
+                                          text:
+                                              detailInformasi['email']),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
                                         ),
-                                        Container(
-                                          height: 1,
-                                          color: CustomColors.blackColor,
-                                        )
-                                      ],
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CustomColors.secondaryColor),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color: CustomColors.blackColor),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                      ),
+                                      style: CustomText.TextArvo(
+                                          14, CustomColors.blackColor),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                  SizedBox(
+                                    height: 1,
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      children: [
-                                        Image.asset(
-                                            Server.urlGambar("ic_ig.png"),
-                                            fit: BoxFit.contain,
-                                            height: 25,
-                                            width: 25),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Akun Instagram",
-                                          style: CustomText.TextArvoBold(
-                                              14, CustomColors.blackColor),
-                                        )
-                                      ],
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Akun Instagram",
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.blackColor),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
-                                              ? Text(
-                                                  detailInformasi['akun_ig'],
-                                                  style: CustomText.TextArvo(
-                                                    14,
-                                                    CustomColors.blackColor,
-                                                  ),
-                                                  textAlign: TextAlign.start,
-                                                )
-                                              : Shimmer.fromColors(
-                                                  baseColor: Color.fromARGB(
-                                                      255, 104, 102, 102)!,
-                                                  highlightColor:
-                                                      const Color.fromARGB(
-                                                          255, 202, 200, 200)!,
-                                                  child: Text(
-                                                    'Loading...',
-                                                    style: CustomText.TextArvo(
-                                                      14,
-                                                      CustomColors.blackColor,
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                  ),
-                                                ),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: TextField(
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      textInputAction: TextInputAction.next,
+                                      controller: TextEditingController(
+                                          text:
+                                              detailInformasi['akun_ig']),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
                                         ),
-                                        Container(
-                                          height: 1,
-                                          color: CustomColors.blackColor,
-                                        )
-                                      ],
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CustomColors.secondaryColor),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color: CustomColors.blackColor),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                      ),
+                                      style: CustomText.TextArvo(
+                                          14, CustomColors.blackColor),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                  SizedBox(
+                                    height: 1,
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.facebook,
-                                            size: 30,
-                                            color: CustomColors.blackColor),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Akun Facebook",
-                                          style: CustomText.TextArvoBold(
-                                              14, CustomColors.blackColor),
-                                        )
-                                      ],
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Akun Facebook",
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.blackColor),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
-                                              ? Text(
-                                                  detailInformasi['akun_fb'],
-                                                  style: CustomText.TextArvo(
-                                                    14,
-                                                    CustomColors.blackColor,
-                                                  ),
-                                                  textAlign: TextAlign.start,
-                                                )
-                                              : Shimmer.fromColors(
-                                                  baseColor: Color.fromARGB(
-                                                      255, 104, 102, 102)!,
-                                                  highlightColor:
-                                                      const Color.fromARGB(
-                                                          255, 202, 200, 200)!,
-                                                  child: Text(
-                                                    'Loading...',
-                                                    style: CustomText.TextArvo(
-                                                      14,
-                                                      CustomColors.blackColor,
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                  ),
-                                                ),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: TextField(
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      textInputAction: TextInputAction.next,
+                                      controller: TextEditingController(
+                                          text:
+                                              detailInformasi['akun_fb']),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
                                         ),
-                                        Container(
-                                          height: 1,
-                                          color: CustomColors.blackColor,
-                                        )
-                                      ],
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CustomColors.secondaryColor),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color: CustomColors.blackColor),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                      ),
+                                      style: CustomText.TextArvo(
+                                          14, CustomColors.blackColor),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                  SizedBox(
+                                    height: 1,
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.tiktok,
-                                            size: 30,
-                                            color: CustomColors.blackColor),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Akun Tiktok",
-                                          style: CustomText.TextArvoBold(
-                                              14, CustomColors.blackColor),
-                                        )
-                                      ],
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Akun Tiktok",
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.blackColor),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
-                                              ? Text(
-                                                  detailInformasi[
-                                                      'akun_tiktok'],
-                                                  style: CustomText.TextArvo(
-                                                    14,
-                                                    CustomColors.blackColor,
-                                                  ),
-                                                  textAlign: TextAlign.start,
-                                                )
-                                              : Shimmer.fromColors(
-                                                  baseColor: Color.fromARGB(
-                                                      255, 104, 102, 102)!,
-                                                  highlightColor:
-                                                      const Color.fromARGB(
-                                                          255, 202, 200, 200)!,
-                                                  child: Text(
-                                                    'Loading...',
-                                                    style: CustomText.TextArvo(
-                                                      14,
-                                                      CustomColors.blackColor,
-                                                    ),
-                                                    textAlign: TextAlign.start,
-                                                  ),
-                                                ),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: TextField(
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      textInputAction: TextInputAction.next,
+                                      controller: TextEditingController(
+                                          text:
+                                              detailInformasi['akun_tiktok']),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
                                         ),
-                                        Container(
-                                          height: 1,
-                                          color: CustomColors.blackColor,
-                                        )
-                                      ],
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CustomColors.secondaryColor),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color: CustomColors.blackColor),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                      ),
+                                      style: CustomText.TextArvo(
+                                          14, CustomColors.blackColor),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.location_on,
-                                            size: 30,
-                                            color: CustomColors.blackColor),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Lokasi",
-                                          style: CustomText.TextArvoBold(
-                                              14, CustomColors.blackColor),
-                                        )
-                                      ],
+                                  SizedBox(
+                                    height: 1,
+                                  ),
+                                Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "Lokasi",
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.blackColor),
+                                      ),
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 40),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 5),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              // Jalankan link
-                                              openLink();
-                                            },
-                                            child: Card(
-                                              elevation: 5,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: TextField(
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      textInputAction: TextInputAction.next,
+                                      controller: TextEditingController(
+                                          text:"Masukkan Lokasi Toko"
+                                              // detailInformasi['akun_tiktok']
                                               ),
-                                              child: Container(
-                                                width: double.infinity,
-                                                height: 150,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  image: DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/images/map.png'),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color:
+                                                  CustomColors.secondaryColor),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          borderSide: BorderSide(
+                                              color: CustomColors.blackColor),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10.0),
+                                      ),
+                                      style: CustomText.TextArvo(
+                                          14, CustomColors.blackColor),
                                     ),
+                                  ),
+                                  SizedBox(
+                                    height: 1,
                                   ),
                                 ],
                               ),
                             ),
-                            Padding(
+                          Padding(
                                 padding: EdgeInsets.only(top: 50),
                                 child: Align(
                                   alignment: Alignment.center,

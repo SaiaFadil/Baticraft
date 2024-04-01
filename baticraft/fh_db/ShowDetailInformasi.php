@@ -2,7 +2,7 @@
 require 'Koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $sql = "SELECT * FROM informations; ";
+    $sql = "SELECT * FROM informations;";
     $result = $konek->query($sql);
     $DetailInfo = $result->fetch_assoc();
     $response = $DetailInfo;

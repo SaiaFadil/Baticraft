@@ -6,7 +6,6 @@ import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +19,7 @@ class InformasiToko extends StatefulWidget {
 }
 
 class _InformasiTokoState extends State<InformasiToko> {
-  GoogleMapController? _controller;
+ 
 
 
 
