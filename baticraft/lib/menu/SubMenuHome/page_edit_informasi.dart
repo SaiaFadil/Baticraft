@@ -28,6 +28,43 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
   late http.MultipartRequest
       request; // Perubahan: request dideklarasikan sebagai late
 
+Future<void> postDataToServer() async {
+  // Persiapkan data yang akan dikirim
+  Map<String, dynamic> data = {
+    'nama_pemilik': namaPemilikController.text,
+    'alamat': alamatController.text,
+    'lokasi': lokasiController.text,
+    'deskripsi': deskripsiController.text,
+    'no_telpon': nomorTeleponController.text,
+    'email': emailController.text,
+    'image': ImageSaatIni, 
+    'akun_ig': akunInstagramController.text,
+    'akun_fb': akunFacebookController.text,
+    'akun_tiktok': akunTiktokController.text,
+  };
+
+  // Buat request POST ke URL server
+  Uri url = Server.url("Edit_Informasi_Toko.php");
+  
+  try {
+    // Kirim request POST ke server
+    final response = await http.post(url, body: data);
+
+    // Periksa kode status respons
+    if (response.statusCode == 200) {
+      _uploadImage();
+      // Sukses mengirim data
+      print(response.body);
+      print('Data berhasil dikirim');
+    } else {
+      // Gagal mengirim data
+      print('Gagal mengirim data. Kode status: ${response.statusCode}');
+    }
+  } catch (error) {
+    // Tangani kesalahan jika terjadi
+    print('Terjadi kesalahan: $error');
+  }
+}
   Future<void> _getImage() async {
     final pickedFile =
         await _imagePicker.pickImage(source: ImageSource.gallery);
@@ -38,7 +75,6 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
             .path); 
             ImageSaatIni = pickedFile.name;
             // Perubahan: Mengambil nama file setelah pemilihan gambar
-        // ImageSaatIni = pickedFile.name; // Perhatikan, variabel ImageSaatIni tidak dideklarasikan dalam kode yang diberikan
       });
     }
   }
@@ -688,7 +724,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                           20, CustomColors.whiteColor),
                                     ),
                                     onPressed: () {
-_uploadImage();
+postDataToServer();
                                     },
                                   ),
                                 )),

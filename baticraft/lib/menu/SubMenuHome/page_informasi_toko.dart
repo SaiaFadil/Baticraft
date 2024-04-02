@@ -58,10 +58,10 @@ class _InformasiTokoState extends State<InformasiToko> {
 //Akhir Backend
 
   void openLink() async {
-    if (await canLaunch('https://www.google.com')) {
-      await launch('https://www.google.com');
+    if (await canLaunch(detailInformasi['lokasi'])) {
+      await launch(detailInformasi['lokasi']);
     } else {
-      throw 'Could not launch https://www.google.com';
+      throw 'Could not launch'+detailInformasi['lokasi'];
     }
   }
 
