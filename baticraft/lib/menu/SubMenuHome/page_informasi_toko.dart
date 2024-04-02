@@ -56,10 +56,10 @@ class _InformasiTokoState extends State<InformasiToko> {
   }
 
 //Akhir Backend
-
   void openLink() async {
     if (await canLaunch(detailInformasi['lokasi'])) {
       await launch(detailInformasi['lokasi']);
+      print(detailInformasi['lokasi']);
     } else {
       throw 'Could not launch'+detailInformasi['lokasi'];
     }
@@ -92,11 +92,15 @@ class _InformasiTokoState extends State<InformasiToko> {
           children: [
             Positioned(
               top: 0,
-              child: detailInformasi['nama_pemilik'] != null
-                  ? Image.network(
-                      Server.urlImageDatabase(detailInformasi['image']),
-                      fit: BoxFit.fitWidth,
-                    )
+              left: 0,
+              right: 0,
+              child: detailInformasi['image'] != null
+                  ? Container(
+                    child: Image.network(
+                        Server.urlImageDatabase(detailInformasi['image']),
+                        fit: BoxFit.fitWidth,alignment: Alignment.center,
+                      ),
+                  )
                   : Shimmer.fromColors(
                       baseColor: Color.fromARGB(255, 104, 102, 102)!,
                       highlightColor: const Color.fromARGB(255, 202, 200, 200)!,

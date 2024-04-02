@@ -23,11 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             deskripsi = '$deskripsi',
             no_telpon = '$no_telpon',
             email = '$email',
-            image = '$image',
             akun_ig = '$akun_ig',
             akun_fb ='$akun_fb',
-            akun_tiktok = '$akun_tiktok'
-            WHERE id = 1";
+            akun_tiktok = '$akun_tiktok'";
+
+    // Tambahkan perubahan gambar jika data gambar tidak kosong
+    if (!empty($image)) {
+        $sql .= ", image = '$image'";
+    }
+
+    $sql .= " WHERE id = 1";
 
     // Jalankan pernyataan SQL
     if ($konek->query($sql) === TRUE) {

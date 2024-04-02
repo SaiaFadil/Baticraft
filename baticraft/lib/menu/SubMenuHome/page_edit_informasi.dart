@@ -65,6 +65,7 @@ Future<void> postDataToServer() async {
     print('Terjadi kesalahan: $error');
   }
 }
+
   Future<void> _getImage() async {
     final pickedFile =
         await _imagePicker.pickImage(source: ImageSource.gallery);
