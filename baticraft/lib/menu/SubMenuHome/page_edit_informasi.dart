@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 class EditInformasiToko extends StatefulWidget {
   const EditInformasiToko({super.key});
@@ -20,46 +21,83 @@ class EditInformasiToko extends StatefulWidget {
 }
 
 class _EditInformasiTokoState extends State<EditInformasiToko> {
+//Awal Backend
   ImagePicker _imagePicker = ImagePicker();
   File? _profileImage;
+  String? fileName; // Perubahan: fileName diubah menjadi nullable
+  late http.MultipartRequest
+      request; // Perubahan: request dideklarasikan sebagai late
 
   Future<void> _getImage() async {
-    final PickedFile =
+    final pickedFile =
         await _imagePicker.pickImage(source: ImageSource.gallery);
-    if (PickedFile != null) {
+    if (pickedFile != null) {
       setState(() {
-        _profileImage = File(PickedFile.path);
-         ImageSaatIni = PickedFile.name; 
+        _profileImage = File(pickedFile.path);
+        fileName = path.basename(pickedFile
+            .path); 
+            ImageSaatIni = pickedFile.name;
+            // Perubahan: Mengambil nama file setelah pemilihan gambar
+        // ImageSaatIni = pickedFile.name; // Perhatikan, variabel ImageSaatIni tidak dideklarasikan dalam kode yang diberikan
       });
     }
   }
 
-//Awal Backend
+ Future<void> _uploadImage() async {
+    if (_profileImage == null) {
+      print("errorrrrrrr");
+      return;
+    }
+
+
+    // Menyiapkan request untuk mengunggah gambar ke server
+    request = http.MultipartRequest(
+        'POST', Uri.parse(Server.urlString("upload_image.png")));
+
+    // Menambahkan file gambar ke dalam request
+    
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'image',
+        _profileImage!.path,
+        filename: fileName,
+      ),
+    );
+    
+
+    // Mengirim request ke server
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      print('Gambar berhasil diunggah');
+    } else {
+      print('Terjadi kesalahan saat mengunggah gambar');
+      print(response.statusCode);
+      print(response);
+    }
+  }
+
   String jsonDetailInformasi = "{}";
   Map<String, dynamic> detailInformasi = {};
 
-  Future getDetailUser() async {
+  Future<void> getDetailUser() async {
     final response = await http.get(Server.url("ShowDetailInformasi.php"));
 
     if (response.statusCode == 200) {
-      jsonDetailInformasi = response.body.toString();
-      detailInformasi = json.decode(jsonDetailInformasi);
-      if (detailInformasi.isNotEmpty) {
-        setState(() {
-          print("nama_pemilik = " + detailInformasi['nama_pemilik']);
-          print("nama_toko = " + detailInformasi['nama_toko']);
-          print("alamatnya = " + detailInformasi['alamat']);
-          print("deskripsi = " + detailInformasi['deskripsi']);
-          print("no_telpon = " + detailInformasi['no_telpon']);
-          print("email = " + detailInformasi['email']);
-          print("akun_ig = " + detailInformasi['akun_ig']);
-          print("akun_fb = " + detailInformasi['akun_fb']);
-          print("akun_tiktok = " + detailInformasi['akun_tiktok']);
-          print("image = " + detailInformasi['image']);
-        });
-      } else {
-        print("No data available");
-      }
+      setState(() {
+        jsonDetailInformasi = response.body.toString();
+        detailInformasi = json.decode(jsonDetailInformasi);
+
+        // Set nilai-nilai dari detailInformasi ke dalam controller
+        namaPemilikController.text = detailInformasi['nama_pemilik'];
+        alamatController.text = detailInformasi['alamat'];
+        deskripsiController.text = detailInformasi['deskripsi'];
+        nomorTeleponController.text = detailInformasi['no_telpon'];
+        emailController.text = detailInformasi['email'];
+        akunInstagramController.text = detailInformasi['akun_ig'];
+        akunFacebookController.text = detailInformasi['akun_fb'];
+        akunTiktokController.text = detailInformasi['akun_tiktok'];
+        lokasiController.text = detailInformasi['lokasi'];
+      });
     } else {
       print("HTTP Request failed with status: ${response.statusCode}");
     }
@@ -82,6 +120,16 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
       throw 'Could not launch https://www.google.com';
     }
   }
+
+  final TextEditingController namaPemilikController = TextEditingController();
+  final TextEditingController alamatController = TextEditingController();
+  final TextEditingController deskripsiController = TextEditingController();
+  final TextEditingController nomorTeleponController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController akunInstagramController = TextEditingController();
+  final TextEditingController akunFacebookController = TextEditingController();
+  final TextEditingController akunTiktokController = TextEditingController();
+  final TextEditingController lokasiController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +161,10 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                 left: 0,
                 right: 0,
                 child: ImageSaatIni != ""
-                    ? Image(image: FileImage(_profileImage!),fit: BoxFit.contain,)
+                    ? Image(
+                        image: FileImage(_profileImage!),
+                        fit: BoxFit.contain,
+                      )
                     : Image.asset(Server.urlGambar("gambarawal.png"))),
             Positioned(
               top: 0,
@@ -175,7 +226,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                         ),
                                       ),
                                       child: InkWell(
-                                         onTap: _getImage,
+                                        onTap: _getImage,
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Row(children: [
@@ -220,9 +271,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
-                                      controller: TextEditingController(
-                                          text:
-                                              detailInformasi['nama_pemilik']),
+                                      controller: namaPemilikController,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -269,8 +318,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
-                                      controller: TextEditingController(
-                                          text: detailInformasi['alamat']),
+                                      controller: alamatController,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -317,8 +365,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
-                                      controller: TextEditingController(
-                                          text: detailInformasi['deskripsi']),
+                                      controller: deskripsiController,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -365,8 +412,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
-                                      controller: TextEditingController(
-                                          text: detailInformasi['no_telpon']),
+                                      controller: nomorTeleponController,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -412,9 +458,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
-                                      controller: TextEditingController(
-                                          text:
-                                              detailInformasi['email']),
+                                      controller: emailController,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -460,9 +504,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
-                                      controller: TextEditingController(
-                                          text:
-                                              detailInformasi['akun_ig']),
+                                      controller: akunInstagramController,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -508,9 +550,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
-                                      controller: TextEditingController(
-                                          text:
-                                              detailInformasi['akun_fb']),
+                                      controller: akunFacebookController,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -556,9 +596,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
-                                      controller: TextEditingController(
-                                          text:
-                                              detailInformasi['akun_tiktok']),
+                                      controller: akunTiktokController,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -587,7 +625,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                   SizedBox(
                                     height: 1,
                                   ),
-                                Padding(
+                                  Padding(
                                     padding: const EdgeInsets.only(top: 10),
                                     child: Align(
                                       alignment: Alignment.centerLeft,
@@ -604,10 +642,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
-                                      controller: TextEditingController(
-                                          text:"Masukkan Lokasi Toko"
-                                              // detailInformasi['akun_tiktok']
-                                              ),
+                                      controller: lokasiController,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.all(
@@ -639,7 +674,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                 ],
                               ),
                             ),
-                          Padding(
+                            Padding(
                                 padding: EdgeInsets.only(top: 50),
                                 child: Align(
                                   alignment: Alignment.center,
@@ -651,7 +686,9 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
                                       style: CustomText.TextArvoBold(
                                           20, CustomColors.whiteColor),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+_uploadImage();
+                                    },
                                   ),
                                 )),
                           ],

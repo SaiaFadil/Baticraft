@@ -45,8 +45,8 @@ class _page_login extends State<page_login> {
           Map<String, dynamic> detailUser = json.decode(response.body);
           print("JsonData");
           isWrong = false;
-          CustomWidget.NotifBerhasilLogin(context,utama());
-         
+          CustomWidget.NotifBerhasilLogin(context, utama());
+
           page_login.id_user = detailUser['id'];
           print("id user = " + detailUser['id']);
         } else {
