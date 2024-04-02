@@ -52,7 +52,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
 
     // Menyiapkan request untuk mengunggah gambar ke server
     request = http.MultipartRequest(
-        'POST', Uri.parse(Server.urlString("upload_image.png")));
+        'POST', Uri.parse(Server.urlString("upload_image.php")));
 
     // Menambahkan file gambar ke dalam request
     
@@ -73,6 +73,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
       print('Terjadi kesalahan saat mengunggah gambar');
       print(response.statusCode);
       print(response);
+      print(response.reasonPhrase);
     }
   }
 
