@@ -6,7 +6,6 @@ import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
@@ -19,15 +18,9 @@ class InformasiToko extends StatefulWidget {
 }
 
 class _InformasiTokoState extends State<InformasiToko> {
- 
-
-
-
-
-
 //Awal Backend
- String jsonDetailInformasi = "{}";
-Map<String, dynamic> detailInformasi = {};
+  String jsonDetailInformasi = "{}";
+  Map<String, dynamic> detailInformasi = {};
 
   Future getDetailUser() async {
     final response = await http.get(Server.url("ShowDetailInformasi.php"));
@@ -47,7 +40,6 @@ Map<String, dynamic> detailInformasi = {};
           print("akun_fb = " + detailInformasi['akun_fb']);
           print("akun_tiktok = " + detailInformasi['akun_tiktok']);
           print("image = " + detailInformasi['image']);
-          
         });
       } else {
         print("No data available");
@@ -57,32 +49,21 @@ Map<String, dynamic> detailInformasi = {};
     }
   }
 
-@override
+  @override
   void initState() {
     super.initState();
-getDetailUser();
-
+    getDetailUser();
   }
-
-
 
 //Akhir Backend
 
-
-
-
-
-
-
-
-
-void openLink() async {
-  if (await canLaunch('https://www.google.com')) {
-    await launch('https://www.google.com');
-  } else {
-    throw 'Could not launch https://www.google.com';
+  void openLink() async {
+    if (await canLaunch('https://www.google.com')) {
+      await launch('https://www.google.com');
+    } else {
+      throw 'Could not launch https://www.google.com';
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -112,15 +93,14 @@ void openLink() async {
             Positioned(
               top: 0,
               child: detailInformasi['nama_pemilik'] != null
-    ? Image.network(
-                Server.urlImageDatabase(detailInformasi['image']),
-                fit: BoxFit.fitWidth,
-              )
-    : Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 104, 102, 102)!,
-        highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
-        child: Image.asset(Server.urlGambar("default.png"))
-      ), 
+                  ? Image.network(
+                      Server.urlImageDatabase(detailInformasi['image']),
+                      fit: BoxFit.fitWidth,
+                    )
+                  : Shimmer.fromColors(
+                      baseColor: Color.fromARGB(255, 104, 102, 102)!,
+                      highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
+                      child: Image.asset(Server.urlGambar("default.png"))),
             ),
             Positioned(
               top: 0,
@@ -186,27 +166,33 @@ void openLink() async {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child:  detailInformasi['nama_pemilik'] != null
-    ? Text(
-        detailInformasi['nama_pemilik'],
-        style: CustomText.TextArvo(
-          14,
-          CustomColors.blackColor,
-        ),
-        textAlign: TextAlign.start,
-      )
-    : Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 104, 102, 102)!,
-        highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
-        child: Text(
-          'Loading...',
-          style: CustomText.TextArvo(
-            14,
-            CustomColors.blackColor,
-          ),
-          textAlign: TextAlign.start,
-        ),
-      ),
+                                          child: detailInformasi[
+                                                      'nama_pemilik'] !=
+                                                  null
+                                              ? Text(
+                                                  detailInformasi[
+                                                      'nama_pemilik'],
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
                                         ),
                                         Container(
                                           height: 1,
@@ -250,27 +236,32 @@ void openLink() async {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child:  detailInformasi['nama_pemilik'] != null
-    ? Text(
-        detailInformasi['alamat'],
-        style: CustomText.TextArvo(
-          14,
-          CustomColors.blackColor,
-        ),
-        textAlign: TextAlign.start,
-      )
-    : Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 104, 102, 102)!,
-        highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
-        child: Text(
-          'Loading...',
-          style: CustomText.TextArvo(
-            14,
-            CustomColors.blackColor,
-          ),
-          textAlign: TextAlign.start,
-        ),
-      ),
+                                          child: detailInformasi[
+                                                      'nama_pemilik'] !=
+                                                  null
+                                              ? Text(
+                                                  detailInformasi['alamat'],
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
                                         ),
                                         Container(
                                           height: 1,
@@ -317,27 +308,32 @@ void openLink() async {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child:  detailInformasi['nama_pemilik'] != null
-    ? Text(
-        detailInformasi['deskripsi'],
-        style: CustomText.TextArvo(
-          14,
-          CustomColors.blackColor,
-        ),
-        textAlign: TextAlign.start,
-      )
-    : Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 104, 102, 102)!,
-        highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
-        child: Text(
-          'Loading...',
-          style: CustomText.TextArvo(
-            14,
-            CustomColors.blackColor,
-          ),
-          textAlign: TextAlign.start,
-        ),
-      ),
+                                          child: detailInformasi[
+                                                      'nama_pemilik'] !=
+                                                  null
+                                              ? Text(
+                                                  detailInformasi['deskripsi'],
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
                                         ),
                                         Container(
                                           height: 1,
@@ -381,27 +377,32 @@ void openLink() async {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child:  detailInformasi['nama_pemilik'] != null
-    ? Text(
-        detailInformasi['no_telpon'],
-        style: CustomText.TextArvo(
-          14,
-          CustomColors.blackColor,
-        ),
-        textAlign: TextAlign.start,
-      )
-    : Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 104, 102, 102)!,
-        highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
-        child: Text(
-          'Loading...',
-          style: CustomText.TextArvo(
-            14,
-            CustomColors.blackColor,
-          ),
-          textAlign: TextAlign.start,
-        ),
-      ),
+                                          child: detailInformasi[
+                                                      'nama_pemilik'] !=
+                                                  null
+                                              ? Text(
+                                                  detailInformasi['no_telpon'],
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
                                         ),
                                         Container(
                                           height: 1,
@@ -445,27 +446,32 @@ void openLink() async {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child:   detailInformasi['nama_pemilik'] != null
-    ? Text(
-        detailInformasi['email'],
-        style: CustomText.TextArvo(
-          14,
-          CustomColors.blackColor,
-        ),
-        textAlign: TextAlign.start,
-      )
-    : Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 104, 102, 102)!,
-        highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
-        child: Text(
-          'Loading...',
-          style: CustomText.TextArvo(
-            14,
-            CustomColors.blackColor,
-          ),
-          textAlign: TextAlign.start,
-        ),
-      ),
+                                          child: detailInformasi[
+                                                      'nama_pemilik'] !=
+                                                  null
+                                              ? Text(
+                                                  detailInformasi['email'],
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
                                         ),
                                         Container(
                                           height: 1,
@@ -511,27 +517,32 @@ void openLink() async {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child:   detailInformasi['nama_pemilik'] != null
-    ? Text(
-        detailInformasi['akun_ig'],
-        style: CustomText.TextArvo(
-          14,
-          CustomColors.blackColor,
-        ),
-        textAlign: TextAlign.start,
-      )
-    : Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 104, 102, 102)!,
-        highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
-        child: Text(
-          'Loading...',
-          style: CustomText.TextArvo(
-            14,
-            CustomColors.blackColor,
-          ),
-          textAlign: TextAlign.start,
-        ),
-      ),
+                                          child: detailInformasi[
+                                                      'nama_pemilik'] !=
+                                                  null
+                                              ? Text(
+                                                  detailInformasi['akun_ig'],
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
                                         ),
                                         Container(
                                           height: 1,
@@ -575,27 +586,32 @@ void openLink() async {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child:   detailInformasi['nama_pemilik'] != null
-    ? Text(
-        detailInformasi['akun_fb'],
-        style: CustomText.TextArvo(
-          14,
-          CustomColors.blackColor,
-        ),
-        textAlign: TextAlign.start,
-      )
-    : Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 104, 102, 102)!,
-        highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
-        child: Text(
-          'Loading...',
-          style: CustomText.TextArvo(
-            14,
-            CustomColors.blackColor,
-          ),
-          textAlign: TextAlign.start,
-        ),
-      ),
+                                          child: detailInformasi[
+                                                      'nama_pemilik'] !=
+                                                  null
+                                              ? Text(
+                                                  detailInformasi['akun_fb'],
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
                                         ),
                                         Container(
                                           height: 1,
@@ -639,27 +655,33 @@ void openLink() async {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child:  detailInformasi['nama_pemilik'] != null
-    ? Text(
-        detailInformasi['akun_tiktok'],
-        style: CustomText.TextArvo(
-          14,
-          CustomColors.blackColor,
-        ),
-        textAlign: TextAlign.start,
-      )
-    : Shimmer.fromColors(
-        baseColor: Color.fromARGB(255, 104, 102, 102)!,
-        highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
-        child: Text(
-          'Loading...',
-          style: CustomText.TextArvo(
-            14,
-            CustomColors.blackColor,
-          ),
-          textAlign: TextAlign.start,
-        ),
-      ),
+                                          child: detailInformasi[
+                                                      'nama_pemilik'] !=
+                                                  null
+                                              ? Text(
+                                                  detailInformasi[
+                                                      'akun_tiktok'],
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                ),
                                         ),
                                         Container(
                                           height: 1,
@@ -749,10 +771,22 @@ void openLink() async {
                                           20, CustomColors.whiteColor),
                                     ),
                                     onPressed: () {
-
-                                      Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>EditInformasiToko(),transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                        return FadeTransition(opacity: animation,child: child,);
-                                      },));
+                                      Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimation) =>
+                                                EditInformasiToko(),
+                                            transitionsBuilder: (context,
+                                                animation,
+                                                secondaryAnimation,
+                                                child) {
+                                              return FadeTransition(
+                                                opacity: animation,
+                                                child: child,
+                                              );
+                                            },
+                                          ));
                                     },
                                   ),
                                 )),
