@@ -61,7 +61,7 @@ class _InformasiTokoState extends State<InformasiToko> {
       await launch(detailInformasi['lokasi']);
       print(detailInformasi['lokasi']);
     } else {
-      throw 'Could not launch'+detailInformasi['lokasi'];
+      throw 'Could not launch' + detailInformasi['lokasi'];
     }
   }
 
@@ -96,11 +96,12 @@ class _InformasiTokoState extends State<InformasiToko> {
               right: 0,
               child: detailInformasi['image'] != null
                   ? Container(
-                    child: Image.network(
+                      child: Image.network(
                         Server.urlImageDatabase(detailInformasi['image']),
-                        fit: BoxFit.fitWidth,alignment: Alignment.center,
+                        fit: BoxFit.fitWidth,
+                        alignment: Alignment.center,
                       ),
-                  )
+                    )
                   : Shimmer.fromColors(
                       baseColor: Color.fromARGB(255, 104, 102, 102)!,
                       highlightColor: const Color.fromARGB(255, 202, 200, 200)!,
@@ -775,22 +776,37 @@ class _InformasiTokoState extends State<InformasiToko> {
                                           20, CustomColors.whiteColor),
                                     ),
                                     onPressed: () {
-                                      Navigator.push(
+                                      Navigator.pushReplacement(
                                           context,
                                           PageRouteBuilder(
-                                            pageBuilder: (context, animation,
-                                                    secondaryAnimation) =>
-                                                EditInformasiToko(),
-                                            transitionsBuilder: (context,
-                                                animation,
-                                                secondaryAnimation,
-                                                child) {
-                                              return FadeTransition(
-                                                opacity: animation,
-                                                child: child,
-                                              );
-                                            },
-                                          ));
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  EditInformasiToko(),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                );
+                                              }));
+                                      // Navigator.push(
+                                      //     context,
+                                      //     PageRouteBuilder(
+                                      //       pageBuilder: (context, animation,
+                                      //               secondaryAnimation) =>
+                                      //           EditInformasiToko(),
+                                      //       transitionsBuilder: (context,
+                                      //           animation,
+                                      //           secondaryAnimation,
+                                      //           child) {
+                                      //         return FadeTransition(
+                                      //           opacity: animation,
+                                      //           child: child,
+                                      //         );
+                                      //       },
+                                      //     ));
                                     },
                                   ),
                                 )),

@@ -1,3 +1,4 @@
+import 'package:baticraft/menu/SubMenuHome/page_tambah_produk.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -56,7 +57,26 @@ class KelolaProdukState extends State<KelolaProduk> {
                 width: double.infinity,
                 height: 150,
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: (){
+
+ Navigator.pushReplacement(
+                                          context,
+                                          PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  Tambah_Produk(),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                return FadeTransition(
+                                                  opacity: animation,
+                                                  child: child,
+                                                );
+                                              }));
+
+
+                  },
                   style: CustomButton.DefaultButton(CustomColors.fourtyColor),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

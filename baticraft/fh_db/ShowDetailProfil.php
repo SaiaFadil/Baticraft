@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = $DetailUser;
     echo json_encode($response);
     mysqli_close($konek);
-
 } else {
     die ("Method is not POST");
 }

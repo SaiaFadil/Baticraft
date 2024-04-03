@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:baticraft/menu/SubMenuHome/page_informasi_toko.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
+import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -28,43 +30,44 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
   late http.MultipartRequest
       request; // Perubahan: request dideklarasikan sebagai late
 
-Future<void> postDataToServer() async {
-  // Persiapkan data yang akan dikirim
-  Map<String, dynamic> data = {
-    'nama_pemilik': namaPemilikController.text,
-    'alamat': alamatController.text,
-    'lokasi': lokasiController.text,
-    'deskripsi': deskripsiController.text,
-    'no_telpon': nomorTeleponController.text,
-    'email': emailController.text,
-    'image': ImageSaatIni, 
-    'akun_ig': akunInstagramController.text,
-    'akun_fb': akunFacebookController.text,
-    'akun_tiktok': akunTiktokController.text,
-  };
+  Future<void> postDataToServer() async {
+    // Persiapkan data yang akan dikirim
+    Map<String, dynamic> data = {
+      'nama_pemilik': namaPemilikController.text,
+      'alamat': alamatController.text,
+      'lokasi': lokasiController.text,
+      'deskripsi': deskripsiController.text,
+      'no_telpon': nomorTeleponController.text,
+      'email': emailController.text,
+      'image': ImageSaatIni,
+      'akun_ig': akunInstagramController.text,
+      'akun_fb': akunFacebookController.text,
+      'akun_tiktok': akunTiktokController.text,
+    };
 
-  // Buat request POST ke URL server
-  Uri url = Server.url("Edit_Informasi_Toko.php");
-  
-  try {
-    // Kirim request POST ke server
-    final response = await http.post(url, body: data);
+    // Buat request POST ke URL server
+    Uri url = Server.url("Edit_Informasi_Toko.php");
 
-    // Periksa kode status respons
-    if (response.statusCode == 200) {
-      _uploadImage();
-      // Sukses mengirim data
-      print(response.body);
-      print('Data berhasil dikirim');
-    } else {
-      // Gagal mengirim data
-      print('Gagal mengirim data. Kode status: ${response.statusCode}');
+    try {
+      // Kirim request POST ke server
+      final response = await http.post(url, body: data);
+
+      // Periksa kode status respons
+      if (response.statusCode == 200) {
+        _uploadImage();
+        CustomWidget.NotifBerhasilEditInformasi(context, InformasiToko());
+        // Sukses mengirim data
+        print(response.body);
+        print('Data berhasil dikirim');
+      } else {
+        // Gagal mengirim data
+        print('Gagal mengirim data. Kode status: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Tangani kesalahan jika terjadi
+      print('Terjadi kesalahan: $error');
     }
-  } catch (error) {
-    // Tangani kesalahan jika terjadi
-    print('Terjadi kesalahan: $error');
   }
-}
 
   Future<void> _getImage() async {
     final pickedFile =
@@ -72,27 +75,25 @@ Future<void> postDataToServer() async {
     if (pickedFile != null) {
       setState(() {
         _profileImage = File(pickedFile.path);
-        fileName = path.basename(pickedFile
-            .path); 
-            ImageSaatIni = pickedFile.name;
-            // Perubahan: Mengambil nama file setelah pemilihan gambar
+        fileName = path.basename(pickedFile.path);
+        ImageSaatIni = pickedFile.name;
+        // Perubahan: Mengambil nama file setelah pemilihan gambar
       });
     }
   }
 
- Future<void> _uploadImage() async {
+  Future<void> _uploadImage() async {
     if (_profileImage == null) {
       print("errorrrrrrr");
       return;
     }
-
 
     // Menyiapkan request untuk mengunggah gambar ke server
     request = http.MultipartRequest(
         'POST', Uri.parse(Server.urlString("upload_image.php")));
 
     // Menambahkan file gambar ke dalam request
-    
+
     request.files.add(
       await http.MultipartFile.fromPath(
         'image',
@@ -100,7 +101,6 @@ Future<void> postDataToServer() async {
         filename: fileName,
       ),
     );
-    
 
     // Mengirim request ke server
     var response = await request.send();
@@ -150,15 +150,6 @@ Future<void> postDataToServer() async {
   String ImageSaatIni = "";
 //Akhir Backend
 
-  void openLink() async {
-    if (await canLaunch('https://www.google.com')) {
-      await launch('https://www.google.com');
-    } else {
-      print("Could not launch https://www.google.com");
-      throw 'Could not launch https://www.google.com';
-    }
-  }
-
   final TextEditingController namaPemilikController = TextEditingController();
   final TextEditingController alamatController = TextEditingController();
   final TextEditingController deskripsiController = TextEditingController();
@@ -181,7 +172,18 @@ Future<void> postDataToServer() async {
               textAlign: TextAlign.center),
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          InformasiToko(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      }));
             },
             icon: Icon(Icons.arrow_back_ios),
             color: CustomColors.threertyColor,
@@ -447,7 +449,7 @@ Future<void> postDataToServer() async {
                                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                     child: TextField(
                                       minLines: 1,
-                                      keyboardType: TextInputType.text,
+                                      keyboardType: TextInputType.number,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
                                       controller: nomorTeleponController,
@@ -493,7 +495,7 @@ Future<void> postDataToServer() async {
                                   Container(
                                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                                     child: TextField(
-                                      keyboardType: TextInputType.text,
+                                      keyboardType: TextInputType.emailAddress,
                                       textAlign: TextAlign.start,
                                       textInputAction: TextInputAction.next,
                                       controller: emailController,
@@ -725,7 +727,7 @@ Future<void> postDataToServer() async {
                                           20, CustomColors.whiteColor),
                                     ),
                                     onPressed: () {
-postDataToServer();
+                                      postDataToServer();
                                     },
                                   ),
                                 )),

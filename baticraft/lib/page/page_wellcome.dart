@@ -25,8 +25,8 @@ class _SliderPState extends State<SliderP> {
   ];
   final judul = [
     "KELOLA\nDATA PRODUK",
-    "KELOLA\nDATA PRODUK",
-    "KELOLA\nDATA PRODUK"
+    "TRANSAKSI\nDAN PESANAN",
+    "LAPORAN\nPENJUALAN"
   ];
 Future<void> Pindah() async {
   await Navigator.push(

@@ -1,3 +1,4 @@
+import 'package:baticraft/menu/SubMenuHome/page_informasi_toko.dart';
 import 'package:baticraft/navigation/utama.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/Server.dart';
@@ -25,7 +26,11 @@ class CustomWidget {
               padding: EdgeInsets.only(right: 15),
               child: Align(
                   alignment: Alignment.centerRight,
-                  child: Icon(Icons.search,color: CustomColors.secondaryColor,size: 35,)),
+                  child: Icon(
+                    Icons.search,
+                    color: CustomColors.secondaryColor,
+                    size: 35,
+                  )),
             )
           ],
         ));
@@ -61,7 +66,7 @@ class CustomWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom:8.0),
+                  padding: const EdgeInsets.only(bottom: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -83,8 +88,10 @@ class CustomWidget {
                                         Text("23",
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: CustomText.TextArvoBoldItalic(
-                                                30, CustomColors.whiteColor)),
+                                            style:
+                                                CustomText.TextArvoBoldItalic(
+                                                    30,
+                                                    CustomColors.whiteColor)),
                                         SizedBox(width: 5),
                                         Text("pcs",
                                             style: CustomText.TextArvo(
@@ -115,8 +122,10 @@ class CustomWidget {
                                     Row(
                                       children: [
                                         Text("243",
-                                            style: CustomText.TextArvoBoldItalic(
-                                                30, CustomColors.whiteColor)),
+                                            style:
+                                                CustomText.TextArvoBoldItalic(
+                                                    30,
+                                                    CustomColors.whiteColor)),
                                         SizedBox(width: 5),
                                         Text("orang  ",
                                             maxLines: 1,
@@ -148,69 +157,143 @@ class CustomWidget {
     );
   }
 
+  static void NotifBerhasilLogin(BuildContext context, Widget nextPage) {
+    showDialog(
+      context: context,
 
-
-
-static void NotifBerhasilLogin(BuildContext context, Widget nextPage) {
-showDialog(
-    context: context,
-    
-    barrierDismissible: false, // Prevent dismissal by tapping outside
-    builder: (context) => Stack(
-      children: <Widget>[
-        // Transparent background with a slight dimming effect
-        ModalBarrier(color: Colors.black.withOpacity(0.3)),
-        Center(
-          child: Container(
-            width: 300.0, // Adjust width as needed
-            height: 200.0, // Adjust height as needed
-            decoration: BoxDecoration(
-              color: CustomColors.secondaryColor,
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Animated checkmark
-                ScaleTransition(
-                  scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                    CurvedAnimation(
-                      parent: AlwaysStoppedAnimation(1),
-                      curve: Curves.easeInOut,
+      barrierDismissible: false, // Prevent dismissal by tapping outside
+      builder: (context) => Stack(
+        children: <Widget>[
+          // Transparent background with a slight dimming effect
+          ModalBarrier(color: Colors.black.withOpacity(0.3)),
+          Center(
+            child: Container(
+              width: 300.0, // Adjust width as needed
+              height: 200.0, // Adjust height as needed
+              decoration: BoxDecoration(
+                color: CustomColors.secondaryColor,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Animated checkmark
+                  ScaleTransition(
+                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                      CurvedAnimation(
+                        parent: AlwaysStoppedAnimation(1),
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.check,
+                      size: 60.0,
+                      color: CustomColors.whiteColor,
                     ),
                   ),
-                  child: Icon(
-                    Icons.check,
-                    size: 60.0,
-                    color: CustomColors.whiteColor,
+                  SizedBox(height: 20.0),
+                  // Login success text
+                  Text(
+                    "Login Berhasil!",
+                    style: CustomText.TextArvoBold(20, CustomColors.whiteColor),
                   ),
-                ),
-                SizedBox(height: 20.0),
-                // Login success text
-                Text(
-                  "Login Berhasil!",
-                  style: CustomText.TextArvoBold(20, CustomColors.whiteColor),
-                ),
-                SizedBox(height: 20.0),
-                // "OK" button with navigation
-                // ElevatedButton(
-                //   onPressed: () => Navigator.pop(context), // Dismiss dialog
-                //   child: Text(
-                //     "Ok",
-                //     style: TextStyle(
-                //       color: Colors.white,
-                //       fontSize: 16.0,
-                //     ),
-                //   ),
-                //   style: CustomButton.DefaultButton(CustomColors.primaryColor)
-                // ),
-              ],
+                  SizedBox(height: 20.0),
+                  // "OK" button with navigation
+                  // ElevatedButton(
+                  //   onPressed: () => Navigator.pop(context), // Dismiss dialog
+                  //   child: Text(
+                  //     "Ok",
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //       fontSize: 16.0,
+                  //     ),
+                  //   ),
+                  //   style: CustomButton.DefaultButton(CustomColors.primaryColor)
+                  // ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-  ).then((_) => Navigator.push(context, MaterialPageRoute(builder: (context) => nextPage))); // Navigate after dismissal
+        ],
+      ),
+    ).then((_) => Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => nextPage))); // Navigate after dismissal
+  }
 
-}
+  static void NotifBerhasilEditInformasi(
+      BuildContext context, Widget nextPage) {
+    showDialog(
+      context: context,
+
+      barrierDismissible: false, // Prevent dismissal by tapping outside
+      builder: (context) => Stack(
+        children: <Widget>[
+          // Transparent background with a slight dimming effect
+          ModalBarrier(color: Colors.black.withOpacity(0.3)),
+          Center(
+            child: Container(
+              width: 300.0, // Adjust width as needed
+              height: 200.0, // Adjust height as needed
+              decoration: BoxDecoration(
+                color: CustomColors.secondaryColor,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Animated checkmark
+                  ScaleTransition(
+                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                      CurvedAnimation(
+                        parent: AlwaysStoppedAnimation(1),
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.check,
+                      size: 60.0,
+                      color: CustomColors.whiteColor,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  // Login success text
+                  Text(
+                    "Berhasil Mengubah Informasi!",
+                    style: CustomText.TextArvoBold(20, CustomColors.whiteColor),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20.0),
+                  // "OK" button with navigation
+                  // ElevatedButton(
+                  //   onPressed: () => , // Dismiss dialog
+                  //   child: Text(
+                  //     "Ok",
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //       fontSize: 16.0,
+                  //     ),
+                  //   ),
+                  //   style: CustomButton.DefaultButton(CustomColors.primaryColor)
+                  // ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ).then((_) => Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                InformasiToko(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            }))); 
+  }
 }
