@@ -9,6 +9,8 @@ import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:shimmer/shimmer.dart';
+
 class MenuDashboard extends StatefulWidget {
   const MenuDashboard({Key? key}) : super(key: key);
 
@@ -22,6 +24,42 @@ class _MenuDashboardState extends State<MenuDashboard> {
   String jsonDetailUser = "{}"; // Initialize as an empty JSON object
   Map<String, dynamic> detailUser = {}; // Initialize as an empty map
 
+  String jsonDetailInformasi = "{}";
+  Map<String, dynamic> detailInformasi = {};
+
+
+ Future getDetailInformasi() async {
+    final response = await http.get(Server.url("ShowDetailInformasi.php"));
+
+    if (response.statusCode == 200) {
+      jsonDetailInformasi = response.body.toString();
+      detailInformasi = json.decode(jsonDetailInformasi);
+      if (detailInformasi.isNotEmpty) {
+        setState(() {
+          print("nama_pemilik = " + detailInformasi['nama_pemilik']);
+          print("nama_toko = " + detailInformasi['nama_toko']);
+          print("alamatnya = " + detailInformasi['alamat']);
+          print("deskripsi = " + detailInformasi['deskripsi']);
+          print("no_telpon = " + detailInformasi['no_telpon']);
+          print("email = " + detailInformasi['email']);
+          print("akun_ig = " + detailInformasi['akun_ig']);
+          print("akun_fb = " + detailInformasi['akun_fb']);
+          print("akun_tiktok = " + detailInformasi['akun_tiktok']);
+          print("image = " + detailInformasi['image']);
+        });
+      } else {
+        print("No data available");
+      }
+    } else {
+      print("HTTP Request failed with status: ${response.statusCode}");
+    }
+  }
+
+
+
+
+
+
   Future getDetailUser() async {
     final response = await http.post(Server.url("ShowDetailProfil.php"),
         body: {"id_user": page_login.id_user});
@@ -31,9 +69,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
       detailUser = json.decode(jsonDetailUser);
       if (detailUser.isNotEmpty) {
         setState(() {
-          print("alamatnya = " + detailUser['alamat']);
-          alamat = detailUser['alamat']
-              .toString(); // Update alamat with the fetched value
+          alamat = detailUser['alamat'];
+          nama = detailUser['nama'];
         });
       } else {
         print("No data available");
@@ -44,35 +81,22 @@ class _MenuDashboardState extends State<MenuDashboard> {
   }
 
   String alamat = "";
+  String nama = "";
   @override
   void initState() {
     super.initState();
 
+    getDetailInformasi();
     showProduk();
     showPesanan();
-    // _startTimer();
     getDetailUser();
     setState(() {
-      print("Alamat = " + alamat);
+      print("idddddd = " + page_login.id_user);
       showProduk();
       print(listProdukTerlaris[0]['image_path'].toString());
       print(listProdukTerlaris[0]['nama'].toString());
       print(listProdukTerlaris[0]['harga'].toString());
     });
-  }
-  // void _startTimer() {
-  //   _timer = Timer.periodic(Duration(milliseconds: 100), (Timer timer) {
-  //     setState(() {
-  //       showPesanan();
-  //       // getDetailUser();
-  //     });
-  //   });
-  // }
-
-  @override
-  void dispose() {
-    // _timer.cancel(); // Cancel the timer to pr  event memory leaks
-    super.dispose();
   }
 
   String jsonProduk = """[
@@ -89,7 +113,6 @@ class _MenuDashboardState extends State<MenuDashboard> {
 
   List<Map<String, dynamic>> listProdukTerlaris = [];
   List<Map<String, dynamic>> listPesanan = [];
-  String Alamat = "";
   Future<void> showProduk() async {
     listProdukTerlaris =
         List<Map<String, dynamic>>.from(json.decode(jsonProduk));
@@ -98,9 +121,6 @@ class _MenuDashboardState extends State<MenuDashboard> {
   Future<void> showPesanan() async {
     listPesanan = List<Map<String, dynamic>>.from(json.decode(jsonPesanan));
   }
-
-  bool Refresh = false;
-  late Timer _timer;
 
   Widget KumpulanPesanan() {
     return Column(
@@ -134,7 +154,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         child: Text(
                           listPesanan[index]['nama'],
                           style: CustomText.TextArvoBold(
-                            16,
+                            18,
                             CustomColors.blackColor,
                           ),
                         ),
@@ -255,13 +275,28 @@ class _MenuDashboardState extends State<MenuDashboard> {
                     CustomColors.whiteColor,
                   ),
                 ),
-                Text(
-                  "Fadillah Wahyu",
-                  style: CustomText.TextArvoBold(
-                    18 * mediaQuery.textScaleFactor,
-                    CustomColors.whiteColor,
-                  ),
-                )
+                detailUser['nama'] != null
+                    ? Text(
+                        detailUser['nama'],
+                        style: CustomText.TextArvoBold(
+                          18,
+                          CustomColors.whiteColor,
+                        ),
+                        textAlign: TextAlign.start,
+                      )
+                    : Shimmer.fromColors(
+                        baseColor: Color.fromARGB(255, 104, 102, 102)!,
+                        highlightColor:
+                            const Color.fromARGB(255, 202, 200, 200)!,
+                        child: Text(
+                          'Loading...',
+                          style: CustomText.TextArvo(
+                            14,
+                            CustomColors.blackColor,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      )
               ],
             ),
           ),
@@ -619,7 +654,9 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: InkWell(
@@ -687,18 +724,32 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                             margin: EdgeInsets.only(
                                               left: 10,
                                             ),
-                                            child: Text(
-                                              // '${detailUser['alamat']}',
-                                              "Jl.Bengawan No.57 Perumahan Candi, Kabupaten Nganjuk",
-                                              maxLines: 5,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.left,
-                                              style:
-                                                  CustomText.TextArvoBoldItalic(
-                                                14 * mediaQuery.textScaleFactor,
-                                                CustomColors.blackColor,
-                                              ),
-                                            )),
+                                            child:  detailInformasi[
+                                                      'nama_pemilik'] !=
+                                                  null
+                                              ? Text(
+                                                  detailInformasi['alamat'],
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                )
+                                              : Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    'Loading...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                )),
                                       ],
                                     ),
                                   ),

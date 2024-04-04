@@ -24,7 +24,7 @@ class Tambah_Produk extends StatefulWidget {
 class Tambah_ProdukState extends State<Tambah_Produk> {
 //AWAL BACKEND
 
-  String? _selectedOption;
+  String? _selectedOption = "Kain";
 
   String _selectedStatus = 'tersedia'; // Nilai default
   String ImageSaatIni = "";

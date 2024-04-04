@@ -22,7 +22,7 @@ class _InformasiTokoState extends State<InformasiToko> {
   String jsonDetailInformasi = "{}";
   Map<String, dynamic> detailInformasi = {};
 
-  Future getDetailUser() async {
+  Future getDetailInformasi() async {
     final response = await http.get(Server.url("ShowDetailInformasi.php"));
 
     if (response.statusCode == 200) {
@@ -52,7 +52,7 @@ class _InformasiTokoState extends State<InformasiToko> {
   @override
   void initState() {
     super.initState();
-    getDetailUser();
+    getDetailInformasi();
   }
 
 //Akhir Backend

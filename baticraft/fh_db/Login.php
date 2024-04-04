@@ -9,25 +9,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $email = mysqli_real_escape_string($konek, $email);
 
-    $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1";
+    $sql = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
     $result = $konek->query($sql);
     $response = [];
-    $user = $result->fetch_assoc();
+
     if ($result->num_rows == 1) {
-        $role_db = $user['role'];
-        if ($role_db == 'admin') {
-            $response = $user;
+        $user = $result->fetch_assoc();
+        $hashedPasswordFromDatabase = $user['password'];
+
+        // Memeriksa apakah password yang dimasukkan oleh pengguna cocok dengan hash di database
+        if (password_verify($password, $hashedPasswordFromDatabase)) {
+            $role_db = $user['role'];
+            if ($role_db == 'admin') {
+                $response = $user;
+            } else {
+                $response = [
+                    'error' => 'User bukan admin'
+                ];
+            }
         } else {
-            // $response = $user;
-            $response =  Array();
+            $response = [
+                'error' => 'Email atau Password Salah'
+            ];
         }
     } else {
-        // $response = $user;
-        $response =  Array();
+        $response = [
+            'error' => 'User tidak ditemukan'
+        ];
     }
-    echo json_encode($response);
-    mysqli_close($konek);
 } else {
-    die("Method is not post");
+    $response = [
+        'error' => 'Metode tidak valid'
+    ];
 }
-    
+
+echo json_encode($response);
+mysqli_close($konek);
