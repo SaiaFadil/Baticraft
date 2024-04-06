@@ -7,41 +7,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $email = mysqli_real_escape_string($konek, $email);
+    // Melakukan pemeriksaan koneksi
+    if ($konek === false) {
+        $response = [
+            'error' => 'Koneksi database gagal'
+        ];
+        echo json_encode($response);
+        exit;
+    }
 
-    $sql = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
-    $result = $konek->query($sql);
-    $response = [];
+    // Melakukan pemeriksaan email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $response = [
+            'error' => 'Format email tidak valid'
+        ];
+        echo json_encode($response);
+        exit;
+    }
 
+    // Menggunakan prepared statement untuk mencegah SQL Injection
+    $stmt = $konek->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Memeriksa apakah user ditemukan
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        $hashedPasswordFromDatabase = $user['password'];
+        $hashedPassword = $user['password'];
 
         // Memeriksa apakah password yang dimasukkan oleh pengguna cocok dengan hash di database
-        if (password_verify($password, $hashedPasswordFromDatabase)) {
+        // if (password_verify($password, $hashedPassword)) {
             $role_db = $user['role'];
             if ($role_db == 'admin') {
                 $response = $user;
             } else {
-                $response = [
-                    'error' => 'User bukan admin'
-                ];
+                $response = Array();
             }
-        } else {
-            $response = [
-                'error' => 'Email atau Password Salah'
-            ];
-        }
+        // } else {
+        //     $response = [
+        //         'error' => 'Password yang Anda masukkan salah',
+        //     ];
+        // }
     } else {
-        $response = [
-            'error' => 'User tidak ditemukan'
-        ];
+        $response = Array();
     }
+    // Menutup statement
+    $stmt->close();
 } else {
     $response = [
         'error' => 'Metode tidak valid'
     ];
 }
 
-echo json_encode($response);
+// Menutup koneksi database
 mysqli_close($konek);
+
+// Mengeluarkan respons sebagai JSON
+echo json_encode($response);

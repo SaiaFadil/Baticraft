@@ -1,4 +1,4 @@
-import 'package:baticraft/menu/SubMenuHome/page_informasi_toko.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuInformasiToko/page_informasi_toko.dart';
 import 'package:baticraft/navigation/utama.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/Server.dart';
@@ -288,6 +288,80 @@ class CustomWidget {
         PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) =>
                 InformasiToko(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            }))); 
+  }
+ static void NotifBerhasilTambahProduk(
+      BuildContext context, Widget nextPage) {
+    showDialog(
+      context: context,
+
+      barrierDismissible: false, // Prevent dismissal by tapping outside
+      builder: (context) => Stack(
+        children: <Widget>[
+          // Transparent background with a slight dimming effect
+          ModalBarrier(color: Colors.black.withOpacity(0.3)),
+          Center(
+            child: Container(
+              width: 300.0, // Adjust width as needed
+              height: 200.0, // Adjust height as needed
+              decoration: BoxDecoration(
+                color: CustomColors.secondaryColor,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Animated checkmark
+                  ScaleTransition(
+                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                      CurvedAnimation(
+                        parent: AlwaysStoppedAnimation(1),
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.check,
+                      size: 60.0,
+                      color: CustomColors.whiteColor,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  // Login success text
+                  Text(
+                    "Berhasil Ditambahkan!",
+                    style: CustomText.TextArvoBold(20, CustomColors.whiteColor),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20.0),
+                  // "OK" button with navigation
+                  // ElevatedButton(
+                  //   onPressed: () => , // Dismiss dialog
+                  //   child: Text(
+                  //     "Ok",
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //       fontSize: 16.0,
+                  //     ),
+                  //   ),
+                  //   style: CustomButton.DefaultButton(CustomColors.primaryColor)
+                  // ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ).then((_) => Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                nextPage,
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(

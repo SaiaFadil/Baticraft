@@ -7,6 +7,7 @@ import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 class List_Kelola_Produk extends StatefulWidget {
   const List_Kelola_Produk({super.key});
@@ -17,65 +18,42 @@ class List_Kelola_Produk extends StatefulWidget {
 }
 
 class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
-  String jsonProdukKemeja = """[
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"}
-    
-  ]""";
-  String jsonProdukBaju = """[
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"}
+  String jsonProdukKemeja = "{}";
+  String jsonProdukBaju = "{}";
+  String jsonProdukKain = "{}";
 
-  ]""";
-  String jsonProdukKain = """[
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"}
-  ]""";
-
-  List<Map<String, dynamic>> listProdukKemeja = [];
-  List<Map<String, dynamic>> listProdukBaju = [];
-  List<Map<String, dynamic>> listProdukKain = [];
-  Future<void> showProdukKemeja() async {
-    listProdukKemeja =
-        List<Map<String, dynamic>>.from(json.decode(jsonProdukKemeja));
-  }
-
-  Future<void> showProdukBaju() async {
-    listProdukBaju =
-        List<Map<String, dynamic>>.from(json.decode(jsonProdukBaju));
-  }
-
-  Future<void> showProdukKain() async {
-    listProdukKain =
-        List<Map<String, dynamic>>.from(json.decode(jsonProdukKain));
-  }
 
   List<Map<String, dynamic>> listKemeja = [];
   List<Map<String, dynamic>> listBaju = [];
   List<Map<String, dynamic>> listKain = [];
 
-  // Future showKemeja() async {
-  //   final response = await http.get(Server.url("ShowBuah.php"));
-  //   jsonKemeja = response.body.toString();
-
-  //   listKemeja = List<Map<String, dynamic>>.from(json.decode(jsonKemeja));
-  // }
-
-  // Future showBaju() async {
-  //   final response = await http.get(Server.url("ShowSayur.php"));
-  //   jsonBaju = response.body.toString();
-  //   listBaju = List<Map<String, dynamic>>.from(json.decode(jsonBaju));
-  // }
-
-  // Future showKain() async {
-  //   final response = await http.get(Server.url("ShowSayur.php"));
-  //   jsonKain = response.body.toString();
-  //   listKain = List<Map<String, dynamic>>.from(json.decode(jsonKain));
-  // }
-
+  Future<void> showKemeja() async {
+    final response = await http.get(Server.url("showKemeja.php"));
+    jsonProdukKemeja = response.body.toString();
+    setState(() {
+      listKemeja =
+          List<Map<String, dynamic>>.from(json.decode(jsonProdukKemeja));
+    });
+    print(listKemeja[0]['nama']);
+  }
+  Future<void> showKaos() async {
+    final response = await http.get(Server.url("showKaos.php"));
+    jsonProdukBaju = response.body.toString();
+    setState(() {
+      listBaju =
+          List<Map<String, dynamic>>.from(json.decode(jsonProdukBaju));
+    });
+    print(listBaju[0]['nama']);
+  }
+  Future<void> showKain() async {
+    final response = await http.get(Server.url("showKain.php"));
+    jsonProdukKain = response.body.toString();
+    setState(() {
+      listKain =
+          List<Map<String, dynamic>>.from(json.decode(jsonProdukKain));
+    });
+    print(listKain[0]['nama']);
+  }
   Widget KumpulanKemeja() {
     return Container(
       height: 230,
@@ -83,15 +61,16 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: List.generate(
-            listProdukKemeja.length,
+            listKemeja.length,
             (index) => Padding(
               padding: const EdgeInsets.only(
                 left: 10,
               ),
               child: GestureDetector(
                 onTap: () {
-
-                  
+                  List_Kelola_Produk.id_produk = listKemeja[index]['id'];
+                  print("id produk = " +List_Kelola_Produk.id_produk);
+                  // Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>EditP))
                 },
                 child: Container(
                   width: 170,
@@ -105,33 +84,77 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          listKemeja.isEmpty
+                              ? Shimmer.fromColors(
+                                  baseColor:
+                                      Color.fromARGB(255, 104, 102, 102)!,
+                                  highlightColor:
+                                      const Color.fromARGB(255, 202, 200, 200)!,
+                                  child: Text(
+                                    '...',
+                                    style: CustomText.TextArvo(
+                                      14,
+                                      CustomColors.blackColor,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                )
+                              : Container(
+                                  child: Image.network(
+                                    fit: BoxFit.fitWidth,
+                                    height: 120,
+                                    Server.urlImageDatabase(
+                                        listKemeja[index]['image_path']),
+                                  ),
+                                ),
                           Container(
-                            child: Image.network(
-                              fit: BoxFit.fitWidth,
-                              height: 120,
-                              Server.urlImageDatabase(
-                                  listProdukKemeja[index]['image_path']),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: Text(
-                              listProdukKemeja[index]['nama'],
-                              style: CustomText.TextArvoBold(
-                                  14, CustomColors.blackColor),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: listKemeja.isEmpty
+                                  ? Shimmer.fromColors(
+                                      baseColor:
+                                          Color.fromARGB(255, 104, 102, 102)!,
+                                      highlightColor: const Color.fromARGB(
+                                          255, 202, 200, 200)!,
+                                      child: Text(
+                                        '...',
+                                        style: CustomText.TextArvo(
+                                          14,
+                                          CustomColors.blackColor,
+                                        ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    )
+                                  : Text(
+                                      listKemeja[index]['nama'],
+                                      style: CustomText.TextArvoBold(
+                                          14, CustomColors.blackColor),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    )),
                           Container(
                             padding: EdgeInsets.only(left: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Rp." + listProdukKemeja[index]['harga'],
-                                    style: CustomText.TextArvoBold(
-                                        12, CustomColors.blackColor)),
+                                listKemeja.isEmpty
+                                    ? Shimmer.fromColors(
+                                        baseColor:
+                                            Color.fromARGB(255, 104, 102, 102)!,
+                                        highlightColor: const Color.fromARGB(
+                                            255, 202, 200, 200)!,
+                                        child: Text(
+                                          '...',
+                                          style: CustomText.TextArvo(
+                                            14,
+                                            CustomColors.blackColor,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      )
+                                    : Text("Rp." + listKemeja[index]['harga'],
+                                        style: CustomText.TextArvoBold(
+                                            12, CustomColors.blackColor)),
                                 Container(
                                   child: IconButton(
                                       onPressed: () {},
@@ -155,21 +178,24 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
       ),
     );
   }
-
-  Widget KumpulanBaju() {
+  Widget KumpulanKaos() {
     return Container(
       height: 230,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: List.generate(
-            listProdukBaju.length,
+            listBaju.length,
             (index) => Padding(
               padding: const EdgeInsets.only(
                 left: 10,
               ),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  List_Kelola_Produk.id_produk = listBaju[index]['id'];
+                  print(List_Kelola_Produk.id_produk);
+                  // Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>EditP))
+                },
                 child: Container(
                   width: 170,
                   child: Card(
@@ -182,33 +208,77 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          listBaju.isEmpty
+                              ? Shimmer.fromColors(
+                                  baseColor:
+                                      Color.fromARGB(255, 104, 102, 102)!,
+                                  highlightColor:
+                                      const Color.fromARGB(255, 202, 200, 200)!,
+                                  child: Text(
+                                    '...',
+                                    style: CustomText.TextArvo(
+                                      14,
+                                      CustomColors.blackColor,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                )
+                              : Container(
+                                  child: Image.network(
+                                    fit: BoxFit.fitWidth,
+                                    height: 120,
+                                    Server.urlImageDatabase(
+                                        listBaju[index]['image_path']),
+                                  ),
+                                ),
                           Container(
-                            child: Image.network(
-                              fit: BoxFit.fitWidth,
-                              height: 120,
-                              Server.urlImageDatabase(
-                                  listProdukBaju[index]['image_path']),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: Text(
-                              listProdukBaju[index]['nama'],
-                              style: CustomText.TextArvoBold(
-                                  14, CustomColors.blackColor),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: listBaju.isEmpty
+                                  ? Shimmer.fromColors(
+                                      baseColor:
+                                          Color.fromARGB(255, 104, 102, 102)!,
+                                      highlightColor: const Color.fromARGB(
+                                          255, 202, 200, 200)!,
+                                      child: Text(
+                                        '...',
+                                        style: CustomText.TextArvo(
+                                          14,
+                                          CustomColors.blackColor,
+                                        ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    )
+                                  : Text(
+                                      listBaju[index]['nama'],
+                                      style: CustomText.TextArvoBold(
+                                          14, CustomColors.blackColor),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    )),
                           Container(
                             padding: EdgeInsets.only(left: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Rp." + listProdukBaju[index]['harga'],
-                                    style: CustomText.TextArvoBold(
-                                        12, CustomColors.blackColor)),
+                                listBaju.isEmpty
+                                    ? Shimmer.fromColors(
+                                        baseColor:
+                                            Color.fromARGB(255, 104, 102, 102)!,
+                                        highlightColor: const Color.fromARGB(
+                                            255, 202, 200, 200)!,
+                                        child: Text(
+                                          '...',
+                                          style: CustomText.TextArvo(
+                                            14,
+                                            CustomColors.blackColor,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      )
+                                    : Text("Rp." + listBaju[index]['harga'],
+                                        style: CustomText.TextArvoBold(
+                                            12, CustomColors.blackColor)),
                                 Container(
                                   child: IconButton(
                                       onPressed: () {},
@@ -232,7 +302,6 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
       ),
     );
   }
-
   Widget KumpulanKain() {
     return Container(
       height: 230,
@@ -240,13 +309,17 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: List.generate(
-            listProdukKain.length,
+            listKain.length,
             (index) => Padding(
               padding: const EdgeInsets.only(
                 left: 10,
               ),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  List_Kelola_Produk.id_produk = listKain[index]['id'];
+                  print(List_Kelola_Produk.id_produk);
+                  // Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>EditP))
+                },
                 child: Container(
                   width: 170,
                   child: Card(
@@ -259,33 +332,77 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          listKain.isEmpty
+                              ? Shimmer.fromColors(
+                                  baseColor:
+                                      Color.fromARGB(255, 104, 102, 102)!,
+                                  highlightColor:
+                                      const Color.fromARGB(255, 202, 200, 200)!,
+                                  child: Text(
+                                    '...',
+                                    style: CustomText.TextArvo(
+                                      14,
+                                      CustomColors.blackColor,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                )
+                              : Container(
+                                  child: Image.network(
+                                    fit: BoxFit.fitWidth,
+                                    height: 120,
+                                    Server.urlImageDatabase(
+                                        listKain[index]['image_path']),
+                                  ),
+                                ),
                           Container(
-                            child: Image.network(
-                              fit: BoxFit.fitWidth,
-                              height: 120,
-                              Server.urlImageDatabase(
-                                  listProdukKain[index]['image_path']),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: Text(
-                              listProdukKain[index]['nama'],
-                              style: CustomText.TextArvoBold(
-                                  14, CustomColors.blackColor),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              child: listKain.isEmpty
+                                  ? Shimmer.fromColors(
+                                      baseColor:
+                                          Color.fromARGB(255, 104, 102, 102)!,
+                                      highlightColor: const Color.fromARGB(
+                                          255, 202, 200, 200)!,
+                                      child: Text(
+                                        '...',
+                                        style: CustomText.TextArvo(
+                                          14,
+                                          CustomColors.blackColor,
+                                        ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    )
+                                  : Text(
+                                      listKain[index]['nama'],
+                                      style: CustomText.TextArvoBold(
+                                          14, CustomColors.blackColor),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    )),
                           Container(
                             padding: EdgeInsets.only(left: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Rp." + listProdukKain[index]['harga'],
-                                    style: CustomText.TextArvoBold(
-                                        12, CustomColors.blackColor)),
+                                listKain.isEmpty
+                                    ? Shimmer.fromColors(
+                                        baseColor:
+                                            Color.fromARGB(255, 104, 102, 102)!,
+                                        highlightColor: const Color.fromARGB(
+                                            255, 202, 200, 200)!,
+                                        child: Text(
+                                          '...',
+                                          style: CustomText.TextArvo(
+                                            14,
+                                            CustomColors.blackColor,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      )
+                                    : Text("Rp." + listKain[index]['harga'],
+                                        style: CustomText.TextArvoBold(
+                                            12, CustomColors.blackColor)),
                                 Container(
                                   child: IconButton(
                                       onPressed: () {},
@@ -313,10 +430,11 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
   @override
   void initState() {
     super.initState();
+    showKemeja();
     setState(() {
-      showProdukKemeja();
-      showProdukBaju();
-      showProdukKain();
+      showKemeja();
+      showKaos();
+      showKain();
     });
   }
 
@@ -351,8 +469,8 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),
         ),
         Padding(
-           padding: const EdgeInsets.only(top: 10),
-          child: KumpulanBaju(),
+          padding: const EdgeInsets.only(top: 10),
+          child: KumpulanKaos(),
         ),
         Align(
           alignment: Alignment.centerLeft,
@@ -362,7 +480,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),
         ),
         Padding(
-           padding: const EdgeInsets.only(top: 10,bottom: 30),
+          padding: const EdgeInsets.only(top: 10, bottom: 30),
           child: KumpulanKain(),
         ),
       ],

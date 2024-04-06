@@ -1,4 +1,4 @@
-import 'package:baticraft/menu/SubMenuHome/page_tambah_produk.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/TambahProduk/page_tambah_produk.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -48,7 +48,8 @@ class KelolaProdukState extends State<KelolaProduk> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         side: BorderSide(
-                            color: CustomColors.secondaryColor, strokeAlign: 1)),
+                            color: CustomColors.secondaryColor,
+                            strokeAlign: 1)),
                     elevation: 10,
                     child: CustomWidget.KolomPencarian(() {}))),
             Padding(
@@ -57,32 +58,27 @@ class KelolaProdukState extends State<KelolaProduk> {
                 width: double.infinity,
                 height: 150,
                 child: ElevatedButton(
-                  onPressed: (){
-
- Navigator.pushReplacement(
-                                          context,
-                                          PageRouteBuilder(
-                                              pageBuilder: (context, animation,
-                                                      secondaryAnimation) =>
-                                                  Tambah_Produk(),
-                                              transitionsBuilder: (context,
-                                                  animation,
-                                                  secondaryAnimation,
-                                                  child) {
-                                                return FadeTransition(
-                                                  opacity: animation,
-                                                  child: child,
-                                                );
-                                              }));
-
-
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    Tambah_Produk(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            }));
                   },
                   style: CustomButton.DefaultButton(CustomColors.fourtyColor),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
-                          width: 10,
+                          width: 10,  
                         ),
                         Image.asset(
                           "assets/images/ic_tambahproduk.png",
@@ -101,7 +97,9 @@ class KelolaProdukState extends State<KelolaProduk> {
                 ),
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             List_Kelola_Produk()
           ]),
         ),

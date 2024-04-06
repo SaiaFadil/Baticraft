@@ -47,8 +47,9 @@ class _page_login extends State<page_login> {
           isWrong = false;
           CustomWidget.NotifBerhasilLogin(context, utama());
 
-          page_login.id_user = detailUser['id'];
-          print("id user = " + detailUser['id']);
+          page_login.id_user = detailUser['id'].toString();
+          print("id user = " + detailUser['id'].toString());
+          print("id user = " + response.body);
         } else {
           setState(() {
             print("kesalahan");

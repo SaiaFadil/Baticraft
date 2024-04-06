@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:baticraft/menu/SubMenuHome/page_edit_informasi.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuInformasiToko/page_edit_informasi.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
-import 'package:baticraft/menu/SubMenuHome/page_informasi_toko.dart';
-import 'package:baticraft/menu/SubMenuHome/page_kelola_produk.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuInformasiToko/page_informasi_toko.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/page_kelola_produk.dart';
 import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
