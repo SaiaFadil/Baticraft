@@ -1,4 +1,5 @@
 import 'package:baticraft/menu/SubMenuHome/subMenuProduk/TambahProduk/page_tambah_produk.dart';
+import 'package:baticraft/navigation/utama.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -26,7 +27,7 @@ class KelolaProdukState extends State<KelolaProduk> {
               textAlign: TextAlign.center),
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) =>utama() ,));
             },
             icon: Icon(Icons.arrow_back_ios),
             color: CustomColors.threertyColor,

@@ -45,8 +45,9 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
       throw Exception('Failed to load next product code');
     }
   }
-//akhir generate kode
 
+//akhir generate kode
+  bool DataTidakLengkap = false;
   TextEditingController namaController = TextEditingController();
   TextEditingController deskripsiController = TextEditingController();
   TextEditingController hargaController = TextEditingController();
@@ -126,7 +127,7 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
     var response = await request.send();
     if (response.statusCode == 200) {
       print('Data sended successfully');
-CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
+      CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
       // Handle success response
     } else {
       print('Failed to upload data. Error: ${response.reasonPhrase}');
@@ -203,7 +204,7 @@ CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
     }
   }
 
- //AKHIR BACKEND
+  //AKHIR BACKEND
 
 // Tambahan inputan KAIN
   Column InputanKain() {
@@ -222,7 +223,7 @@ CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: TextField(
-            controller:ukuranController,
+            controller: ukuranController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
             textInputAction: TextInputAction.next,
@@ -294,7 +295,7 @@ CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: TextField(
-            controller:lebarKainController,
+            controller: lebarKainController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
             textInputAction: TextInputAction.next,
@@ -339,7 +340,7 @@ CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: TextField(
-            controller:ukuranController,
+            controller: ukuranController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
             textInputAction: TextInputAction.next,
@@ -372,53 +373,53 @@ CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
             ),
           ),
         ),
-       Container(
-                width: double.infinity,
-                child: Card(
-                  surfaceTintColor: CustomColors.whiteColor,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      width: 1,
-                      color: CustomColors.blackColor,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  shadowColor: CustomColors.whiteColor,
-                  elevation: 15,
-                  color: CustomColors.whiteColor,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: DropdownButton<String>(
-                      elevation: 0,
-                      isExpanded: true,
-                      dropdownColor: CustomColors.whiteColor,
-                      iconSize: 30,
-                      focusColor: CustomColors.HintColor,
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: CustomColors.blackColor,
-                      ),
-                      style: CustomText.TextArvo(16, CustomColors.blackColor),
-                      value: _selectedJenisLengan,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedJenisLengan = newValue!;
-                        });
-                      },
-                      items: <String>['pendek', 'panjang']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
+        Container(
+          width: double.infinity,
+          child: Card(
+            surfaceTintColor: CustomColors.whiteColor,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1,
+                color: CustomColors.blackColor,
               ),
-        ],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            shadowColor: CustomColors.whiteColor,
+            elevation: 15,
+            color: CustomColors.whiteColor,
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              child: DropdownButton<String>(
+                elevation: 0,
+                isExpanded: true,
+                dropdownColor: CustomColors.whiteColor,
+                iconSize: 30,
+                focusColor: CustomColors.HintColor,
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: CustomColors.blackColor,
+                ),
+                style: CustomText.TextArvo(16, CustomColors.blackColor),
+                value: _selectedJenisLengan,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedJenisLengan = newValue!;
+                  });
+                },
+                items: <String>['pendek', 'panjang']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -441,7 +442,7 @@ CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: TextField(
-            controller:ukuranController,
+            controller: ukuranController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
             textInputAction: TextInputAction.next,
@@ -474,53 +475,53 @@ CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
             ),
           ),
         ),
-         Container(
-                width: double.infinity,
-                child: Card(
-                  surfaceTintColor: CustomColors.whiteColor,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      width: 1,
-                      color: CustomColors.blackColor,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  shadowColor: CustomColors.whiteColor,
-                  elevation: 15,
-                  color: CustomColors.whiteColor,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: DropdownButton<String>(
-                      elevation: 0,
-                      isExpanded: true,
-                      dropdownColor: CustomColors.whiteColor,
-                      iconSize: 30,
-                      focusColor: CustomColors.HintColor,
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: CustomColors.blackColor,
-                      ),
-                      style: CustomText.TextArvo(16, CustomColors.blackColor),
-                      value: _selectedJenisLengan,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedJenisLengan = newValue!;
-                        });
-                      },
-                      items: <String>['pendek', 'panjang']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
+        Container(
+          width: double.infinity,
+          child: Card(
+            surfaceTintColor: CustomColors.whiteColor,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1,
+                color: CustomColors.blackColor,
               ),
-            ],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            shadowColor: CustomColors.whiteColor,
+            elevation: 15,
+            color: CustomColors.whiteColor,
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              child: DropdownButton<String>(
+                elevation: 0,
+                isExpanded: true,
+                dropdownColor: CustomColors.whiteColor,
+                iconSize: 30,
+                focusColor: CustomColors.HintColor,
+                icon: Icon(
+                  Icons.arrow_drop_down,
+                  color: CustomColors.blackColor,
+                ),
+                style: CustomText.TextArvo(16, CustomColors.blackColor),
+                value: _selectedJenisLengan,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedJenisLengan = newValue!;
+                  });
+                },
+                items: <String>['pendek', 'panjang']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -849,566 +850,720 @@ CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomColors.whiteColor,
-      appBar: AppBar(
-        elevation: 5,
-        title: Text("Tambah Produk",
-            style: CustomText.TextArvoBold(16, CustomColors.threertyColor),
-            textAlign: TextAlign.center),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        KelolaProduk(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    }));
-          },
-          icon: Icon(Icons.arrow_back_ios),
-          color: CustomColors.threertyColor,
+    return WillPopScope(
+      onWillPop: () async {
+        setState(() {
+          DataTidakLengkap = false;
+        });
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: CustomColors.whiteColor,
+        appBar: AppBar(
+          elevation: 5,
+          title: Text("Tambah Produk",
+              style: CustomText.TextArvoBold(16, CustomColors.threertyColor),
+              textAlign: TextAlign.center),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          KelolaProduk(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      }));
+            },
+            icon: Icon(Icons.arrow_back_ios),
+            color: CustomColors.threertyColor,
+          ),
+          shadowColor: CustomColors.blackColor,
+          centerTitle: true,
+          surfaceTintColor: CustomColors.whiteColor,
         ),
-        shadowColor: CustomColors.blackColor,
-        centerTitle: true,
-        surfaceTintColor: CustomColors.whiteColor,
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 20),
-                  width: 250,
-                  height: 250,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        width: 2,
-                        color: CustomColors.secondaryColor,
+        body: GestureDetector(
+          onTap: () {
+            setState(() {
+              DataTidakLengkap = false;
+            });
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 20, bottom: 20),
+                      width: 250,
+                      height: 250,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            width: 2,
+                            color: CustomColors.secondaryColor,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        shadowColor: CustomColors.blackColor,
+                        elevation: 15,
+                        surfaceTintColor: CustomColors.whiteColor,
+                        child: ImageSaatIni != ""
+                            ? Card(
+                                margin: EdgeInsets.all(20),
+                                child: Image(
+                                  image: FileImage(_profileImage!),
+                                  fit: BoxFit.contain,
+                                ),
+                              )
+                            : Container(
+                                margin: EdgeInsets.all(20),
+                                child: Image.asset(
+                                  Server.urlGambar("default2.png"),
+                                  fit: BoxFit.contain,
+                                )),
                       ),
-                      borderRadius: BorderRadius.circular(20),
                     ),
-                    shadowColor: CustomColors.blackColor,
-                    elevation: 15,
-                    surfaceTintColor: CustomColors.whiteColor,
-                    child: ImageSaatIni != ""
-                        ? Card(
-                            margin: EdgeInsets.all(20),
-                            child: Image(
-                              image: FileImage(_profileImage!),
+                  ),
+                  Container(
+                    width: 210,
+                    child: Card(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _getImage();
+                        },
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
+                          elevation: MaterialStateProperty.all<double>(10),
+                          padding:
+                              MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                  EdgeInsets.fromLTRB(5, 12, 5, 12)),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              CustomColors.secondaryColor),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              Server.urlGambar("camera_ad.png"),
                               fit: BoxFit.contain,
                             ),
-                          )
-                        : Container(
-                            margin: EdgeInsets.all(20),
-                            child: Image.asset(
-                              Server.urlGambar("default2.png"),
-                              fit: BoxFit.contain,
-                            )),
-                  ),
-                ),
-              ),
-              Container(
-                width: 210,
-                child: Card(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _getImage();
-                    },
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Upload Gambar",
+                              style: CustomText.TextArvoBold(
+                                  16, CustomColors.whiteColor),
+                            ),
+                          ],
                         ),
                       ),
-                      elevation: MaterialStateProperty.all<double>(10),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          EdgeInsets.fromLTRB(5, 12, 5, 12)),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          CustomColors.secondaryColor),
                     ),
+                  ),
+                  ImageSaatIni.isEmpty ? SizedBox() : InputGambar2(),
+                  ImageSaatIni2.isEmpty ? SizedBox() : InputGambar3(),
+                  ImageSaatIni3.isEmpty ? SizedBox() : InputGambar4(),
+                  ImageSaatIni4.isEmpty ? SizedBox() : InputGambar5(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Nama Produk",
+                        style: CustomText.TextArvoBold(
+                            14, CustomColors.blackColor),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    child: TextField(
+                      onTap: () {
+                        DataTidakLengkap = false;
+                      },
+                      controller: namaController,
+                      keyboardType: TextInputType.text,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        hintText: "Masukkan Nama Produk",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.secondaryColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.blackColor),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      ),
+                      style: CustomText.TextArvo(14, CustomColors.blackColor),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Deskripsi Produk",
+                        style: CustomText.TextArvoBold(
+                            14, CustomColors.blackColor),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    child: TextField(
+                      onTap: () {
+                        DataTidakLengkap = false;
+                      },
+                      controller: deskripsiController,
+                      keyboardType: TextInputType.text,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        hintText: "Masukkan Deskripsi Produk",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.secondaryColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.blackColor),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      ),
+                      style: CustomText.TextArvo(14, CustomColors.blackColor),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Harga",
+                        style: CustomText.TextArvoBold(
+                            14, CustomColors.blackColor),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    child: TextField(
+                      onTap: () {
+                        DataTidakLengkap = false;
+                      },
+                      controller: hargaController,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        hintText: "Rp.0",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.secondaryColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.blackColor),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      ),
+                      style: CustomText.TextArvo(14, CustomColors.blackColor),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Status",
+                        style: CustomText.TextArvoBold(
+                            14, CustomColors.blackColor),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: Card(
+                      surfaceTintColor: CustomColors.whiteColor,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          width: 1,
+                          color: CustomColors.blackColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      shadowColor: CustomColors.whiteColor,
+                      elevation: 15,
+                      color: CustomColors.whiteColor,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        child: DropdownButton<String>(
+                          elevation: 0,
+                          isExpanded: true,
+                          dropdownColor: CustomColors.whiteColor,
+                          iconSize: 30,
+                          focusColor: CustomColors.HintColor,
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: CustomColors.blackColor,
+                          ),
+                          style:
+                              CustomText.TextArvo(16, CustomColors.blackColor),
+                          value: _selectedStatus,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedStatus = newValue!;
+                            });
+                          },
+                          items: <String>['tersedia', 'tidak tersedia']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Stok",
+                        style: CustomText.TextArvoBold(
+                            14, CustomColors.blackColor),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    child: TextField(
+                      onTap: () {
+                        DataTidakLengkap = false;
+                      },
+                      controller: stokController,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        hintText: "+1",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.secondaryColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.blackColor),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      ),
+                      style: CustomText.TextArvo(14, CustomColors.blackColor),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Bahan",
+                        style: CustomText.TextArvoBold(
+                            14, CustomColors.blackColor),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    child: TextField(
+                      onTap: () {
+                        DataTidakLengkap = false;
+                      },
+                      controller: bahanController,
+                      keyboardType: TextInputType.text,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        hintText: "Masukkan Bahan Produk",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.secondaryColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.blackColor),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      ),
+                      style: CustomText.TextArvo(14, CustomColors.blackColor),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Jenis Batik",
+                        style: CustomText.TextArvoBold(
+                            14, CustomColors.blackColor),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    child: TextField(
+                      onTap: () {
+                        DataTidakLengkap = false;
+                      },
+                      controller: jenisBatikController,
+                      keyboardType: TextInputType.text,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        hintText: "Masukkan Jenis Batik",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.secondaryColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: CustomColors.blackColor),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
+                      ),
+                      style: CustomText.TextArvo(14, CustomColors.blackColor),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Kategori",
+                        style: CustomText.TextArvoBold(
+                            14, CustomColors.blackColor),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          Server.urlGambar("camera_ad.png"),
-                          fit: BoxFit.contain,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "Upload Gambar",
-                          style: CustomText.TextArvoBold(
-                              16, CustomColors.whiteColor),
-                        ),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _selectedOption = 'kain';
+                              });
+                            },
+                            child: Text(
+                              'Kain',
+                              style: CustomText.TextArvoBold(
+                                  16,
+                                  _selectedOption == 'kain'
+                                      ? CustomColors.whiteColor
+                                      : CustomColors.secondaryColor),
+                            ),
+                            style: ButtonStyle(
+                              surfaceTintColor:
+                                  MaterialStateProperty.all<Color>(
+                                      _selectedOption == 'kain'
+                                          ? CustomColors.secondaryColor
+                                          : CustomColors.whiteColor),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: CustomColors.secondaryColor),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                              ),
+                              elevation: MaterialStateProperty.all<double>(10),
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                      EdgeInsets.fromLTRB(30, 5, 30, 5)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  _selectedOption == 'kain'
+                                      ? CustomColors.secondaryColor
+                                      : CustomColors.whiteColor),
+                            )),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _selectedOption = 'kaos';
+                              });
+                            },
+                            child: Text('Kaos',
+                                style: CustomText.TextArvoBold(
+                                    16,
+                                    _selectedOption == 'kaos'
+                                        ? CustomColors.whiteColor
+                                        : CustomColors.secondaryColor)),
+                            style: ButtonStyle(
+                              surfaceTintColor:
+                                  MaterialStateProperty.all<Color>(
+                                      _selectedOption == 'kaos'
+                                          ? CustomColors.secondaryColor
+                                          : CustomColors.whiteColor),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: CustomColors.secondaryColor),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                              ),
+                              elevation: MaterialStateProperty.all<double>(10),
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                      EdgeInsets.fromLTRB(30, 5, 30, 5)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  _selectedOption == 'kaos'
+                                      ? CustomColors.secondaryColor
+                                      : CustomColors.whiteColor),
+                            )),
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _selectedOption = 'kemeja';
+                              });
+                            },
+                            child: Text('kemeja',
+                                style: CustomText.TextArvoBold(
+                                    16,
+                                    _selectedOption == 'kemeja'
+                                        ? CustomColors.whiteColor
+                                        : CustomColors.secondaryColor)),
+                            style: ButtonStyle(
+                              surfaceTintColor:
+                                  MaterialStateProperty.all<Color>(
+                                      _selectedOption == 'kemeja'
+                                          ? CustomColors.secondaryColor
+                                          : CustomColors.whiteColor),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: CustomColors.secondaryColor),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                              ),
+                              elevation: MaterialStateProperty.all<double>(10),
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                      EdgeInsets.fromLTRB(30, 5, 30, 5)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  _selectedOption == 'kemeja'
+                                      ? CustomColors.secondaryColor
+                                      : CustomColors.whiteColor),
+                            )),
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),
-                ),
-              ),
-              ImageSaatIni.isEmpty ? SizedBox() : InputGambar2(),
-              ImageSaatIni2.isEmpty ? SizedBox() : InputGambar3(),
-              ImageSaatIni3.isEmpty ? SizedBox() : InputGambar4(),
-              ImageSaatIni4.isEmpty ? SizedBox() : InputGambar5(),
-              Padding(
-                padding: const EdgeInsets.only(top: 50),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Nama Produk",
-                    style: CustomText.TextArvoBold(14, CustomColors.blackColor),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: TextField(
-                  controller: namaController,
-                  keyboardType: TextInputType.text,
-                  textAlign: TextAlign.start,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    hintText: "Masukkan Nama Produk",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide:
-                          BorderSide(color: CustomColors.secondaryColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: CustomColors.blackColor),
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                  ),
-                  style: CustomText.TextArvo(14, CustomColors.blackColor),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Deskripsi Produk",
-                    style: CustomText.TextArvoBold(14, CustomColors.blackColor),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: TextField(
-                  controller: deskripsiController,
-                  keyboardType: TextInputType.text,
-                  textAlign: TextAlign.start,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    hintText: "Masukkan Deskripsi Produk",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide:
-                          BorderSide(color: CustomColors.secondaryColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: CustomColors.blackColor),
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                  ),
-                  style: CustomText.TextArvo(14, CustomColors.blackColor),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Harga",
-                    style: CustomText.TextArvoBold(14, CustomColors.blackColor),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: TextField(
-                  controller:hargaController,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.start,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    hintText: "Rp.0",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide:
-                          BorderSide(color: CustomColors.secondaryColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: CustomColors.blackColor),
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                  ),
-                  style: CustomText.TextArvo(14, CustomColors.blackColor),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Status",
-                    style: CustomText.TextArvoBold(14, CustomColors.blackColor),
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                child: Card(
-                  surfaceTintColor: CustomColors.whiteColor,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      width: 1,
-                      color: CustomColors.blackColor,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  shadowColor: CustomColors.whiteColor,
-                  elevation: 15,
-                  color: CustomColors.whiteColor,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: DropdownButton<String>(
-                      elevation: 0,
-                      isExpanded: true,
-                      dropdownColor: CustomColors.whiteColor,
-                      iconSize: 30,
-                      focusColor: CustomColors.HintColor,
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: CustomColors.blackColor,
-                      ),
-                      style: CustomText.TextArvo(16, CustomColors.blackColor),
-                      value: _selectedStatus,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedStatus = newValue!;
-                        });
-                      },
-                      items: <String>['tersedia', 'tidak tersedia']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Stok",
-                    style: CustomText.TextArvoBold(14, CustomColors.blackColor),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: TextField(
-                  controller: stokController,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.start,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    hintText: "+1",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide:
-                          BorderSide(color: CustomColors.secondaryColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: CustomColors.blackColor),
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                  ),
-                  style: CustomText.TextArvo(14, CustomColors.blackColor),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Bahan",
-                    style: CustomText.TextArvoBold(14, CustomColors.blackColor),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: TextField(
-                  controller:bahanController,
-                  keyboardType: TextInputType.text,
-                  textAlign: TextAlign.start,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    hintText: "Masukkan Bahan Produk",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide:
-                          BorderSide(color: CustomColors.secondaryColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: CustomColors.blackColor),
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                  ),
-                  style: CustomText.TextArvo(14, CustomColors.blackColor),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Jenis Batik",
-                    style: CustomText.TextArvoBold(14, CustomColors.blackColor),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                child: TextField(
-                  controller:jenisBatikController,
-                  keyboardType: TextInputType.text,
-                  textAlign: TextAlign.start,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    hintText: "Masukkan Jenis Batik",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide:
-                          BorderSide(color: CustomColors.secondaryColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(color: CustomColors.blackColor),
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
-                  ),
-                  style: CustomText.TextArvo(14, CustomColors.blackColor),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Kategori",
-                    style: CustomText.TextArvoBold(14, CustomColors.blackColor),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _selectedOption = 'kain';
-                          });
-                        },
-                        child: Text(
-                          'Kain',
-                          style: CustomText.TextArvoBold(
-                              16,
-                              _selectedOption == 'kain'
-                                  ? CustomColors.whiteColor
-                                  : CustomColors.secondaryColor),
-                        ),
-                        style: ButtonStyle(
-                          surfaceTintColor: MaterialStateProperty.all<Color>(
-                              _selectedOption == 'kain'
-                                  ? CustomColors.secondaryColor
-                                  : CustomColors.whiteColor),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                            RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: CustomColors.secondaryColor),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                          ),
-                          elevation: MaterialStateProperty.all<double>(10),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                  EdgeInsets.fromLTRB(30, 5, 30, 5)),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              _selectedOption == 'kain'
-                                  ? CustomColors.secondaryColor
-                                  : CustomColors.whiteColor),
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _selectedOption = 'kaos';
-                          });
-                        },
-                        child: Text('Kaos',
-                            style: CustomText.TextArvoBold(
-                                16,
-                                _selectedOption == 'kaos'
-                                    ? CustomColors.whiteColor
-                                    : CustomColors.secondaryColor)),
-                        style: ButtonStyle(
-                          surfaceTintColor: MaterialStateProperty.all<Color>(
-                              _selectedOption == 'kaos'
-                                  ? CustomColors.secondaryColor
-                                  : CustomColors.whiteColor),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                            RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: CustomColors.secondaryColor),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                          ),
-                          elevation: MaterialStateProperty.all<double>(10),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                  EdgeInsets.fromLTRB(30, 5, 30, 5)),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              _selectedOption == 'kaos'
-                                  ? CustomColors.secondaryColor
-                                  : CustomColors.whiteColor),
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _selectedOption = 'kemeja';
-                          });
-                        },
-                        child: Text('kemeja',
-                            style: CustomText.TextArvoBold(
-                                16,
-                                _selectedOption == 'kemeja'
-                                    ? CustomColors.whiteColor
-                                    : CustomColors.secondaryColor)),
-                        style: ButtonStyle(
-                          surfaceTintColor: MaterialStateProperty.all<Color>(
-                              _selectedOption == 'kemeja'
-                                  ? CustomColors.secondaryColor
-                                  : CustomColors.whiteColor),
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                            RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: CustomColors.secondaryColor),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                            ),
-                          ),
-                          elevation: MaterialStateProperty.all<double>(10),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                  EdgeInsets.fromLTRB(30, 5, 30, 5)),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              _selectedOption == 'kemeja'
-                                  ? CustomColors.secondaryColor
-                                  : CustomColors.whiteColor),
-                        )),
-                    SizedBox(height: 20),
-                  ],
-                ),
-              ),
-              _selectedOption == 'kain' ? InputanKain() : SizedBox(),
-              _selectedOption == 'kaos' ? InputanKaos() : SizedBox(),
-              _selectedOption == 'kemeja' ? InputanKemeja() : SizedBox(),
-              Padding(
-                  padding: EdgeInsets.only(top: 50, bottom: 50),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      style: CustomButton.DefaultButton(
-                          CustomColors.secondaryColor),
+                  _selectedOption == 'kain' ? InputanKain() : SizedBox(),
+                  _selectedOption == 'kaos' ? InputanKaos() : SizedBox(),
+                  _selectedOption == 'kemeja' ? InputanKemeja() : SizedBox(),
+                  Visibility(
+                    visible: DataTidakLengkap,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 30),
                       child: Text(
-                        "Tambah",
-                        style: CustomText.TextArvoBold(
-                            20, CustomColors.whiteColor),
+                        "Lengkapi Semua Kolom!",
+                        style: CustomText.TextArvoBoldItalic(
+                            18, CustomColors.redColor),
                       ),
-                      onPressed: () {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Konfirmasi",style: CustomText.TextArvoBold(18, CustomColors.whiteColor),),
-        backgroundColor: CustomColors.secondaryColor,
-        content: Text("Apakah Anda yakin data sudah benar?",style: CustomText.TextArvo(16, CustomColors.whiteColor),),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Tutup dialog
-              uploadData(); // Unggah data jika user yakin
-              print("pressed");
-            },
-            child: Text("Ya",style: CustomText.TextArvoBold(18, CustomColors.whiteColor),),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Tutup dialog
-            },
-            child: Text("Tidak",style: CustomText.TextArvoBold(18, CustomColors.whiteColor),),
-          ),
-        ],
-      );
-    },
-  );
-},
-
                     ),
-                  )),
-            ],
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 50, bottom: 50),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: ElevatedButton(
+                          style: CustomButton.DefaultButton(
+                              CustomColors.secondaryColor),
+                          child: Text(
+                            "Tambah",
+                            style: CustomText.TextArvoBold(
+                                20, CustomColors.whiteColor),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              if (ImageSaatIni.isEmpty) {
+                                DataTidakLengkap = true;
+                              } else if (namaController.text.isEmpty) {
+                                DataTidakLengkap = true;
+                              } else if (deskripsiController.text.isEmpty) {
+                                DataTidakLengkap = true;
+                              } else if (hargaController.text.isEmpty) {
+                                DataTidakLengkap = true;
+                              } else if (stokController.text.isEmpty) {
+                                DataTidakLengkap = true;
+                              } else if (bahanController.text.isEmpty) {
+                                DataTidakLengkap = true;
+                              } else if (jenisBatikController.text.isEmpty) {
+                                DataTidakLengkap = true;
+                              } else if (ukuranController.text.isEmpty) {
+                                DataTidakLengkap = true;
+                              } else if (_selectedOption == "kain") {
+                                if (panjangKainController.text.isEmpty) {
+                                  DataTidakLengkap = true;
+                                } else if (lebarKainController.text.isEmpty) {
+                                  DataTidakLengkap = true;
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          "Konfirmasi",
+                                          style: CustomText.TextArvoBold(
+                                              18, CustomColors.whiteColor),
+                                        ),
+                                        backgroundColor:
+                                            CustomColors.secondaryColor,
+                                        content: Text(
+                                          "Apakah Anda yakin data sudah benar?",
+                                          style: CustomText.TextArvo(
+                                              16, CustomColors.whiteColor),
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Tutup dialog
+                                              uploadData(); // Unggah data jika user yakin
+                                              print("pressed");
+                                            },
+                                            child: Text(
+                                              "Ya",
+                                              style: CustomText.TextArvoBold(
+                                                  18, CustomColors.whiteColor),
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Tutup dialog
+                                            },
+                                            child: Text(
+                                              "Tidak",
+                                              style: CustomText.TextArvoBold(
+                                                  18, CustomColors.whiteColor),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        "Konfirmasi",
+                                        style: CustomText.TextArvoBold(
+                                            18, CustomColors.whiteColor),
+                                      ),
+                                      backgroundColor:
+                                          CustomColors.secondaryColor,
+                                      content: Text(
+                                        "Apakah Anda yakin data sudah benar?",
+                                        style: CustomText.TextArvo(
+                                            16, CustomColors.whiteColor),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Tutup dialog
+                                            uploadData(); // Unggah data jika user yakin
+                                            print("pressed");
+                                          },
+                                          child: Text(
+                                            "Ya",
+                                            style: CustomText.TextArvoBold(
+                                                18, CustomColors.whiteColor),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Tutup dialog
+                                          },
+                                          child: Text(
+                                            "Tidak",
+                                            style: CustomText.TextArvoBold(
+                                                18, CustomColors.whiteColor),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            });
+                          },
+                        ),
+                      )),
+                ],
+              ),
+            ),
           ),
         ),
       ),

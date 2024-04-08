@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_kain.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_kaos.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_kemeja.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/page_kelola_produk.dart';
 import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -18,10 +22,23 @@ class List_Kelola_Produk extends StatefulWidget {
 }
 
 class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
+  
+  Future<void> deleteProductAndImages(String idProduk) async {
+  final response = await http.post(Server.url('deleteProduk.php'), body: {'id_produk': idProduk.toString()});
+
+  if (response.statusCode == 200) {
+    final responseData = json.decode(response.body);
+    print(responseData['message']);
+    Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => KelolaProduk(),));
+  } else {
+    print('Failed to delete product and images. Error: ${response.reasonPhrase}');
+  }
+}
+  
+  
   String jsonProdukKemeja = "{}";
   String jsonProdukBaju = "{}";
   String jsonProdukKain = "{}";
-
 
   List<Map<String, dynamic>> listKemeja = [];
   List<Map<String, dynamic>> listBaju = [];
@@ -36,24 +53,25 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
     });
     print(listKemeja[0]['nama']);
   }
+
   Future<void> showKaos() async {
     final response = await http.get(Server.url("showKaos.php"));
     jsonProdukBaju = response.body.toString();
     setState(() {
-      listBaju =
-          List<Map<String, dynamic>>.from(json.decode(jsonProdukBaju));
+      listBaju = List<Map<String, dynamic>>.from(json.decode(jsonProdukBaju));
     });
     print(listBaju[0]['nama']);
   }
+
   Future<void> showKain() async {
     final response = await http.get(Server.url("showKain.php"));
     jsonProdukKain = response.body.toString();
     setState(() {
-      listKain =
-          List<Map<String, dynamic>>.from(json.decode(jsonProdukKain));
+      listKain = List<Map<String, dynamic>>.from(json.decode(jsonProdukKain));
     });
     print(listKain[0]['nama']);
   }
+
   Widget KumpulanKemeja() {
     return Container(
       height: 230,
@@ -69,8 +87,13 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
               child: GestureDetector(
                 onTap: () {
                   List_Kelola_Produk.id_produk = listKemeja[index]['id'];
-                  print("id produk = " +List_Kelola_Produk.id_produk);
-                  // Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>EditP))
+                  print("id produk = " + List_Kelola_Produk.id_produk);
+                  Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  Edit_Produk_Kemeja()));
                 },
                 child: Container(
                   width: 170,
@@ -157,7 +180,54 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                             12, CustomColors.blackColor)),
                                 Container(
                                   child: IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                                 showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        "Konfirmasi",
+                                        style: CustomText.TextArvoBold(
+                                            18, CustomColors.whiteColor),
+                                      ),
+                                      backgroundColor:
+                                          CustomColors.secondaryColor,
+                                      content: Text(
+                                        "Apakah Anda yakin ingin HAPUS produk ini?",
+                                        style: CustomText.TextArvo(
+                                            16, CustomColors.whiteColor),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); 
+                                                deleteProductAndImages(listKemeja[index]['id']);
+                                            print("pressed");
+                                          },
+                                          child: Text(
+                                            "Ya",
+                                            style: CustomText.TextArvoBold(
+                                                18, CustomColors.whiteColor),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Tutup dialog
+                                          },
+                                          child: Text(
+                                            "Tidak",
+                                            style: CustomText.TextArvoBold(
+                                                18, CustomColors.whiteColor),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                      
+                                      },
                                       icon: Image.asset(
                                         Server.urlGambar("icons_sampah.png"),
                                         height: 20,
@@ -178,6 +248,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
       ),
     );
   }
+
   Widget KumpulanKaos() {
     return Container(
       height: 230,
@@ -193,8 +264,13 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
               child: GestureDetector(
                 onTap: () {
                   List_Kelola_Produk.id_produk = listBaju[index]['id'];
-                  print(List_Kelola_Produk.id_produk);
-                  // Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>EditP))
+                  print("id produk = " + List_Kelola_Produk.id_produk);
+                  Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  Edit_Produk_Kaos()));
                 },
                 child: Container(
                   width: 170,
@@ -281,7 +357,54 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                             12, CustomColors.blackColor)),
                                 Container(
                                   child: IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                                    showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        "Konfirmasi",
+                                        style: CustomText.TextArvoBold(
+                                            18, CustomColors.whiteColor),
+                                      ),
+                                      backgroundColor:
+                                          CustomColors.secondaryColor,
+                                      content: Text(
+                                        "Apakah Anda yakin ingin HAPUS produk ini?",
+                                        style: CustomText.TextArvo(
+                                            16, CustomColors.whiteColor),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); 
+                                                deleteProductAndImages(listBaju[index]['id']);
+                                            print("pressed");
+                                          },
+                                          child: Text(
+                                            "Ya",
+                                            style: CustomText.TextArvoBold(
+                                                18, CustomColors.whiteColor),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Tutup dialog
+                                          },
+                                          child: Text(
+                                            "Tidak",
+                                            style: CustomText.TextArvoBold(
+                                                18, CustomColors.whiteColor),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                      
+                                      },
                                       icon: Image.asset(
                                         Server.urlGambar("icons_sampah.png"),
                                         height: 20,
@@ -302,6 +425,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
       ),
     );
   }
+
   Widget KumpulanKain() {
     return Container(
       height: 230,
@@ -317,8 +441,13 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
               child: GestureDetector(
                 onTap: () {
                   List_Kelola_Produk.id_produk = listKain[index]['id'];
-                  print(List_Kelola_Produk.id_produk);
-                  // Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>EditP))
+                  print("id produk = " + List_Kelola_Produk.id_produk);
+                  Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  Edit_Produk_Kain()));
                 },
                 child: Container(
                   width: 170,
@@ -405,7 +534,54 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                             12, CustomColors.blackColor)),
                                 Container(
                                   child: IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                                    showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        "Konfirmasi",
+                                        style: CustomText.TextArvoBold(
+                                            18, CustomColors.whiteColor),
+                                      ),
+                                      backgroundColor:
+                                          CustomColors.secondaryColor,
+                                      content: Text(
+                                        "Apakah Anda yakin ingin HAPUS produk ini?",
+                                        style: CustomText.TextArvo(
+                                            16, CustomColors.whiteColor),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); 
+                                                deleteProductAndImages(listKain[index]['id']);
+                                            print("pressed");
+                                          },
+                                          child: Text(
+                                            "Ya",
+                                            style: CustomText.TextArvoBold(
+                                                18, CustomColors.whiteColor),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Tutup dialog
+                                          },
+                                          child: Text(
+                                            "Tidak",
+                                            style: CustomText.TextArvoBold(
+                                                18, CustomColors.whiteColor),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                      
+                                      },
                                       icon: Image.asset(
                                         Server.urlGambar("icons_sampah.png"),
                                         height: 20,
@@ -431,6 +607,8 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
   void initState() {
     super.initState();
     showKemeja();
+    showKaos();
+    showKain();
     setState(() {
       showKemeja();
       showKaos();

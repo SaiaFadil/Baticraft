@@ -100,9 +100,9 @@ class _MenuDashboardState extends State<MenuDashboard> {
   }
 
   String jsonProduk = """[
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "produkterlaris.png", "nama": "Batik Palembang", "harga": "74000"}
+    {"image_path": "product_image_66139bf877dc1.jpg", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "product_image_66139bf877dc1.jpg", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "product_image_66139bf877dc1.jpg", "nama": "Batik Palembang", "harga": "74000"}
     
   ]""";
   String jsonPesanan = """[
