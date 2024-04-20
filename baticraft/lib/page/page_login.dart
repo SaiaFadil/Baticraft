@@ -62,6 +62,35 @@ class _page_login extends State<page_login> {
     }
   }
 
+Future<Map<String, dynamic>> checkEmail(String email) async { // Ganti dengan URL Anda
+
+  try {
+    final response = await http.post(
+      Server.url("loginGoogle.php"),
+      body: {'email': email},
+    );
+
+    if (response.statusCode == 200) {
+      final userData = json.decode(response.body);
+
+          page_login.id_user = userData['id'].toString();
+          print("id user = " + userData['id'].toString());
+          print("id user = " + response.body);
+CustomWidget.NotifBerhasilLogin(context, utama());
+      // Jika respons berhasil
+      return userData;
+
+    } else {
+      _googleSignIn.disconnect();
+      // Jika respons gagal
+      throw Exception('Gagal memeriksa email');
+    }
+  } catch (e) {
+    // Jika terjadi kesalahan
+    throw Exception('Error: $e');
+  }
+}
+
   late GoogleSignIn _googleSignIn;
   GoogleSignInAccount? currentUser;
   List<String> scopes = <String>[
@@ -517,13 +546,20 @@ class _page_login extends State<page_login> {
 
   // Metode untuk menangani masuk dengan akun Google
   Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-      print('Fadil sedang memilih Akun....');
-    } catch (error) {
-      print('Error signing in with Google: $error');
+  try {
+    await _googleSignIn.signIn();
+    if (_googleSignIn.currentUser != null) {
+      String email = _googleSignIn.currentUser!.email;
+      print('Email yang dipilih: $email');
+      checkEmail(email);
+      // Lakukan sesuatu dengan email yang dipilih di sini
+      // Contoh: Kirim email ke server Anda untuk verifikasi atau tindakan lainnya
     }
+    print('Fadil sedang memilih Akun....');
+  } catch (error) {
+    print('Error signing in with Google: $error');
   }
+}
 
   Future<void> _handleGetContact(GoogleSignInAccount user) async {
     setState(() {
