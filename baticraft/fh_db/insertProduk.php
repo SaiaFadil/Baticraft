@@ -1,5 +1,5 @@
 <?php
-require('Koneksi.php');
+require ('Koneksi.php');
 
 // Mengambil data produk dari request
 $kode_product = $_POST['kode_product'];
@@ -23,7 +23,7 @@ $sql = "INSERT INTO products (kode_product, nama, deskripsi, harga, kategori, st
 if ($konek->query($sql) === TRUE) {
     // Jika produk berhasil disimpan, ambil id produk yang baru saja disimpan
     $last_product_id = $konek->insert_id;
-    
+
     // Memeriksa apakah ada gambar yang diunggah
     if (isset($_FILES['images']) && !empty($_FILES['images']['name'])) {
         // Memproses setiap gambar yang diunggah
@@ -35,7 +35,7 @@ if ($konek->query($sql) === TRUE) {
             // Path lengkap file gambar
             $target_file = $target_dir . basename($_FILES["images"]["name"][$i]);
             // Ekstensi file
-            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
             // Nama file gambar yang disimpan di database
             $image_name = "product_image_" . uniqid() . "." . $imageFileType;
             // Simpan gambar ke direktori

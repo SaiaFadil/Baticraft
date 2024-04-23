@@ -29,8 +29,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
   String? fileName; // Perubahan: fileName diubah menjadi nullable
   late http.MultipartRequest
       request; // Perubahan: request dideklarasikan sebagai late
-
-  Future<void> postDataToServer() async {
+      Future<void> postDataToServer() async {
     // Persiapkan data yang akan dikirim
     Map<String, dynamic> data = {
       'nama_pemilik': namaPemilikController.text,
@@ -68,6 +67,8 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
       print('Terjadi kesalahan: $error');
     }
   }
+
+
 
   Future<void> _getImage() async {
     final pickedFile =

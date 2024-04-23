@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-// import 'package:baticraft/menu/SubMenuProfil/page_detail_profil.dart';
+import 'package:baticraft/menu/SubMenuProfil/page_detail_profil.dart';
 import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +81,18 @@ class _menu_profilState extends State<menu_profil> {
                     ),
                     child: InkWell(
                       onTap: () {
-                       
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      detail_profil(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return FadeTransition(
+                                    opacity: animation, child: child);
+                              },
+                            ));
                       },
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       child: Container(
