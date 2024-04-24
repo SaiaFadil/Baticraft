@@ -5,6 +5,8 @@ static Color fourtyColor = Color.fromRGBO(56, 65, 157, 1);
 static Color threertyColor= Color.fromRGBO(66, 84, 146, 1);
 static Color secondaryColor = Color.fromRGBO(56, 135, 190, 1);
 static Color primaryColor = Color.fromRGBO(82, 211, 216, 1);
+static Color hintprimary = Color.fromRGBO(230, 230, 254, 1);
+static Color greenColor = Color.fromRGBO(0, 209, 129, 1);
 
 
 static Color card1 = Color.fromRGBO(56, 65, 157, 1);

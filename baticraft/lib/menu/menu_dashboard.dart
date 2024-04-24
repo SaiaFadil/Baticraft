@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:baticraft/menu/SubMenuHome/subMenuInformasiToko/page_informasi_toko.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuLaporanPenjualan/Laporan.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuProduk/page_kelola_produk.dart';
 import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/src/CustomColors.dart';
@@ -622,31 +623,38 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                   ]),
                                 ),
                                 SizedBox(height: 10),
-                                Card(
-                                  elevation: 5,
-                                  surfaceTintColor: CustomColors.whiteColor,
-                                  color: CustomColors.card4,
-                                  child: Column(children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(20),
-                                      child: Text(
-                                        "LAPORAN\nPENJUALAN",
-                                        textAlign: TextAlign.center,
-                                        style: CustomText.TextArvoBold(
-                                          16 * mediaQuery.textScaleFactor,
-                                          CustomColors.whiteColor,
+                                InkWell(
+                                  onTap: (){
+                                    Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>LaporanUtama(),transitionsBuilder: (context,animation,secondaryAnimation,child){
+                                      return FadeTransition(opacity: animation,child: child,);
+                                    }));
+                                  },
+                                  child: Card(
+                                    elevation: 5,
+                                    surfaceTintColor: CustomColors.whiteColor,
+                                    color: CustomColors.card4,
+                                    child: Column(children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(20),
+                                        child: Text(
+                                          "LAPORAN\nPENJUALAN",
+                                          textAlign: TextAlign.center,
+                                          style: CustomText.TextArvoBold(
+                                            16 * mediaQuery.textScaleFactor,
+                                            CustomColors.whiteColor,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10, 0, 10, 20),
-                                      child: Image.asset(
-                                        Server.urlGambar("imgcard4.png"),
-                                        fit: BoxFit.contain,
-                                      ),
-                                    )
-                                  ]),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                        child: Image.asset(
+                                          Server.urlGambar("imgcard4.png"),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      )
+                                    ]),
+                                  ),
                                 ),
                               ],
                             ),

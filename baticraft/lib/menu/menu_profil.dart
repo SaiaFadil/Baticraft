@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:baticraft/menu/SubMenuProfil/page_detail_profil.dart';
+import 'package:baticraft/menu/SubMenuProfil/page_edit_profil.dart';
+import 'package:baticraft/menu/SubMenuProfil/page_ubah_kata_sandi.dart';
 import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
@@ -202,7 +204,11 @@ class _menu_profilState extends State<menu_profil> {
                     height: 30,
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>edit_profil(),transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(opacity: animation,child: child,);
+                      },));
+                    },
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     child: Row(
                       children: [
@@ -234,7 +240,11 @@ class _menu_profilState extends State<menu_profil> {
                         top: 5, left: 10, right: 10, bottom: 10),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context,PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>ubah_kata_sandi(),transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(opacity: animation,child: child,);
+                      },));
+                    },
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     child: Row(
                       children: [
@@ -251,7 +261,7 @@ class _menu_profilState extends State<menu_profil> {
                           width: 10,
                         ),
                         Text(
-                          "Edit Profil",
+                          "Ganti Kata Sandi",
                           style: CustomText.TextArvoBold(
                               16, CustomColors.secondaryColor),
                         ),
@@ -287,7 +297,7 @@ class _menu_profilState extends State<menu_profil> {
                           width: 10,
                         ),
                         Text(
-                          "Edit Profil",
+                          "Keluar",
                           style: CustomText.TextArvoBold(
                               16, CustomColors.secondaryColor),
                         ),

@@ -92,66 +92,63 @@ class _detail_profilState extends State<detail_profil> {
                 child: Column(
                   children: [
                     Align(
-                        alignment: Alignment.center,
-                        child: detailUser['nama'] != null
-                                      ? Align(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            detailUser['nama'],
-                                            overflow:TextOverflow.ellipsis,
-                                            style: CustomText.TextArvoBold(
-                                              24,
-                                              CustomColors.whiteColor,
-                                            ),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                        )
-                                      : Shimmer.fromColors(
-                                          baseColor: Color.fromARGB(
-                                              255, 104, 102, 102)!,
-                                          highlightColor: const Color.fromARGB(
-                                              255, 202, 200, 200)!,
-                                          child: Text(
-                                            'Loading...',
-                                            style: CustomText.TextArvo(
-                                              24,
-                                              CustomColors.whiteColor,
-                                            ),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                        ),
-),
+                      alignment: Alignment.center,
+                      child: detailUser['nama'] != null
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                detailUser['nama'],
+                                overflow: TextOverflow.ellipsis,
+                                style: CustomText.TextArvoBold(
+                                  24,
+                                  CustomColors.whiteColor,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            )
+                          : Shimmer.fromColors(
+                              baseColor: Color.fromARGB(255, 104, 102, 102)!,
+                              highlightColor:
+                                  const Color.fromARGB(255, 202, 200, 200)!,
+                              child: Text(
+                                'Loading...',
+                                style: CustomText.TextArvo(
+                                  24,
+                                  CustomColors.whiteColor,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                    ),
                     Align(
-                        alignment: Alignment.center,
-                        child: detailUser['email'] != null
-                                      ? Align(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            detailUser['email'],
-                                            overflow:TextOverflow.ellipsis,
-
-                                            style: CustomText.TextArvo(
-                                              12,
-                                              CustomColors.whiteColor,
-                                            ),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                        )
-                                      : Shimmer.fromColors(
-                                          baseColor: Color.fromARGB(
-                                              255, 104, 102, 102)!,
-                                          highlightColor: const Color.fromARGB(
-                                              255, 202, 200, 200)!,
-                                          child: Text(
-                                            'Loading...',
-                                            style: CustomText.TextArvo(
-                                              14,
-                                              CustomColors.whiteColor,
-                                            ),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                        ),
-),
+                      alignment: Alignment.center,
+                      child: detailUser['email'] != null
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                detailUser['email'],
+                                overflow: TextOverflow.ellipsis,
+                                style: CustomText.TextArvo(
+                                  12,
+                                  CustomColors.whiteColor,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            )
+                          : Shimmer.fromColors(
+                              baseColor: Color.fromARGB(255, 104, 102, 102)!,
+                              highlightColor:
+                                  const Color.fromARGB(255, 202, 200, 200)!,
+                              child: Text(
+                                'Loading...',
+                                style: CustomText.TextArvo(
+                                  14,
+                                  CustomColors.whiteColor,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ),
+                    ),
                     Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -248,7 +245,7 @@ class _detail_profilState extends State<detail_profil> {
                                           alignment: Alignment.centerLeft,
                                           child: Text(
                                             detailUser['alamat'],
-                                            overflow:TextOverflow.ellipsis,
+                                            overflow: TextOverflow.ellipsis,
                                             style: CustomText.TextArvoBold(
                                               12,
                                               CustomColors.whiteColor,
@@ -413,15 +410,14 @@ class _detail_profilState extends State<detail_profil> {
               margin: EdgeInsets.only(top: 15),
               child: detailUser.isNotEmpty
                   ? CircleAvatar(
-                    foregroundColor: CustomColors.whiteColor,
+                      foregroundColor: CustomColors.whiteColor,
 
-                    
                       backgroundColor:
                           CustomColors.secondaryColor, // Inner circle color
                       radius: 70.0,
                       child: CircleAvatar(
-                           backgroundColor: CustomColors.whiteColor,
-                            radius: 65, 
+                        backgroundColor: CustomColors.whiteColor,
+                        radius: 65,
                         child: CircleAvatar(
                             foregroundColor: CustomColors.secondaryColor,
                             radius: 55, // Ubah ukuran avatar

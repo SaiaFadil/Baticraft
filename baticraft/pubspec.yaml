@@ -30,6 +30,7 @@ dependencies:
   url_launcher: ^6.2.5
   shimmer: ^3.0.0
   image_picker: ^0.8.3+3
+  flutter_date_picker: ^0.1.9
 
 dev_dependencies:
   flutter_test:
