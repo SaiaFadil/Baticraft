@@ -266,7 +266,11 @@ class _menu_profilState extends State<menu_profil> {
                         top: 5, left: 10, right: 10, bottom: 10),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, PageRouteBuilder(pageBuilder: ((context, animation, secondaryAnimation) =>page_login()
+                        )));
+                        page_login.id_user = "";
+                    },
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     child: Row(
                       children: [

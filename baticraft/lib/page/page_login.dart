@@ -43,7 +43,7 @@ class _page_login extends State<page_login> {
         jsonData = response.body.toString();
         if (jsonData != "[]") {
           Map<String, dynamic> detailUser = json.decode(response.body);
-          print("JsonData");
+          print("JsonData = "+jsonData);
           isWrong = false;
           CustomWidget.NotifBerhasilLogin(context, utama());
 
@@ -56,6 +56,7 @@ class _page_login extends State<page_login> {
             isWrong = true;
             errorText = "Email atau Password Salah!";
             sizeerror = 18;
+            print("JsonData = "+jsonData);
           });
         }
       } else {}
@@ -112,28 +113,8 @@ CustomWidget.NotifBerhasilLogin(context, utama());
   @override
   void initState() {
     super.initState();
-    _googleSignIn = GoogleSignIn(
-      // Initialization of _googleSignIn here
-      scopes: scopes,
-    );
-    _googleSignIn.disconnect();
-
-    _googleSignIn.onCurrentUserChanged
-        .listen((GoogleSignInAccount? account) async {
-      bool isAuthorized = account != null;
-      if (kIsWeb && account != null) {
-        isAuthorized = await _googleSignIn.canAccessScopes(scopes);
-      }
-      setState(() {
-        currentUser = account;
-        isAuthorized = isAuthorized;
-      });
-      if (isAuthorized) {
-        unawaited(_handleGetContact(account!));
-      }
-    });
-    _googleSignIn.signInSilently();
-
+    
+   
     RawKeyboard.instance.addListener(_handleKeyEvent);
   }
 
@@ -393,7 +374,7 @@ CustomWidget.NotifBerhasilLogin(context, utama());
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30),
+                                padding: EdgeInsets.symmetric(horizontal: 30,vertical: 10),
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: TextButton(
@@ -439,59 +420,8 @@ CustomWidget.NotifBerhasilLogin(context, utama());
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        height: 1,
-                                        color: CustomColors.blackColor,
-                                      ),
-                                    ),
-                                    Text('atau',
-                                        style: CustomText.TextArvo(
-                                            16, CustomColors.blackColor)),
-                                    Expanded(
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                        height: 1,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(20, 10, 20, 25),
-                                child: OutlinedButton(
-                                  onPressed:
-                                      _handleSignIn, // Panggil metode _handleSignIn() saat tombol ditekan
-                                  style: CustomButton.DefaultButton(
-                                      CustomColors.whiteColor),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        Server.urlGambar(
-                                            'icons8-google-480.svg'),
-                                        height: 24,
-                                        width: 24,
-                                      ),
-                                      SizedBox(width: 12),
-                                      Text(
-                                        'Masuk dengan akun Google',
-                                        style: CustomText.TextArvo(
-                                            14, CustomColors.blackColor),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                          
+                         
                               Text(
                                 'Status Keyboard: ${isKeyboardActive ? statusKeyboard = 'Aktif' : statusKeyboard = "tidak aktif"}' +
                                     statusKeyboard,
@@ -544,70 +474,70 @@ CustomWidget.NotifBerhasilLogin(context, utama());
     }
   }
 
-  // Metode untuk menangani masuk dengan akun Google
-  Future<void> _handleSignIn() async {
-  try {
-    await _googleSignIn.signIn();
-    if (_googleSignIn.currentUser != null) {
-      String email = _googleSignIn.currentUser!.email;
-      print('Email yang dipilih: $email');
-      checkEmail(email);
-      // Lakukan sesuatu dengan email yang dipilih di sini
-      // Contoh: Kirim email ke server Anda untuk verifikasi atau tindakan lainnya
-    }
-    print('Fadil sedang memilih Akun....');
-  } catch (error) {
-    print('Error signing in with Google: $error');
-  }
-}
+//   // Metode untuk menangani masuk dengan akun Google
+//   Future<void> _handleSignIn() async {
+//   try {
+//     await _googleSignIn.signIn();
+//     if (_googleSignIn.currentUser != null) {
+//       String email = _googleSignIn.currentUser!.email;
+//       print('Email yang dipilih: $email');
+//       checkEmail(email);
+//       // Lakukan sesuatu dengan email yang dipilih di sini
+//       // Contoh: Kirim email ke server Anda untuk verifikasi atau tindakan lainnya
+//     }
+//     print('Fadil sedang memilih Akun....');
+//   } catch (error) {
+//     print('Error signing in with Google: $error');
+//   }
+// }
 
-  Future<void> _handleGetContact(GoogleSignInAccount user) async {
-    setState(() {
-      print("Email yang dipilih : " + user.email);
-      contactText = 'Loading contact info...';
-    });
-    final http.Response response = await http.get(
-      Uri.parse('https://people.googleapis.com/v1/people/me/connections'
-          '?requestMask.includeField=person.names'),
-      headers: await user.authHeaders,
-    );
-    if (response.statusCode != 200) {
-      setState(() {
-        contactText = 'People API gave a ${response.statusCode} '
-            'response. Check logs for details.';
-      });
-      // print('People API ${response.statusCode} response: ${response.body}');
-      return;
-    }
-    final Map<String, dynamic> data =
-        json.decode(response.body) as Map<String, dynamic>;
-    final String? namedContact = _pickFirstNamedContact(data);
-    setState(() {
-      if (namedContact != null) {
-        contactText = 'I see you know $namedContact!';
-      } else {
-        contactText = 'No contacts to display.';
-      }
-    });
-  }
+//   Future<void> _handleGetContact(GoogleSignInAccount user) async {
+//     setState(() {
+//       print("Email yang dipilih : " + user.email);
+//       contactText = 'Loading contact info...';
+//     });
+//     final http.Response response = await http.get(
+//       Uri.parse('https://people.googleapis.com/v1/people/me/connections'
+//           '?requestMask.includeField=person.names'),
+//       headers: await user.authHeaders,
+//     );
+//     if (response.statusCode != 200) {
+//       setState(() {
+//         contactText = 'People API gave a ${response.statusCode} '
+//             'response. Check logs for details.';
+//       });
+//       // print('People API ${response.statusCode} response: ${response.body}');
+//       return;
+//     }
+//     final Map<String, dynamic> data =
+//         json.decode(response.body) as Map<String, dynamic>;
+//     final String? namedContact = _pickFirstNamedContact(data);
+//     setState(() {
+//       if (namedContact != null) {
+//         contactText = 'I see you know $namedContact!';
+//       } else {
+//         contactText = 'No contacts to display.';
+//       }
+//     });
+//   }
 
-  String? _pickFirstNamedContact(Map<String, dynamic> data) {
-    final List<dynamic>? connections = data['connections'] as List<dynamic>?;
-    final Map<String, dynamic>? contact = connections?.firstWhere(
-      (dynamic contact) => (contact as Map<Object?, dynamic>)['names'] != null,
-      orElse: () => null,
-    ) as Map<String, dynamic>?;
-    if (contact != null) {
-      final List<dynamic> names = contact['names'] as List<dynamic>;
-      final Map<String, dynamic>? name = names.firstWhere(
-        (dynamic name) =>
-            (name as Map<Object?, dynamic>)['displayName'] != null,
-        orElse: () => null,
-      ) as Map<String, dynamic>?;
-      if (name != null) {
-        return name['displayName'] as String?;
-      }
-    }
-    return null;
-  }
+  // String? _pickFirstNamedContact(Map<String, dynamic> data) {
+  //   final List<dynamic>? connections = data['connections'] as List<dynamic>?;
+  //   final Map<String, dynamic>? contact = connections?.firstWhere(
+  //     (dynamic contact) => (contact as Map<Object?, dynamic>)['names'] != null,
+  //     orElse: () => null,
+  //   ) as Map<String, dynamic>?;
+  //   if (contact != null) {
+  //     final List<dynamic> names = contact['names'] as List<dynamic>;
+  //     final Map<String, dynamic>? name = names.firstWhere(
+  //       (dynamic name) =>
+  //           (name as Map<Object?, dynamic>)['displayName'] != null,
+  //       orElse: () => null,
+  //     ) as Map<String, dynamic>?;
+  //     if (name != null) {
+  //       return name['displayName'] as String?;
+  //     }
+  //   }
+  //   return null;
+  // }
 }

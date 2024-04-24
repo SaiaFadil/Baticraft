@@ -18,9 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Melakukan pemeriksaan email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $response = [
-            'error' => 'Format email tidak valid'
-        ];
+        $response = Array();
         echo json_encode($response);
         exit;
     }
@@ -30,34 +28,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
-
+    
     // Memeriksa apakah user ditemukan
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
         $hashedPassword = $user['password'];
 
         // Memeriksa apakah password yang dimasukkan oleh pengguna cocok dengan hash di database
-        // if (password_verify($password, $hashedPassword)) {
+        if (password_verify($password, $hashedPassword)) {
             $role_db = $user['role'];
             if ($role_db == 'admin') {
                 $response = $user;
             } else {
                 $response = Array();
             }
-        // } else {
-        //     $response = [
-        //         'error' => 'Password yang Anda masukkan salah',
-        //     ];
-        // }
+        } else {
+            $response = Array();
+        }
     } else {
         $response = Array();
     }
     // Menutup statement
     $stmt->close();
 } else {
-    $response = [
-        'error' => 'Metode tidak valid'
-    ];
+    $response = Array();
 }
 
 // Menutup koneksi database
