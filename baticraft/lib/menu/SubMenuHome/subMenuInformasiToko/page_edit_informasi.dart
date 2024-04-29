@@ -45,7 +45,7 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
     };
 
     // Buat request POST ke URL server
-    Uri url = Server.url("Edit_Informasi_Toko.php");
+    Uri url = Server.urlLaravel("EditIformasiMobile");
 
     try {
       // Kirim request POST ke server
@@ -83,48 +83,50 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
     }
   }
 
-  Future<void> _uploadImage() async {
-    if (_profileImage == null) {
-      print("errorrrrrrr");
-      return;
-    }
-
-    // Menyiapkan request untuk mengunggah gambar ke server
-    request = http.MultipartRequest(
-        'POST', Uri.parse(Server.urlString("upload_image.php")));
-
-    // Menambahkan file gambar ke dalam request
-
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        'image',
-        _profileImage!.path,
-        filename: fileName,
-      ),
-    );
-
-    // Mengirim request ke server
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      print('Gambar berhasil diunggah');
-    } else {
-      print('Terjadi kesalahan saat mengunggah gambar');
-      print(response.statusCode);
-      print(response);
-      print(response.reasonPhrase);
-    }
+ Future<void> _uploadImage() async {
+  if (_profileImage == null) {
+    print("errorrrrrrr");
+    return;
   }
+
+  // Menginisialisasi variabel request sebelum menggunakannya
+  request = http.MultipartRequest(
+      'POST', Server.urlLaravel("UploadGambarInformasi"));
+
+  // Menambahkan file gambar ke dalam request
+  request.files.add(
+    await http.MultipartFile.fromPath(
+      'image',
+      _profileImage!.path,
+      filename: fileName,
+    ),
+  );
+
+  // Mengirim request ke server
+  var response = await request.send();
+  if (response.statusCode == 200) {
+    print('Gambar berhasil diunggah');
+  } else {
+    print('Terjadi kesalahan saat mengunggah gambar');
+    print(response.statusCode);
+    print(response);
+    print(response.reasonPhrase);
+  }
+}
 
   String jsonDetailInformasi = "{}";
   Map<String, dynamic> detailInformasi = {};
 
-  Future<void> getDetailUser() async {
-    final response = await http.get(Server.url("ShowDetailInformasi.php"));
+    Future getDetailInformasi() async {
+    try {
+      final response =
+          await http.get(Server.urlLaravel("DetailInformasiMobile"));
 
-    if (response.statusCode == 200) {
-      setState(() {
-        jsonDetailInformasi = response.body.toString();
-        detailInformasi = json.decode(jsonDetailInformasi);
+      if (response.statusCode == 200) {
+        List<dynamic> detailInformasiList = json.decode(response.body);
+        if (detailInformasiList.isNotEmpty) {
+          Map<String, dynamic> detailInformasi = detailInformasiList[0];
+          setState(() {
 
         // Set nilai-nilai dari detailInformasi ke dalam controller
         namaPemilikController.text = detailInformasi['nama_pemilik'];
@@ -136,16 +138,23 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
         akunFacebookController.text = detailInformasi['akun_fb'];
         akunTiktokController.text = detailInformasi['akun_tiktok'];
         lokasiController.text = detailInformasi['lokasi'];
-      });
-    } else {
-      print("HTTP Request failed with status: ${response.statusCode}");
+       });
+        } else {
+          print("No data available");
+        }
+      } else {
+        print("HTTP Request failed with status: ${response.statusCode}");
+      }
+    } catch ($e) {
+      print("error "+$e.toString());
+      
     }
   }
 
   @override
   void initState() {
     super.initState();
-    getDetailUser();
+    getDetailInformasi();
   }
 
   String ImageSaatIni = "";

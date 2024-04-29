@@ -28,41 +28,40 @@ class _MenuDashboardState extends State<MenuDashboard> {
   String jsonDetailInformasi = "{}";
   Map<String, dynamic> detailInformasi = {};
 
-
- Future getDetailInformasi() async {
-    final response = await http.get(Server.url("ShowDetailInformasi.php"));
-
-    if (response.statusCode == 200) {
-      jsonDetailInformasi = response.body.toString();
-      detailInformasi = json.decode(jsonDetailInformasi);
-      if (detailInformasi.isNotEmpty) {
-        setState(() {
-          print("nama_pemilik = " + detailInformasi['nama_pemilik']);
-          print("nama_toko = " + detailInformasi['nama_toko']);
-          print("alamatnya = " + detailInformasi['alamat']);
-          print("deskripsi = " + detailInformasi['deskripsi']);
-          print("no_telpon = " + detailInformasi['no_telpon']);
-          print("email = " + detailInformasi['email']);
-          print("akun_ig = " + detailInformasi['akun_ig']);
-          print("akun_fb = " + detailInformasi['akun_fb']);
-          print("akun_tiktok = " + detailInformasi['akun_tiktok']);
-          print("image = " + detailInformasi['image']);
-        });
+  Future getDetailInformasi() async {
+    try {
+      final response = await http.get(Server.urlLaravel("DetailInformasiMobile"));
+      if (response.statusCode == 200) {
+        List<dynamic> detailInformasiList = json.decode(response.body);
+        if (detailInformasiList.isNotEmpty) {
+          // Ambil elemen pertama dari list (asumsikan hanya satu objek dalam list)
+          Map<String, dynamic> detailInformasi = detailInformasiList[0];
+          setState(() {
+            alamat = detailInformasi['alamat'];
+            print("nama_pemilik = " + detailInformasi['nama_pemilik']);
+            print("nama_toko = " + detailInformasi['nama_toko']);
+            print("alamatnya = " + detailInformasi['alamat']);
+            print("deskripsi = " + detailInformasi['deskripsi']);
+            print("no_telpon = " + detailInformasi['no_telpon']);
+            print("email = " + detailInformasi['email']);
+            print("akun_ig = " + detailInformasi['akun_ig']);
+            print("akun_fb = " + detailInformasi['akun_fb']);
+            print("akun_tiktok = " + detailInformasi['akun_tiktok']);
+            print("image = " + detailInformasi['image']);
+          });
+        } else {
+          print("No data available");
+        }
       } else {
-        print("No data available");
+        print("HTTP Request failed with status: ${response.statusCode}");
       }
-    } else {
-      print("HTTP Request failed with status: ${response.statusCode}");
+    } catch ($e) {
+      print($e);
     }
   }
 
-
-
-
-
-
   Future getDetailUser() async {
-    final response = await http.post(Server.url("ShowDetailProfil.php"),
+    final response = await http.post(Server.urlLaravel("DetailProfil"),
         body: {"id_user": page_login.id_user});
 
     if (response.statusCode == 200) {
@@ -70,7 +69,6 @@ class _MenuDashboardState extends State<MenuDashboard> {
       detailUser = json.decode(jsonDetailUser);
       if (detailUser.isNotEmpty) {
         setState(() {
-          alamat = detailUser['alamat'];
           nama = detailUser['nama'];
         });
       } else {
@@ -201,7 +199,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                             child: Image.network(
                               fit: BoxFit.fitWidth,
                               height: 120,
-                              Server.urlImageDatabase(
+                              Server.urlLaravelImage(
                                   listProdukTerlaris[index]['image_path']),
                             ),
                           ),
@@ -624,10 +622,22 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                 ),
                                 SizedBox(height: 10),
                                 InkWell(
-                                  onTap: (){
-                                    Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>LaporanUtama(),transitionsBuilder: (context,animation,secondaryAnimation,child){
-                                      return FadeTransition(opacity: animation,child: child,);
-                                    }));
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimation) =>
+                                                LaporanUtama(),
+                                            transitionsBuilder: (context,
+                                                animation,
+                                                secondaryAnimation,
+                                                child) {
+                                              return FadeTransition(
+                                                opacity: animation,
+                                                child: child,
+                                              );
+                                            }));
                                   },
                                   child: Card(
                                     elevation: 5,
@@ -732,32 +742,35 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                             margin: EdgeInsets.only(
                                               left: 10,
                                             ),
-                                            child:  detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
-                                              ? Text(
-                                                  detailInformasi['alamat'],
-                                                  style: CustomText.TextArvo(
-                                                    14,
-                                                    CustomColors.blackColor,
-                                                  ),
-                                                  textAlign: TextAlign.start,
-                                                )
-                                              : Shimmer.fromColors(
-                                                  baseColor: Color.fromARGB(
-                                                      255, 104, 102, 102)!,
-                                                  highlightColor:
-                                                      const Color.fromARGB(
-                                                          255, 202, 200, 200)!,
-                                                  child: Text(
-                                                    'Loading...',
+                                            child: alamat.isNotEmpty
+                                                ? Text(
+                                                    alamat,
                                                     style: CustomText.TextArvo(
                                                       14,
                                                       CustomColors.blackColor,
                                                     ),
                                                     textAlign: TextAlign.start,
-                                                  ),
-                                                )),
+                                                  )
+                                                : Shimmer.fromColors(
+                                                    baseColor: Color.fromARGB(
+                                                        255, 104, 102, 102)!,
+                                                    highlightColor:
+                                                        const Color.fromARGB(
+                                                            255,
+                                                            202,
+                                                            200,
+                                                            200)!,
+                                                    child: Text(
+                                                      'Loading...',
+                                                      style:
+                                                          CustomText.TextArvo(
+                                                        14,
+                                                        CustomColors.blackColor,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                    ),
+                                                  )),
                                       ],
                                     ),
                                   ),

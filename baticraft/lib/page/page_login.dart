@@ -27,77 +27,82 @@ class _page_login extends State<page_login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   Future _ceklogin() async {
-    final response = await http.post(Server.url("Login.php"), body: {
-      "email": emailController.text,
-      "password": passwordController.text
-    });
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-      setState(() {
-        isWrong = true;
-        sizeerror = 14;
-        errorText = "Masukkan Email dan Password\ndengan benar!";
+    try {
+      final response = await http.post(Server.urlLaravel("LoginMobile"), body: {
+        "email": emailController.text,
+        "password": passwordController.text
       });
-    } else {
-      String jsonData = "[]";
-      if (response.statusCode == 200) {
-        jsonData = response.body.toString();
-        if (jsonData != "[]") {
-          Map<String, dynamic> detailUser = json.decode(response.body);
-          print("JsonData = "+jsonData);
-          isWrong = false;
-          CustomWidget.NotifBerhasilLogin(context, utama());
+      if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+        setState(() {
+          isWrong = true;
+          sizeerror = 14;
+          errorText = "Masukkan Email dan Password\ndengan benar!";
+        });
+      } else {
+        String jsonData = "[]";
+        if (response.statusCode == 200) {
+          jsonData = response.body.toString();
+          if (jsonData != "[]") {
+            Map<String, dynamic> detailUser = json.decode(response.body);
+            print("JsonData = " + jsonData);
+            isWrong = false;
+            CustomWidget.NotifBerhasilLogin(context, utama());
 
-          page_login.id_user = detailUser['id'].toString();
-          print("id user = " + detailUser['id'].toString());
-          print("id user = " + response.body);
-        } else {
-          setState(() {
-            print("kesalahan");
-            isWrong = true;
-            errorText = "Email atau Password Salah!";
-            sizeerror = 18;
-            print("JsonData = "+jsonData);
-          });
-        }
-      } else {}
+            page_login.id_user = detailUser['id'].toString();
+            print("id user = " + detailUser['id'].toString());
+            print("id user = " + response.body);
+          } else {
+            setState(() {
+              print("kesalahan");
+              isWrong = true;
+              errorText = "Email atau Password Salah!";
+              sizeerror = 18;
+              print("JsonData = " + jsonData);
+            });
+          }
+        } else {}
+      }
+    } catch (e) {
+      // Tangani kesalahan koneksi atau kesalahan lainnya
+      print("Error: $e");
     }
   }
 
-Future<Map<String, dynamic>> checkEmail(String email) async { // Ganti dengan URL Anda
+// Future<Map<String, dynamic>> checkEmail(String email) async { // Ganti dengan URL Anda
 
-  try {
-    final response = await http.post(
-      Server.url("loginGoogle.php"),
-      body: {'email': email},
-    );
+//   try {
+//     final response = await http.post(
+//       Server.url("loginGoogle.php"),
+//       body: {'email': email},
+//     );
 
-    if (response.statusCode == 200) {
-      final userData = json.decode(response.body);
+//     if (response.statusCode == 200) {
+//       final userData = json.decode(response.body);
 
-          page_login.id_user = userData['id'].toString();
-          print("id user = " + userData['id'].toString());
-          print("id user = " + response.body);
-CustomWidget.NotifBerhasilLogin(context, utama());
-      // Jika respons berhasil
-      return userData;
+//           page_login.id_user = userData['id'].toString();
+//           print("id user = " + userData['id'].toString());
+//           print("id user = " + response.body);
+// CustomWidget.NotifBerhasilLogin(context, utama());
+//       // Jika respons berhasil
+//       return userData;
 
-    } else {
-      _googleSignIn.disconnect();
-      // Jika respons gagal
-      throw Exception('Gagal memeriksa email');
-    }
-  } catch (e) {
-    // Jika terjadi kesalahan
-    throw Exception('Error: $e');
-  }
-}
+//     } else {
+//       _googleSignIn.disconnect();
+//       // Jika respons gagal
+//       throw Exception('Gagal memeriksa email');
+//     }
+//   } catch (e) {
+//     // Jika terjadi kesalahan
+//     throw Exception('Error: $e');
+//   }
+// }
 
-  late GoogleSignIn _googleSignIn;
-  GoogleSignInAccount? currentUser;
-  List<String> scopes = <String>[
-    'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
-  ];
+  // late GoogleSignIn _googleSignIn;
+  // GoogleSignInAccount? currentUser;
+  // List<String> scopes = <String>[
+  //   'email',
+  //   'https://www.googleapis.com/auth/contacts.readonly',
+  // ];
   bool isAuthorized = false;
   String contactText = '';
 
@@ -113,8 +118,7 @@ CustomWidget.NotifBerhasilLogin(context, utama());
   @override
   void initState() {
     super.initState();
-    
-   
+
     RawKeyboard.instance.addListener(_handleKeyEvent);
   }
 
@@ -374,7 +378,8 @@ CustomWidget.NotifBerhasilLogin(context, utama());
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30,vertical: 10),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 10),
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: TextButton(
@@ -411,7 +416,11 @@ CustomWidget.NotifBerhasilLogin(context, utama());
                                     onPressed: () {
                                       setState(() {
                                         print("Login presseedd");
-                                        _ceklogin();
+                                        try {
+                                          _ceklogin();
+                                        } catch ($e) {
+                                          print("ERRORRR "+$e.toString());
+                                        }
                                       });
                                     },
                                     child: Text("Masuk",
@@ -420,8 +429,6 @@ CustomWidget.NotifBerhasilLogin(context, utama());
                                   ),
                                 ),
                               ),
-                          
-                         
                               Text(
                                 'Status Keyboard: ${isKeyboardActive ? statusKeyboard = 'Aktif' : statusKeyboard = "tidak aktif"}' +
                                     statusKeyboard,

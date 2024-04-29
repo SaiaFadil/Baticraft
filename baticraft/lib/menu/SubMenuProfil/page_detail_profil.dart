@@ -21,7 +21,7 @@ class _detail_profilState extends State<detail_profil> {
   String email = "";
   String nama = "";
   Future getDetailUser() async {
-    final response = await http.post(Server.url("ShowDetailProfil.php"),
+    final response = await http.post(Server.urlLaravel("DetailProfil"),
         body: {"id_user": page_login.id_user});
 
     if (response.statusCode == 200) {
@@ -74,7 +74,7 @@ class _detail_profilState extends State<detail_profil> {
           Container(
             margin: EdgeInsets.only(top: 100),
             padding: EdgeInsets.all(10),
-            height: 450,
+            height: 470,
             width: double.infinity,
             child: Card(
               color: CustomColors.secondaryColor,
@@ -422,20 +422,28 @@ class _detail_profilState extends State<detail_profil> {
                             foregroundColor: CustomColors.secondaryColor,
                             radius: 55, // Ubah ukuran avatar
                             backgroundImage: NetworkImage(
-                                Server.urlProfilDatabase(detailUser[
+                                Server.urlLaravelImage(detailUser[
                                     'image'])) // Ganti URL gambar sesuai kebutuhan
                             ),
                       ),
                     )
-                  : Shimmer.fromColors(
-                      baseColor: Color.fromARGB(255, 42, 5, 146)!,
+                  :  CircleAvatar(
+                          // Gunakan AssetImage untuk gambar lokal
+                          radius: 70,
+                              backgroundColor: CustomColors.secondaryColor,
+                          child: CircleAvatar(
+                              backgroundColor: CustomColors.whiteColor,
+                              radius: 65,
+                              child: Shimmer.fromColors(
+                      baseColor: CustomColors.secondaryColor!,
                       highlightColor: Color.fromARGB(255, 255, 254, 254)!,
-                      child: CircleAvatar(
-                        backgroundImage: AssetImage(Server.urlGambar(
-                            "default2.png")), // Gunakan AssetImage untuk gambar lokal
-                        radius: 30,
-                      ),
-                    )),
+                      child:CircleAvatar(
+                                foregroundColor: CustomColors.secondaryColor,
+                                radius: 55,
+                                backgroundImage: AssetImage(
+                                    Server.urlGambar("default2.png")),
+                              ))),)
+                    ),
         ],
       ),
     );

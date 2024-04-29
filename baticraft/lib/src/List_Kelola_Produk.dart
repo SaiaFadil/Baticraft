@@ -22,20 +22,25 @@ class List_Kelola_Produk extends StatefulWidget {
 }
 
 class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
-  
   Future<void> deleteProductAndImages(String idProduk) async {
-  final response = await http.post(Server.url('deleteProduk.php'), body: {'id_produk': idProduk.toString()});
+    final response = await http.post(Server.urlLaravel('deleteProduct'),
+        body: {'id_produk': idProduk.toString()});
 
-  if (response.statusCode == 200) {
-    final responseData = json.decode(response.body);
-    print(responseData['message']);
-    Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => KelolaProduk(),));
-  } else {
-    print('Failed to delete product and images. Error: ${response.reasonPhrase}');
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      print(responseData['message']);
+      Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                KelolaProduk(), 
+          ));
+    } else {
+      print(
+          'Failed to delete product and images. Error: ${response.reasonPhrase}');
+    }
   }
-}
-  
-  
+
   String jsonProdukKemeja = "{}";
   String jsonProdukBaju = "{}";
   String jsonProdukKain = "{}";
@@ -45,7 +50,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
   List<Map<String, dynamic>> listKain = [];
 
   Future<void> showKemeja() async {
-    final response = await http.get(Server.url("showKemeja.php"));
+    final response = await http.get(Server.urlLaravel("showKemeja"));
     jsonProdukKemeja = response.body.toString();
     setState(() {
       listKemeja =
@@ -55,7 +60,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
   }
 
   Future<void> showKaos() async {
-    final response = await http.get(Server.url("showKaos.php"));
+    final response = await http.get(Server.urlLaravel("showKaos"));
     jsonProdukBaju = response.body.toString();
     setState(() {
       listBaju = List<Map<String, dynamic>>.from(json.decode(jsonProdukBaju));
@@ -64,7 +69,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
   }
 
   Future<void> showKain() async {
-    final response = await http.get(Server.url("showKain.php"));
+    final response = await http.get(Server.urlLaravel("showKain"));
     jsonProdukKain = response.body.toString();
     setState(() {
       listKain = List<Map<String, dynamic>>.from(json.decode(jsonProdukKain));
@@ -73,7 +78,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
   }
 
   Widget KumpulanKemeja() {
-    return Container(
+      return Container(
       height: 230,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -86,7 +91,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  List_Kelola_Produk.id_produk = listKemeja[index]['id'];
+                  List_Kelola_Produk.id_produk = listKemeja[index]['id'].toString();
                   print("id produk = " + List_Kelola_Produk.id_produk);
                   Navigator.pushReplacement(
                       context,
@@ -126,7 +131,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                   child: Image.network(
                                     fit: BoxFit.fitWidth,
                                     height: 120,
-                                    Server.urlImageDatabase(
+                                    Server.urlLaravelImage(
                                         listKemeja[index]['image_path']),
                                   ),
                                 ),
@@ -175,58 +180,68 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                           textAlign: TextAlign.start,
                                         ),
                                       )
-                                    : Text("Rp." + listKemeja[index]['harga'],
+                                    : Text(
+                                        "Rp." +
+                                            listKemeja[index]['harga']
+                                                .toString(),
                                         style: CustomText.TextArvoBold(
                                             12, CustomColors.blackColor)),
                                 Container(
                                   child: IconButton(
                                       onPressed: () {
-                                                 showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        "Konfirmasi",
-                                        style: CustomText.TextArvoBold(
-                                            18, CustomColors.whiteColor),
-                                      ),
-                                      backgroundColor:
-                                          CustomColors.secondaryColor,
-                                      content: Text(
-                                        "Apakah Anda yakin ingin HAPUS produk ini?",
-                                        style: CustomText.TextArvo(
-                                            16, CustomColors.whiteColor),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); 
-                                                deleteProductAndImages(listKemeja[index]['id']);
-                                            print("pressed");
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                "Konfirmasi",
+                                                style: CustomText.TextArvoBold(
+                                                    18,
+                                                    CustomColors.whiteColor),
+                                              ),
+                                              backgroundColor:
+                                                  CustomColors.secondaryColor,
+                                              content: Text(
+                                                "Apakah Anda yakin ingin HAPUS produk ini?",
+                                                style: CustomText.TextArvo(16,
+                                                    CustomColors.whiteColor),
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    deleteProductAndImages(
+                                                        listKemeja[index]
+                                                            ['id'].toString());
+                                                    print("pressed");
+                                                  },
+                                                  child: Text(
+                                                    "Ya",
+                                                    style:
+                                                        CustomText.TextArvoBold(
+                                                            18,
+                                                            CustomColors
+                                                                .whiteColor),
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(); // Tutup dialog
+                                                  },
+                                                  child: Text(
+                                                    "Tidak",
+                                                    style:
+                                                        CustomText.TextArvoBold(
+                                                            18,
+                                                            CustomColors
+                                                                .whiteColor),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
                                           },
-                                          child: Text(
-                                            "Ya",
-                                            style: CustomText.TextArvoBold(
-                                                18, CustomColors.whiteColor),
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Tutup dialog
-                                          },
-                                          child: Text(
-                                            "Tidak",
-                                            style: CustomText.TextArvoBold(
-                                                18, CustomColors.whiteColor),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                      
+                                        );
                                       },
                                       icon: Image.asset(
                                         Server.urlGambar("icons_sampah.png"),
@@ -263,7 +278,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  List_Kelola_Produk.id_produk = listBaju[index]['id'];
+                  List_Kelola_Produk.id_produk = listBaju[index]['id'].toString();
                   print("id produk = " + List_Kelola_Produk.id_produk);
                   Navigator.pushReplacement(
                       context,
@@ -303,7 +318,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                   child: Image.network(
                                     fit: BoxFit.fitWidth,
                                     height: 120,
-                                    Server.urlImageDatabase(
+                                    Server.urlLaravelImage(
                                         listBaju[index]['image_path']),
                                   ),
                                 ),
@@ -352,58 +367,66 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                           textAlign: TextAlign.start,
                                         ),
                                       )
-                                    : Text("Rp." + listBaju[index]['harga'],
+                                    : Text(
+                                        "Rp." +
+                                            listBaju[index]['harga'].toString(),
                                         style: CustomText.TextArvoBold(
                                             12, CustomColors.blackColor)),
                                 Container(
                                   child: IconButton(
                                       onPressed: () {
-                                                    showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        "Konfirmasi",
-                                        style: CustomText.TextArvoBold(
-                                            18, CustomColors.whiteColor),
-                                      ),
-                                      backgroundColor:
-                                          CustomColors.secondaryColor,
-                                      content: Text(
-                                        "Apakah Anda yakin ingin HAPUS produk ini?",
-                                        style: CustomText.TextArvo(
-                                            16, CustomColors.whiteColor),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); 
-                                                deleteProductAndImages(listBaju[index]['id']);
-                                            print("pressed");
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                "Konfirmasi",
+                                                style: CustomText.TextArvoBold(
+                                                    18,
+                                                    CustomColors.whiteColor),
+                                              ),
+                                              backgroundColor:
+                                                  CustomColors.secondaryColor,
+                                              content: Text(
+                                                "Apakah Anda yakin ingin HAPUS produk ini?",
+                                                style: CustomText.TextArvo(16,
+                                                    CustomColors.whiteColor),
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    deleteProductAndImages(
+                                                        listBaju[index]['id'].toString());
+                                                    print("pressed");
+                                                  },
+                                                  child: Text(
+                                                    "Ya",
+                                                    style:
+                                                        CustomText.TextArvoBold(
+                                                            18,
+                                                            CustomColors
+                                                                .whiteColor),
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(); // Tutup dialog
+                                                  },
+                                                  child: Text(
+                                                    "Tidak",
+                                                    style:
+                                                        CustomText.TextArvoBold(
+                                                            18,
+                                                            CustomColors
+                                                                .whiteColor),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
                                           },
-                                          child: Text(
-                                            "Ya",
-                                            style: CustomText.TextArvoBold(
-                                                18, CustomColors.whiteColor),
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Tutup dialog
-                                          },
-                                          child: Text(
-                                            "Tidak",
-                                            style: CustomText.TextArvoBold(
-                                                18, CustomColors.whiteColor),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                      
+                                        );
                                       },
                                       icon: Image.asset(
                                         Server.urlGambar("icons_sampah.png"),
@@ -440,7 +463,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  List_Kelola_Produk.id_produk = listKain[index]['id'];
+                  List_Kelola_Produk.id_produk = listKain[index]['id'].toString();
                   print("id produk = " + List_Kelola_Produk.id_produk);
                   Navigator.pushReplacement(
                       context,
@@ -480,7 +503,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                   child: Image.network(
                                     fit: BoxFit.fitWidth,
                                     height: 120,
-                                    Server.urlImageDatabase(
+                                    Server.urlLaravelImage(
                                         listKain[index]['image_path']),
                                   ),
                                 ),
@@ -529,58 +552,66 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                           textAlign: TextAlign.start,
                                         ),
                                       )
-                                    : Text("Rp." + listKain[index]['harga'],
+                                    : Text(
+                                        "Rp." +
+                                            listKain[index]['harga'].toString(),
                                         style: CustomText.TextArvoBold(
                                             12, CustomColors.blackColor)),
                                 Container(
                                   child: IconButton(
                                       onPressed: () {
-                                                    showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                        "Konfirmasi",
-                                        style: CustomText.TextArvoBold(
-                                            18, CustomColors.whiteColor),
-                                      ),
-                                      backgroundColor:
-                                          CustomColors.secondaryColor,
-                                      content: Text(
-                                        "Apakah Anda yakin ingin HAPUS produk ini?",
-                                        style: CustomText.TextArvo(
-                                            16, CustomColors.whiteColor),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); 
-                                                deleteProductAndImages(listKain[index]['id']);
-                                            print("pressed");
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                "Konfirmasi",
+                                                style: CustomText.TextArvoBold(
+                                                    18,
+                                                    CustomColors.whiteColor),
+                                              ),
+                                              backgroundColor:
+                                                  CustomColors.secondaryColor,
+                                              content: Text(
+                                                "Apakah Anda yakin ingin HAPUS produk ini?",
+                                                style: CustomText.TextArvo(16,
+                                                    CustomColors.whiteColor),
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    deleteProductAndImages(
+                                                        listKain[index]['id'].toString());
+                                                    print("pressed");
+                                                  },
+                                                  child: Text(
+                                                    "Ya",
+                                                    style:
+                                                        CustomText.TextArvoBold(
+                                                            18,
+                                                            CustomColors
+                                                                .whiteColor),
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(); // Tutup dialog
+                                                  },
+                                                  child: Text(
+                                                    "Tidak",
+                                                    style:
+                                                        CustomText.TextArvoBold(
+                                                            18,
+                                                            CustomColors
+                                                                .whiteColor),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
                                           },
-                                          child: Text(
-                                            "Ya",
-                                            style: CustomText.TextArvoBold(
-                                                18, CustomColors.whiteColor),
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Tutup dialog
-                                          },
-                                          child: Text(
-                                            "Tidak",
-                                            style: CustomText.TextArvoBold(
-                                                18, CustomColors.whiteColor),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                      
+                                        );
                                       },
                                       icon: Image.asset(
                                         Server.urlGambar("icons_sampah.png"),
@@ -626,19 +657,18 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Align(
+      children: [    Align(
           alignment: Alignment.centerLeft,
           child: Padding(
-              padding: EdgeInsets.only(left: 25, right: 25),
-              child: Text("Kategori : Kemeja",
-                  textAlign: TextAlign.start,
+              padding: EdgeInsets.only(left: 25, right: 25, top: 10),
+              child: Text("Kategori : Kain",
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: KumpulanKemeja(),
+          padding: const EdgeInsets.only(top: 10, bottom: 30),
+          child: KumpulanKain(),
         ),
+       
         Align(
           alignment: Alignment.centerLeft,
           child: Padding(
@@ -650,16 +680,17 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
           padding: const EdgeInsets.only(top: 10),
           child: KumpulanKaos(),
         ),
-        Align(
+     Align(
           alignment: Alignment.centerLeft,
           child: Padding(
-              padding: EdgeInsets.only(left: 25, right: 25, top: 10),
-              child: Text("Kategori : Kain",
+              padding: EdgeInsets.only(left: 25, right: 25),
+              child: Text("Kategori : Kemeja",
+                  textAlign: TextAlign.start,
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 30),
-          child: KumpulanKain(),
+          padding: const EdgeInsets.only(top: 10),
+          child: KumpulanKemeja(),
         ),
       ],
     );

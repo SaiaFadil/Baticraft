@@ -22,30 +22,47 @@ class _InformasiTokoState extends State<InformasiToko> {
   String jsonDetailInformasi = "{}";
   Map<String, dynamic> detailInformasi = {};
 
-  Future getDetailInformasi() async {
-    final response = await http.get(Server.url("ShowDetailInformasi.php"));
+  String nama_pemilik = "";
+  String nama_toko = "";
+  String alamat = "";
+  String deskripsi = "";
+  String no_telpon = "";
+  String email = "";
+  String akun_ig = "";
+  String akun_fb = "";
+  String akun_tiktok = "";
+  String image = "";
 
-    if (response.statusCode == 200) {
-      jsonDetailInformasi = response.body.toString();
-      detailInformasi = json.decode(jsonDetailInformasi);
-      if (detailInformasi.isNotEmpty) {
-        setState(() {
-          print("nama_pemilik = " + detailInformasi['nama_pemilik']);
-          print("nama_toko = " + detailInformasi['nama_toko']);
-          print("alamatnya = " + detailInformasi['alamat']);
-          print("deskripsi = " + detailInformasi['deskripsi']);
-          print("no_telpon = " + detailInformasi['no_telpon']);
-          print("email = " + detailInformasi['email']);
-          print("akun_ig = " + detailInformasi['akun_ig']);
-          print("akun_fb = " + detailInformasi['akun_fb']);
-          print("akun_tiktok = " + detailInformasi['akun_tiktok']);
-          print("image = " + detailInformasi['image']);
-        });
+  Future getDetailInformasi() async {
+    try {
+      final response =
+          await http.get(Server.urlLaravel("DetailInformasiMobile"));
+
+      if (response.statusCode == 200) {
+        List<dynamic> detailInformasiList = json.decode(response.body);
+        if (detailInformasiList.isNotEmpty) {
+          Map<String, dynamic> detailInformasi = detailInformasiList[0];
+          setState(() {
+            nama_pemilik = detailInformasi['nama_pemilik'];
+            nama_toko = detailInformasi['nama_toko'];
+            alamat = detailInformasi['alamat'];
+            deskripsi = detailInformasi['deskripsi'];
+            no_telpon = detailInformasi['no_telpon'];
+            email = detailInformasi['email'];
+            akun_ig = detailInformasi['akun_ig'];
+            akun_fb = detailInformasi['akun_fb'];
+            akun_tiktok = detailInformasi['akun_tiktok'];
+            image = detailInformasi['image'];
+          });
+        } else {
+          print("No data available");
+        }
       } else {
-        print("No data available");
+        print("HTTP Request failed with status: ${response.statusCode}");
       }
-    } else {
-      print("HTTP Request failed with status: ${response.statusCode}");
+    } catch ($e) {
+      print($e);
+      ;
     }
   }
 
@@ -53,6 +70,9 @@ class _InformasiTokoState extends State<InformasiToko> {
   void initState() {
     super.initState();
     getDetailInformasi();
+    setState(() {
+      getDetailInformasi();
+    });
   }
 
 //Akhir Backend
@@ -94,10 +114,10 @@ class _InformasiTokoState extends State<InformasiToko> {
               top: 0,
               left: 0,
               right: 0,
-              child: detailInformasi['image'] != null
+              child: image.isNotEmpty
                   ? Container(
                       child: Image.network(
-                        Server.urlImageDatabase(detailInformasi['image']),
+                        Server.urlLaravelImage(image),
                         fit: BoxFit.fitWidth,
                         alignment: Alignment.center,
                       ),
@@ -171,12 +191,9 @@ class _InformasiTokoState extends State<InformasiToko> {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
+                                          child: nama_pemilik.isNotEmpty
                                               ? Text(
-                                                  detailInformasi[
-                                                      'nama_pemilik'],
+                                                  nama_pemilik,
                                                   style: CustomText.TextArvo(
                                                     14,
                                                     CustomColors.blackColor,
@@ -241,11 +258,9 @@ class _InformasiTokoState extends State<InformasiToko> {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
+                                          child: nama_pemilik.isNotEmpty
                                               ? Text(
-                                                  detailInformasi['alamat'],
+                                                  alamat,
                                                   style: CustomText.TextArvo(
                                                     14,
                                                     CustomColors.blackColor,
@@ -313,11 +328,9 @@ class _InformasiTokoState extends State<InformasiToko> {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
+                                          child: nama_pemilik.isNotEmpty
                                               ? Text(
-                                                  detailInformasi['deskripsi'],
+                                                  deskripsi,
                                                   style: CustomText.TextArvo(
                                                     14,
                                                     CustomColors.blackColor,
@@ -382,11 +395,9 @@ class _InformasiTokoState extends State<InformasiToko> {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
+                                          child: nama_pemilik.isNotEmpty
                                               ? Text(
-                                                  detailInformasi['no_telpon'],
+                                                  no_telpon,
                                                   style: CustomText.TextArvo(
                                                     14,
                                                     CustomColors.blackColor,
@@ -451,11 +462,9 @@ class _InformasiTokoState extends State<InformasiToko> {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
+                                          child: nama_pemilik.isNotEmpty
                                               ? Text(
-                                                  detailInformasi['email'],
+                                                  email,
                                                   style: CustomText.TextArvo(
                                                     14,
                                                     CustomColors.blackColor,
@@ -522,11 +531,9 @@ class _InformasiTokoState extends State<InformasiToko> {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
+                                          child: nama_pemilik.isNotEmpty
                                               ? Text(
-                                                  detailInformasi['akun_ig'],
+                                                  akun_ig,
                                                   style: CustomText.TextArvo(
                                                     14,
                                                     CustomColors.blackColor,
@@ -591,11 +598,9 @@ class _InformasiTokoState extends State<InformasiToko> {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
+                                          child: nama_pemilik.isNotEmpty
                                               ? Text(
-                                                  detailInformasi['akun_fb'],
+                                                  akun_fb,
                                                   style: CustomText.TextArvo(
                                                     14,
                                                     CustomColors.blackColor,
@@ -660,12 +665,9 @@ class _InformasiTokoState extends State<InformasiToko> {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 5),
-                                          child: detailInformasi[
-                                                      'nama_pemilik'] !=
-                                                  null
+                                          child: nama_pemilik.isNotEmpty
                                               ? Text(
-                                                  detailInformasi[
-                                                      'akun_tiktok'],
+                                                  akun_tiktok,
                                                   style: CustomText.TextArvo(
                                                     14,
                                                     CustomColors.blackColor,

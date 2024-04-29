@@ -49,7 +49,7 @@ class edit_profilState extends State<edit_profil> {
   }
 
   Future getDetailUser() async {
-    final response = await http.post(Server.url("ShowDetailProfil.php"),
+    final response = await http.post(Server.urlLaravel("DetailProfil"),
         body: {"id_user": page_login.id_user});
 
     if (response.statusCode == 200) {
@@ -84,7 +84,7 @@ class edit_profilState extends State<edit_profil> {
 
     // Menyiapkan request untuk mengunggah gambar ke server
     request = http.MultipartRequest(
-        'POST', Uri.parse(Server.urlString("upload_image.php")));
+        'POST', Server.urlLaravel("UploadGambarInformasi"));
 
     // Menambahkan file gambar ke dalam request
 
@@ -120,7 +120,7 @@ class edit_profilState extends State<edit_profil> {
     };
 
     // Buat request POST ke URL server
-    Uri url = Server.url("Edit_Informasi_Toko.php");
+    Uri url = Server.urlLaravel("DetailProfil");
 
     try {
       // Kirim request POST ke server
@@ -196,7 +196,7 @@ class edit_profilState extends State<edit_profil> {
                                 foregroundColor: CustomColors.secondaryColor,
                                 radius: 55, // Ubah ukuran avatar
                                 backgroundImage: NetworkImage(
-                                    Server.urlProfilDatabase(detailUser[
+                                    Server.urlLaravelImage(detailUser[
                                         'image'])) // Ganti URL gambar sesuai kebutuhan
                                 ),
                           ),

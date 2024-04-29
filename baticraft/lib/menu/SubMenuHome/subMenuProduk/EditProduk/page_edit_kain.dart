@@ -27,32 +27,35 @@ class Edit_Produk_Kain extends StatefulWidget {
 class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
 //AWAL BACKEND
   String jsonProdukKain = "{}";
-  List<String> imagePaths = [];
-  List<Map<String, dynamic>> listKain = [];
-  Future<void> showKain() async {
-    final response = await http.post(Server.url("showDetailKain.php"),
-        body: {"id_produk": List_Kelola_Produk.id_produk});
-    jsonProdukKain = response.body.toString();
-    setState(() {
-      listKain =
-          List<Map<String, dynamic>>.from(json.decode(jsonProdukKain));
-      namaController.text = listKain[0]['nama'];
-      deskripsiController.text = listKain[0]['deskripsi'];
-      hargaController.text = listKain[0]['harga'];
-      stokController.text = listKain[0]['stok'];
-      bahanController.text = listKain[0]['bahan'];
-      jenisBatikController.text = listKain[0]['jenis_batik'];
-      ukuranController.text = listKain[0]['ukuran'];
-      panjangKainController.text = listKain[0]['panjang_kain'];
-      lebarKainController.text = listKain[0]['lebar_kain'];
-      _selectedJenisLengan = listKain[0]['jenis_lengan'];
-      imagePaths = List<String>.from(listKain[0]['image_paths']);
-    });
-    print("Panjang dataaa = " + imagePaths.length.toString());
+List<String> imagePaths = [];
 
-    print(listKain[0]['nama']);
-  }
+Future<void> showKain() async {
+  final response = await http.post(Server.urlLaravel("getDetailKain"),
+      body: {"id_produk": List_Kelola_Produk.id_produk});
+  jsonProdukKain = response.body.toString();
+  setState(() {
+    // Periksa apakah respons tidak kosong
+    if (jsonProdukKain.isNotEmpty) {
+      // Parse respons JSON menjadi objek Map
+      Map<String, dynamic> produkKain = json.decode(jsonProdukKain);
+      
+      // Mengakses properti nama, deskripsi, harga, dll.
+      namaController.text = produkKain['nama'];
+      deskripsiController.text = produkKain['deskripsi'];
+      hargaController.text = produkKain['harga'].toString();
+      stokController.text = produkKain['stok'].toString();
+      bahanController.text = produkKain['bahan'];
+      jenisBatikController.text = produkKain['jenis_batik'];
+      ukuranController.text = produkKain['ukuran'];
+      panjangKainController.text = produkKain['panjang_kain'];
+      lebarKainController.text = produkKain['lebar_kain'];
+      _selectedJenisLengan = produkKain['jenis_lengan'];
 
+      // Mengakses properti image_paths dan menyimpannya dalam imagePaths
+      imagePaths = List<String>.from(produkKain['image_paths']);
+    }
+  });
+}
   String _selectedStatus = 'tersedia';
   String _selectedJenisLengan = 'pendek';
 
@@ -108,7 +111,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
 
   Future<void> addImagesToProduct() async {
     // URL endpoint untuk mengirimkan data ke backend
-    var url = Server.url('upload_gambar_without_direktori.php');
+    var url = Server.urlLaravel('upload_gambar_without_direktori');
 
     // Membuat request HTTP POST
     var requesttt = http.MultipartRequest('POST', url);
@@ -153,9 +156,9 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
     }
   }
 
-  Future<void> uploadData() async {
-    var request =
-        http.MultipartRequest('POST', Server.url("updateProdukKain.php"));
+  Future uploadData() async {
+    try{var request =
+        http.MultipartRequest('POST', Server.urlLaravel("updateProduct"));
     request.fields['id_produk'] = List_Kelola_Produk.id_produk;
     request.fields['nama'] = namaController.text;
     request.fields['deskripsi'] = deskripsiController.text;
@@ -181,8 +184,12 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
       CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
       // Handle success response
     } else {
+      print('Failed to upload data. Errorrr: ${response.statusCode}');
       print('Failed to upload data. Error: ${response.reasonPhrase}');
+      print('Failed to upload data. Error: ${response.headersSplitValues}');
       // Handle error response
+    }}catch($e){
+      print($e);
     }
   }
 
@@ -412,7 +419,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlImageDatabase(imagePaths[1]),
+                                Server.urlLaravelImage(imagePaths[1]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -499,7 +506,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlImageDatabase(imagePaths[2]),
+                                Server.urlLaravelImage(imagePaths[2]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -586,7 +593,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlImageDatabase(imagePaths[3]),
+                                Server.urlLaravelImage(imagePaths[3]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -673,7 +680,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlImageDatabase(imagePaths[4]),
+                                Server.urlLaravelImage(imagePaths[4]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -804,7 +811,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                                     ? Container(
                                         margin: EdgeInsets.all(20),
                                         child: Image.network(
-                                          Server.urlImageDatabase(
+                                          Server.urlLaravelImage(
                                               imagePaths[0]),
                                           fit: BoxFit.contain,
                                         ))

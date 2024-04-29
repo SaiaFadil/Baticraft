@@ -24,7 +24,7 @@ class _menu_profilState extends State<menu_profil> {
   String email = "";
   String nama = "";
   Future getDetailUser() async {
-    final response = await http.post(Server.url("ShowDetailProfil.php"),
+    final response = await http.post(Server.urlLaravel("DetailProfil"),
         body: {"id_user": page_login.id_user});
 
     if (response.statusCode == 200) {
@@ -107,7 +107,7 @@ class _menu_profilState extends State<menu_profil> {
                                     ? CircleAvatar(
                                         radius: 30, // Ubah ukuran avatar
                                         backgroundImage: NetworkImage(
-                                            Server.urlProfilDatabase(detailUser[
+                                            Server.urlLaravelImage(detailUser[
                                                 'image'])) // Ganti URL gambar sesuai kebutuhan
                                         )
                                     : Shimmer.fromColors(
@@ -205,9 +205,20 @@ class _menu_profilState extends State<menu_profil> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>edit_profil(),transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(opacity: animation,child: child,);
-                      },));
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    edit_profil(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ));
                     },
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     child: Row(
@@ -241,9 +252,20 @@ class _menu_profilState extends State<menu_profil> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context,PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>ubah_kata_sandi(),transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(opacity: animation,child: child,);
-                      },));
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    ubah_kata_sandi(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                          ));
                     },
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     child: Row(
@@ -277,9 +299,13 @@ class _menu_profilState extends State<menu_profil> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context, PageRouteBuilder(pageBuilder: ((context, animation, secondaryAnimation) =>page_login()
-                        )));
-                        page_login.id_user = "";
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                              pageBuilder:
+                                  ((context, animation, secondaryAnimation) =>
+                                      page_login())));
+                      page_login.id_user = "";
                     },
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     child: Row(

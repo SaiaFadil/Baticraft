@@ -30,7 +30,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
   List<String> imagePaths = [];
   List<Map<String, dynamic>> listKaos = [];
   Future<void> showKaos() async {
-    final response = await http.post(Server.url("showDetailKaos.php"),
+    final response = await http.post(Server.urlLaravel("getDetailKaos"),
         body: {"id_produk": List_Kelola_Produk.id_produk});
     jsonProdukKaos = response.body.toString();
     setState(() {
@@ -108,7 +108,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
 
   Future<void> addImagesToProduct() async {
     // URL endpoint untuk mengirimkan data ke backend
-    var url = Server.url('upload_gambar_without_direktori.php');
+    var url = Server.urlLaravel('upload_gambar_without_direktori');
 
     // Membuat request HTTP POST
     var requesttt = http.MultipartRequest('POST', url);
@@ -155,7 +155,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
 
   Future<void> uploadData() async {
     var request =
-        http.MultipartRequest('POST', Server.url("updateProdukKaos.php"));
+        http.MultipartRequest('POST', Server.urlLaravel("updateProduct"));
     request.fields['id_produk'] = List_Kelola_Produk.id_produk;
     request.fields['nama'] = namaController.text;
     request.fields['deskripsi'] = deskripsiController.text;
@@ -399,7 +399,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlImageDatabase(imagePaths[1]),
+                                Server.urlLaravelImage(imagePaths[1]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -486,7 +486,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlImageDatabase(imagePaths[2]),
+                                Server.urlLaravelImage(imagePaths[2]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -573,7 +573,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlImageDatabase(imagePaths[3]),
+                                Server.urlLaravelImage(imagePaths[3]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -660,7 +660,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlImageDatabase(imagePaths[4]),
+                                Server.urlLaravelImage(imagePaths[4]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -791,7 +791,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                                     ? Container(
                                         margin: EdgeInsets.all(20),
                                         child: Image.network(
-                                          Server.urlImageDatabase(
+                                          Server.urlLaravelImage(
                                               imagePaths[0]),
                                           fit: BoxFit.contain,
                                         ))

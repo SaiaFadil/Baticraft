@@ -34,7 +34,7 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
   Future<String> generateNextProductCode() async {
     // Mengirim permintaan HTTP ke backend untuk mendapatkan kode produk berikutnya
     // Gantilah URL di bawah sesuai dengan endpoint yang tepat pada backend Anda
-    var response = await http.get(Server.url("get_next_id_products.php"));
+    var response = await http.get(Server.urlLaravel("get_next_id_products.php"));
 
     if (response.statusCode == 200) {
       // Jika permintaan berhasil, gunakan kode produk berikutnya yang diterima dari backend
@@ -103,7 +103,7 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
   }
 
   Future<void> uploadData() async {
-    var request = http.MultipartRequest('POST', Server.url("insertProduk.php"));
+    var request = http.MultipartRequest('POST', Server.urlLaravel("insertProduk"));
     request.fields['kode_product'] = _nextProductCode;
     request.fields['nama'] = namaController.text;
     request.fields['deskripsi'] = deskripsiController.text;
@@ -1422,9 +1422,9 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 30),
                       child: Text(
-                        "Lengkapi Semua Kolom!",
+                        "Isi Semua Kolom Dengan Benar!",
                         style: CustomText.TextArvoBoldItalic(
-                            18, CustomColors.redColor),
+                            14, CustomColors.redColor),
                       ),
                     ),
                   ),
