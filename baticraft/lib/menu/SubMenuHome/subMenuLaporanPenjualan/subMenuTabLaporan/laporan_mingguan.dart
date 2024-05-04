@@ -141,6 +141,7 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
                     child: Row(
                       children: [
                         Text(
+                          
                           startDate != null
                               ? "${startDate!.day}/${startDate!.month}/${startDate!.year}"
                               : "Tanggal Awal",

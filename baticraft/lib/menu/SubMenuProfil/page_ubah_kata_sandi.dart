@@ -4,6 +4,7 @@ import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
+import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,8 +18,54 @@ class ubah_kata_sandi extends StatefulWidget {
 }
 
 class _ubah_kata_sandiState extends State<ubah_kata_sandi> {
-  String jsonDetailUser = "{}"; // Initialize as an empty JSON object
-  Map<String, dynamic> detailUser = {}; // Initialize as an empty map
+  String jsonDetailUser = "{}";
+  Map<String, dynamic> detailUser = {};
+  bool _showPassword = false;
+  final TextEditingController katasandisaatini = TextEditingController();
+  final TextEditingController katabaru = TextEditingController();
+  final TextEditingController katasandikonfirmasi = TextEditingController();
+
+  void checkCurrentPassword() async {
+    var url = Server.urlLaravel("checkCurrentPassword");
+
+    // Data yang akan dikirim ke server
+    var data = {'id': page_login.id_user, 'password': katasandisaatini.text};
+
+    // Kirim permintaan POST ke server
+    var response = await http.post(url, body: data);
+
+    // Periksa respons dari server
+    if (response.statusCode == 200) {
+      print(response.body);
+      // CustomWidget.NotifGagalEditPassword2(context);
+    postDataToServer();
+    } else {
+
+    }
+
+    print(response.statusCode);
+  }
+
+  Future<void> postDataToServer() async {
+    // Persiapkan data yang akan dikirim
+    Map<String, dynamic> data = {
+      'password_baru': katabaru.text,
+      'id': page_login.id_user,
+    };
+    Uri url = Server.urlLaravel("UbahPassword");
+    try {
+      final response = await http.post(url, body: data);
+      if (response.statusCode == 200) {
+        CustomWidget.NotifBerhasilEditPassword(context);
+        print(response.body);
+        print('Data berhasil dikirim');
+      } else {
+        print('Gagal mengirim data. Kode status: ${response.statusCode} ${response.body}');
+      }
+    } catch (error) {
+      print('Terjadi kesalahan: $error');
+    }
+  }
 
   @override
   void initState() {
@@ -28,10 +75,6 @@ class _ubah_kata_sandiState extends State<ubah_kata_sandi> {
   }
 
 // hir Backend
-  bool _showPassword = false;
-  final TextEditingController katasandisaatini = TextEditingController();
-  final TextEditingController katabaru = TextEditingController();
-  final TextEditingController katasandikonfirmasi = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +167,7 @@ class _ubah_kata_sandiState extends State<ubah_kata_sandi> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "Kata Sandi Saat Ini",
+                          "Kata Sandi Baru",
                           style: CustomText.TextArvoBold(
                               16, CustomColors.whiteColor),
                         ),
@@ -192,7 +235,6 @@ class _ubah_kata_sandiState extends State<ubah_kata_sandi> {
                     style: CustomText.TextArvo(16, CustomColors.whiteColor),
                   ),
                 ),
-                // Checkbox untuk menampilkan atau menyembunyikan password
                 Align(
                   alignment: Alignment.centerLeft,
                   child: CheckboxListTile(
@@ -223,7 +265,18 @@ class _ubah_kata_sandiState extends State<ubah_kata_sandi> {
                           style: CustomText.TextArvoBold(
                               20, CustomColors.secondaryColor),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          if (katasandisaatini.text.isEmpty ||
+                              katabaru.text.isEmpty ||
+                              katasandikonfirmasi.text.isEmpty) {
+                            CustomWidget.KolomKosong(context);
+                          } else if (katabaru.text !=
+                              katasandikonfirmasi.text) {
+                            CustomWidget.NotifGagalEditPassword(context);
+                          } else {
+                            checkCurrentPassword();
+                          }
+                        },
                       ),
                     )),
               ],

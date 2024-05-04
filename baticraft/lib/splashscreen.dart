@@ -1,3 +1,5 @@
+import 'package:baticraft/navigation/utama.dart';
+import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/page/page_wellcome.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -13,7 +15,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(milliseconds: 2000), () {
-      Navigator.of(context).pushReplacement(
+
+      print("id = "+ page_login.id_user);
+if (page_login.id_user.isEmpty){
+
+  Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => SliderP(),
           transitionsBuilder: (_, animation, __, child) {
@@ -25,6 +31,22 @@ class _SplashScreenState extends State<SplashScreen> {
           transitionDuration: Duration(milliseconds: 500),
         ),
       );
+}else{
+  Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => utama(),
+          transitionsBuilder: (_, animation, __, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          transitionDuration: Duration(milliseconds: 500),
+        ),
+      );
+}
+
+      
     });
   }
 

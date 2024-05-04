@@ -27,35 +27,36 @@ class Edit_Produk_Kain extends StatefulWidget {
 class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
 //AWAL BACKEND
   String jsonProdukKain = "{}";
-List<String> imagePaths = [];
+  List<String> imagePaths = [];
+  List<Map<String, dynamic>> listKaos = [];
+  Future<void> showKain() async {
+    final response = await http.post(Server.urlLaravel("getDetailKain"),
+        body: {"id_produk": List_Kelola_Produk.id_produk});
+    jsonProdukKain = response.body.toString();
+    print(jsonProdukKain);
+    setState(() {
+      // Periksa apakah respons tidak kosong
+      if (jsonProdukKain.isNotEmpty) {
+        // Parse respons JSON menjadi objek Map
+        Map<String, dynamic> produkKain = json.decode(jsonProdukKain);
 
-Future<void> showKain() async {
-  final response = await http.post(Server.urlLaravel("getDetailKain"),
-      body: {"id_produk": List_Kelola_Produk.id_produk});
-  jsonProdukKain = response.body.toString();
-  setState(() {
-    // Periksa apakah respons tidak kosong
-    if (jsonProdukKain.isNotEmpty) {
-      // Parse respons JSON menjadi objek Map
-      Map<String, dynamic> produkKain = json.decode(jsonProdukKain);
-      
-      // Mengakses properti nama, deskripsi, harga, dll.
-      namaController.text = produkKain['nama'];
-      deskripsiController.text = produkKain['deskripsi'];
-      hargaController.text = produkKain['harga'].toString();
-      stokController.text = produkKain['stok'].toString();
-      bahanController.text = produkKain['bahan'];
-      jenisBatikController.text = produkKain['jenis_batik'];
-      ukuranController.text = produkKain['ukuran'];
-      panjangKainController.text = produkKain['panjang_kain'];
-      lebarKainController.text = produkKain['lebar_kain'];
-      _selectedJenisLengan = produkKain['jenis_lengan'];
+        // Mengakses properti nama, deskripsi, harga, dll.
+        namaController.text = produkKain['nama'];
+        deskripsiController.text = produkKain['deskripsi'];
+        hargaController.text = produkKain['harga'].toString();
+        stokController.text = produkKain['stok'].toString();
+        bahanController.text = produkKain['bahan'];
+        jenisBatikController.text = produkKain['jenis_batik'];
+        ukuranController.text = produkKain['ukuran'];
+        panjangKainController.text = produkKain['panjang_kain'];
+        lebarKainController.text = produkKain['lebar_kain'];
 
-      // Mengakses properti image_paths dan menyimpannya dalam imagePaths
-      imagePaths = List<String>.from(produkKain['image_paths']);
-    }
-  });
-}
+        // Mengakses properti image_paths dan menyimpannya dalam imagePaths
+        imagePaths = List<String>.from(produkKain['image_paths']);
+      }
+    });
+  }
+
   String _selectedStatus = 'tersedia';
   String _selectedJenisLengan = 'pendek';
 
@@ -157,38 +158,40 @@ Future<void> showKain() async {
   }
 
   Future uploadData() async {
-    try{var request =
-        http.MultipartRequest('POST', Server.urlLaravel("updateProduct"));
-    request.fields['id_produk'] = List_Kelola_Produk.id_produk;
-    request.fields['nama'] = namaController.text;
-    request.fields['deskripsi'] = deskripsiController.text;
-    request.fields['harga'] = hargaController.text;
-    request.fields['stok'] = stokController.text;
-    request.fields['ukuran'] = ukuranController.text;
-    request.fields['bahan'] = bahanController.text;
-    request.fields['panjang_kain'] = panjangKainController.text;
-    request.fields['lebar_kain'] = lebarKainController.text;
-    request.fields['jenis_batik'] = jenisBatikController.text;
-    request.fields['jenis_lengan'] = _selectedJenisLengan;
+    try {
+      var request =
+          http.MultipartRequest('POST', Server.urlLaravel("updateProduct"));
+      request.fields['id_produk'] = List_Kelola_Produk.id_produk;
+      request.fields['nama'] = namaController.text;
+      request.fields['deskripsi'] = deskripsiController.text;
+      request.fields['harga'] = hargaController.text;
+      request.fields['stok'] = stokController.text;
+      request.fields['ukuran'] = ukuranController.text;
+      request.fields['bahan'] = bahanController.text;
+      request.fields['panjang_kain'] = panjangKainController.text;
+      request.fields['lebar_kain'] = lebarKainController.text;
+      request.fields['jenis_batik'] = jenisBatikController.text;
+      request.fields['jenis_lengan'] = _selectedJenisLengan;
 
-    // Add images to request
-    for (var image in images) {
-      request.files
-          .add(await http.MultipartFile.fromPath('images[]', image.path));
-    }
+      // Add images to request
+      for (var image in images) {
+        request.files
+            .add(await http.MultipartFile.fromPath('images[]', image.path));
+      }
 
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      print('Data sended successfully');
-      
-      CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
-      // Handle success response
-    } else {
-      print('Failed to upload data. Errorrr: ${response.statusCode}');
-      print('Failed to upload data. Error: ${response.reasonPhrase}');
-      print('Failed to upload data. Error: ${response.headersSplitValues}');
-      // Handle error response
-    }}catch($e){
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('Data sended successfully');
+
+        CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
+        // Handle success response
+      } else {
+        print('Failed to upload data. Errorrr: ${response.statusCode}');
+        print('Failed to upload data. Error: ${response.reasonPhrase}');
+        print('Failed to upload data. Error: ${response.headersSplitValues}');
+        // Handle error response
+      }
+    } catch ($e) {
       print($e);
     }
   }
@@ -265,7 +268,7 @@ Future<void> showKain() async {
   //AKHIR BACKEND
 
 // Tambahan inputan Kain
- Column InputanKain() {
+  Column InputanKain() {
     return Column(
       children: [
         Padding(
@@ -811,8 +814,7 @@ Future<void> showKain() async {
                                     ? Container(
                                         margin: EdgeInsets.all(20),
                                         child: Image.network(
-                                          Server.urlLaravelImage(
-                                              imagePaths[0]),
+                                          Server.urlLaravelImage(imagePaths[0]),
                                           fit: BoxFit.contain,
                                         ))
                                     : Image.asset(
@@ -1141,7 +1143,7 @@ Future<void> showKain() async {
                       padding: const EdgeInsets.only(top: 30),
                       child: Text(
                         "Lengkapi Semua Kolom!",
-                         style: CustomText.TextArvoBoldItalic(
+                        style: CustomText.TextArvoBoldItalic(
                             18, CustomColors.redColor),
                       ),
                     ),
@@ -1201,7 +1203,7 @@ Future<void> showKain() async {
                                             Navigator.of(context)
                                                 .pop(); // Tutup dialog
                                             uploadData(); // Unggah data jika user yakin
-                                                addImagesToProduct();
+                                            addImagesToProduct();
                                             print("pressed");
                                           },
                                           child: Text(

@@ -665,14 +665,14 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 30),
+          padding: const EdgeInsets.only(top: 10, bottom: 20),
           child: KumpulanKain(),
         ),
        
         Align(
           alignment: Alignment.centerLeft,
           child: Padding(
-              padding: EdgeInsets.only(left: 25, right: 25, top: 10),
+              padding: EdgeInsets.only(left: 25, right: 25,),
               child: Text("Kategori : Baju",
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),
         ),
@@ -683,7 +683,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
      Align(
           alignment: Alignment.centerLeft,
           child: Padding(
-              padding: EdgeInsets.only(left: 25, right: 25),
+              padding: EdgeInsets.only(left: 25, right: 25,top:10),
               child: Text("Kategori : Kemeja",
                   textAlign: TextAlign.start,
                   style: CustomText.TextArvoBold(20, CustomColors.blackColor))),

@@ -28,29 +28,25 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
 //AWAL BACKEND
   String jsonProdukKaos = "{}";
   List<String> imagePaths = [];
-  List<Map<String, dynamic>> listKaos = [];
+  Map<String, dynamic> listKaos = {};
   Future<void> showKaos() async {
     final response = await http.post(Server.urlLaravel("getDetailKaos"),
         body: {"id_produk": List_Kelola_Produk.id_produk});
     jsonProdukKaos = response.body.toString();
     setState(() {
-      listKaos =
-          List<Map<String, dynamic>>.from(json.decode(jsonProdukKaos));
-      namaController.text = listKaos[0]['nama'];
-      deskripsiController.text = listKaos[0]['deskripsi'];
-      hargaController.text = listKaos[0]['harga'];
-      stokController.text = listKaos[0]['stok'];
-      bahanController.text = listKaos[0]['bahan'];
-      jenisBatikController.text = listKaos[0]['jenis_batik'];
-      ukuranController.text = listKaos[0]['ukuran'];
-      panjangKainController.text = listKaos[0]['panjang_kain'];
-      lebarKainController.text = listKaos[0]['lebar_kain'];
-      _selectedJenisLengan = listKaos[0]['jenis_lengan'];
-      imagePaths = List<String>.from(listKaos[0]['image_paths']);
+      Map<String, dynamic> listKaos = json.decode(jsonProdukKaos);
+      listKaos = listKaos;
+      namaController.text = listKaos['nama'];
+      deskripsiController.text = listKaos['deskripsi'];
+      hargaController.text = listKaos['harga'].toString();
+      stokController.text = listKaos['stok'].toString();
+      bahanController.text = listKaos['bahan'];
+      jenisBatikController.text = listKaos['jenis_batik'];
+      ukuranController.text = listKaos['ukuran'];
+      _selectedJenisLengan = listKaos['jenis_lengan'];
+      imagePaths = List<String>.from(listKaos['image_paths']);
     });
     print("Panjang dataaa = " + imagePaths.length.toString());
-
-    print(listKaos[0]['nama']);
   }
 
   String _selectedStatus = 'tersedia';
@@ -177,7 +173,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
     var response = await request.send();
     if (response.statusCode == 200) {
       print('Data sended successfully');
-      
+
       CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
       // Handle success response
     } else {
@@ -791,8 +787,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                                     ? Container(
                                         margin: EdgeInsets.all(20),
                                         child: Image.network(
-                                          Server.urlLaravelImage(
-                                              imagePaths[0]),
+                                          Server.urlLaravelImage(imagePaths[0]),
                                           fit: BoxFit.contain,
                                         ))
                                     : Image.asset(
@@ -1177,7 +1172,7 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                                             Navigator.of(context)
                                                 .pop(); // Tutup dialog
                                             uploadData(); // Unggah data jika user yakin
-                                                addImagesToProduct();
+                                            addImagesToProduct();
                                             print("pressed");
                                           },
                                           child: Text(

@@ -775,23 +775,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                     ),
                                   ),
                                 ),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20, right: 5),
-                                    child: TextButton(
-                                      onPressed: () {},
-                                      child: Text(
-                                        "Edit Alamat Toko?",
-                                        style: CustomText.TextArvoItalic(
-                                          12 * mediaQuery.textScaleFactor,
-                                          CustomColors.HintColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              
                               ],
                             ),
                           ),

@@ -26,31 +26,27 @@ class Edit_Produk_Kemeja extends StatefulWidget {
 
 class Edit_Produk_KemejaState extends State<Edit_Produk_Kemeja> {
 //AWAL BACKEND
-  String jsonProdukKemeja = "{}";
+ String jsonProdukKemeja = "{}";
   List<String> imagePaths = [];
-  List<Map<String, dynamic>> listKemeja = [];
+  Map<String, dynamic> listKemeja = {};
   Future<void> showKemeja() async {
     final response = await http.post(Server.urlLaravel("getDetailKemeja"),
         body: {"id_produk": List_Kelola_Produk.id_produk});
     jsonProdukKemeja = response.body.toString();
     setState(() {
-      listKemeja =
-          List<Map<String, dynamic>>.from(json.decode(jsonProdukKemeja));
-      namaController.text = listKemeja[0]['nama'];
-      deskripsiController.text = listKemeja[0]['deskripsi'];
-      hargaController.text = listKemeja[0]['harga'];
-      stokController.text = listKemeja[0]['stok'];
-      bahanController.text = listKemeja[0]['bahan'];
-      jenisBatikController.text = listKemeja[0]['jenis_batik'];
-      ukuranController.text = listKemeja[0]['ukuran'];
-      panjangKainController.text = listKemeja[0]['panjang_kain'];
-      lebarKainController.text = listKemeja[0]['lebar_kain'];
-      _selectedJenisLengan = listKemeja[0]['jenis_lengan'];
-      imagePaths = List<String>.from(listKemeja[0]['image_paths']);
+      Map<String, dynamic> listKemeja = json.decode(jsonProdukKemeja);
+      listKemeja = listKemeja;
+      namaController.text = listKemeja['nama'];
+      deskripsiController.text = listKemeja['deskripsi'];
+      hargaController.text = listKemeja['harga'].toString();
+      stokController.text = listKemeja['stok'].toString();
+      bahanController.text = listKemeja['bahan'];
+      jenisBatikController.text = listKemeja['jenis_batik'];
+      ukuranController.text = listKemeja['ukuran'];
+      _selectedJenisLengan = listKemeja['jenis_lengan'];
+      imagePaths = List<String>.from(listKemeja['image_paths']);
     });
     print("Panjang dataaa = " + imagePaths.length.toString());
-
-    print(listKemeja[0]['nama']);
   }
 
   String _selectedStatus = 'tersedia';
@@ -177,7 +173,7 @@ class Edit_Produk_KemejaState extends State<Edit_Produk_Kemeja> {
     var response = await request.send();
     if (response.statusCode == 200) {
       print('Data sended successfully');
-      
+
       CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
       // Handle success response
     } else {
@@ -791,8 +787,7 @@ class Edit_Produk_KemejaState extends State<Edit_Produk_Kemeja> {
                                     ? Container(
                                         margin: EdgeInsets.all(20),
                                         child: Image.network(
-                                          Server.urlLaravelImage(
-                                              imagePaths[0]),
+                                          Server.urlLaravelImage(imagePaths[0]),
                                           fit: BoxFit.contain,
                                         ))
                                     : Image.asset(
@@ -1177,7 +1172,7 @@ class Edit_Produk_KemejaState extends State<Edit_Produk_Kemeja> {
                                             Navigator.of(context)
                                                 .pop(); // Tutup dialog
                                             uploadData(); // Unggah data jika user yakin
-                                                addImagesToProduct();
+                                            addImagesToProduct();
                                             print("pressed");
                                           },
                                           child: Text(

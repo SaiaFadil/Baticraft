@@ -60,7 +60,10 @@ class _page_login extends State<page_login> {
               print("JsonData = " + jsonData);
             });
           }
-        } else {}
+        } else {
+          print("Status code = "+response.statusCode.toString());
+          print("Response = "+response.body.toString());
+        }
       }
     } catch (e) {
       // Tangani kesalahan koneksi atau kesalahan lainnya

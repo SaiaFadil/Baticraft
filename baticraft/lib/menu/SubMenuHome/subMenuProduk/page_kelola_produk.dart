@@ -1,4 +1,5 @@
 import 'package:baticraft/menu/SubMenuHome/subMenuProduk/TambahProduk/page_tambah_produk.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/page_cari_produk.dart';
 import 'package:baticraft/navigation/utama.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
@@ -27,7 +28,12 @@ class KelolaProdukState extends State<KelolaProduk> {
               textAlign: TextAlign.center),
           leading: IconButton(
             onPressed: () {
-              Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) =>utama() ,));
+              Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        utama(),
+                  ));
             },
             icon: Icon(Icons.arrow_back_ios),
             color: CustomColors.threertyColor,
@@ -39,20 +45,34 @@ class KelolaProdukState extends State<KelolaProduk> {
         body: SingleChildScrollView(
           child: Column(children: [
             Container(
-                height: 50,
-                margin: EdgeInsets.all(10),
-                child: Card(
-                    surfaceTintColor: CustomColors.whiteColor,
-                    borderOnForeground: true,
-                    color: CustomColors.whiteColor,
-                    semanticContainer: true,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        side: BorderSide(
-                            color: CustomColors.secondaryColor,
-                            strokeAlign: 1)),
-                    elevation: 10,
-                    child: CustomWidget.KolomPencarian(() {}))),
+              height: 50,
+              margin: EdgeInsets.all(10),
+              child: Card(
+                  surfaceTintColor: CustomColors.whiteColor,
+                  borderOnForeground: true,
+                  color: CustomColors.whiteColor,
+                  semanticContainer: true,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      side: BorderSide(
+                          color: CustomColors.secondaryColor, strokeAlign: 1)),
+                  elevation: 10,
+                  child: CustomWidget.KolomPencarian(
+                    () {
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      cari_produk(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return FadeTransition(
+                                    opacity: animation, child: child);
+                              }));
+                    },
+                  )),
+            ),
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Container(
@@ -79,7 +99,7 @@ class KelolaProdukState extends State<KelolaProduk> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         SizedBox(
-                          width: 10,  
+                          width: 10,
                         ),
                         Image.asset(
                           "assets/images/ic_tambahproduk.png",
