@@ -17,4 +17,20 @@ class CustomButton {
    
    
 }
+  static ButtonStyle NewModel(Color backgroundColor){
+    return ButtonStyle(
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+          ),
+          elevation: MaterialStateProperty.all<double>(10),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.fromLTRB(20, 10, 20, 10)),
+          backgroundColor:
+              MaterialStateProperty.all<Color>(backgroundColor),
+        );
+   
+   
+}
 }

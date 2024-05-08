@@ -1,13 +1,21 @@
 class Server {
-  static String ROUTE = "http://192.168.1.21:8000/";
+  static String ROUTE = "http://172.16.103.137:8000/";
 
 
   static Uri urlLaravel(url) {
-    Uri Server = Uri.parse(ROUTE+"api/MobileApi/" + url);
+    Uri Server = Uri.parse(ROUTE+"api/MobileApi/" + url); 
     return Server;
   }
-  static String urlLaravelImage(url) {
-    String Server = ROUTE+"images/" + url;
+  static String urlLaravelImageProduct(url) {
+    String Server = ROUTE+"storage/product/" + url;
+    return Server;
+  }
+  static String urlLaravelImageUser(url) {
+    String Server = ROUTE+"storage/user/" + url;
+    return Server;
+  }
+  static String urlLaravelImageInformation(url) {
+    String Server = ROUTE+"storage/information/" + url;
     return Server;
   }
 

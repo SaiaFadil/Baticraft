@@ -53,11 +53,16 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
 
       // Periksa kode status respons
       if (response.statusCode == 200) {
+
+        if(response.body.contains("error")){
+          print("ERROR ${response.body}");
+        CustomWidget.NotifGagalEditInformasi(context);
+        }else{
         _uploadImage();
         CustomWidget.NotifBerhasilEditInformasi(context, InformasiToko());
         // Sukses mengirim data
         print(response.body);
-        print('Data berhasil dikirim');
+        print('Data berhasil dikirim');}
       } else {
         // Gagal mengirim data
         print('Gagal mengirim data. Kode status: ${response.statusCode}');
@@ -134,10 +139,22 @@ class _EditInformasiTokoState extends State<EditInformasiToko> {
         deskripsiController.text = detailInformasi['deskripsi'];
         nomorTeleponController.text = detailInformasi['no_telpon'];
         emailController.text = detailInformasi['email'];
-        akunInstagramController.text = detailInformasi['akun_ig'];
-        akunFacebookController.text = detailInformasi['akun_fb'];
-        akunTiktokController.text = detailInformasi['akun_tiktok'];
         lokasiController.text = detailInformasi['lokasi'];
+        if (detailInformasi['akun_fb'].toString() == "null") {
+            akunFacebookController.text = "";
+          } else {
+            akunFacebookController.text = detailInformasi['akun_fb'];
+          }
+          if (detailInformasi['akun_ig'].toString()== "null") {
+            akunInstagramController.text = "";
+          } else {
+            akunInstagramController.text = detailInformasi['akun_ig'];
+          }
+          if (detailInformasi['akun_tiktok'].toString()== "null") {
+            akunTiktokController.text = "";
+          } else {
+            akunTiktokController.text = detailInformasi['akun_tiktok'];
+          }
        });
         } else {
           print("No data available");

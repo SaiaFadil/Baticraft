@@ -131,7 +131,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                   child: Image.network(
                                     fit: BoxFit.fitWidth,
                                     height: 120,
-                                    Server.urlLaravelImage(
+                                    Server.urlLaravelImageProduct(
                                         listKemeja[index]['image_path']),
                                   ),
                                 ),
@@ -318,7 +318,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                   child: Image.network(
                                     fit: BoxFit.fitWidth,
                                     height: 120,
-                                    Server.urlLaravelImage(
+                                    Server.urlLaravelImageProduct(
                                         listBaju[index]['image_path']),
                                   ),
                                 ),
@@ -503,7 +503,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                                   child: Image.network(
                                     fit: BoxFit.fitWidth,
                                     height: 120,
-                                    Server.urlLaravelImage(
+                                    Server.urlLaravelImageProduct(
                                         listKain[index]['image_path']),
                                   ),
                                 ),

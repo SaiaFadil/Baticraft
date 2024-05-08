@@ -422,7 +422,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlLaravelImage(imagePaths[1]),
+                                Server.urlLaravelImageProduct(imagePaths[1]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -509,7 +509,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlLaravelImage(imagePaths[2]),
+                                Server.urlLaravelImageProduct(imagePaths[2]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -596,7 +596,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlLaravelImage(imagePaths[3]),
+                                Server.urlLaravelImageProduct(imagePaths[3]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -683,7 +683,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                           : Container(
                               margin: EdgeInsets.all(20),
                               child: Image.network(
-                                Server.urlLaravelImage(imagePaths[4]),
+                                Server.urlLaravelImageProduct(imagePaths[4]),
                                 fit: BoxFit.contain,
                               ))),
             ),
@@ -814,7 +814,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
                                     ? Container(
                                         margin: EdgeInsets.all(20),
                                         child: Image.network(
-                                          Server.urlLaravelImage(imagePaths[0]),
+                                          Server.urlLaravelImageProduct(imagePaths[0]),
                                           fit: BoxFit.contain,
                                         ))
                                     : Image.asset(

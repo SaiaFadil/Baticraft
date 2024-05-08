@@ -422,7 +422,7 @@ class _detail_profilState extends State<detail_profil> {
                             foregroundColor: CustomColors.secondaryColor,
                             radius: 55, // Ubah ukuran avatar
                             backgroundImage: NetworkImage(
-                                Server.urlLaravelImage(detailUser[
+                                Server.urlLaravelImageUser(detailUser[
                                     'image'])) // Ganti URL gambar sesuai kebutuhan
                             ),
                       ),

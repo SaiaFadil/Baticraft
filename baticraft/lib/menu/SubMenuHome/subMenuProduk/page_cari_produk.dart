@@ -149,7 +149,7 @@ class _cari_produkState extends State<cari_produk> {
                                   child: Image.network(
                                     fit: BoxFit.fitWidth,
                                     height: 120,
-                                    Server.urlLaravelImage(
+                                    Server.urlLaravelImageProduct(
                                         listProduk[index]['image_path']),
                                   ),
                                 ),

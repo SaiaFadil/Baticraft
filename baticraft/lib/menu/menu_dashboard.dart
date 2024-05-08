@@ -14,6 +14,7 @@ import 'package:shimmer/shimmer.dart';
 
 class MenuDashboard extends StatefulWidget {
   const MenuDashboard({Key? key}) : super(key: key);
+  static String nama = "";
 
   @override
   State<MenuDashboard> createState() => _MenuDashboardState();
@@ -30,7 +31,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
 
   Future getDetailInformasi() async {
     try {
-      final response = await http.get(Server.urlLaravel("DetailInformasiMobile"));
+      final response =
+          await http.get(Server.urlLaravel("DetailInformasiMobile"));
       if (response.statusCode == 200) {
         List<dynamic> detailInformasiList = json.decode(response.body);
         if (detailInformasiList.isNotEmpty) {
@@ -70,6 +72,9 @@ class _MenuDashboardState extends State<MenuDashboard> {
       if (detailUser.isNotEmpty) {
         setState(() {
           nama = detailUser['nama'];
+          MenuDashboard.nama = detailUser['nama'];
+          
+    print("Namaaaa "+MenuDashboard.nama);
         });
       } else {
         print("No data available");
@@ -85,6 +90,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
   void initState() {
     super.initState();
 
+    
     getDetailInformasi();
     showProduk();
     showPesanan();
@@ -99,9 +105,9 @@ class _MenuDashboardState extends State<MenuDashboard> {
   }
 
   String jsonProduk = """[
-    {"image_path": "product_image_66139bf877dc1.jpg", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "product_image_66139bf877dc1.jpg", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "product_image_66139bf877dc1.jpg", "nama": "Batik Palembang", "harga": "74000"}
+    {"image_path": "1AifcyhbwoR0dt0I1tIn3FsmzavmpHHUUxq6WCpA.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "1AifcyhbwoR0dt0I1tIn3FsmzavmpHHUUxq6WCpA.png", "nama": "Batik Palembang", "harga": "74000"},
+    {"image_path": "1AifcyhbwoR0dt0I1tIn3FsmzavmpHHUUxq6WCpA.png", "nama": "Batik Palembang", "harga": "74000"}
     
   ]""";
   String jsonPesanan = """[
@@ -199,7 +205,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                             child: Image.network(
                               fit: BoxFit.fitWidth,
                               height: 120,
-                              Server.urlLaravelImage(
+                              Server.urlLaravelImageProduct(
                                   listProdukTerlaris[index]['image_path']),
                             ),
                           ),
@@ -775,7 +781,6 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                     ),
                                   ),
                                 ),
-                              
                               ],
                             ),
                           ),

@@ -296,6 +296,69 @@ class CustomWidget {
               );
             }))); 
   }
+  static void NotifGagalEditInformasi(
+      BuildContext context) {
+    showDialog(
+      context: context,
+
+      barrierDismissible: false, // Prevent dismissal by tapping outside
+      builder: (context) => Stack(
+        children: <Widget>[
+          // Transparent background with a slight dimming effect
+          ModalBarrier(color: Colors.black.withOpacity(0.3)),
+          Center(
+            child: Container(
+              width: 300.0, // Adjust width as needed
+              height: 200.0, // Adjust height as needed
+              decoration: BoxDecoration(
+                color: CustomColors.redColor,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Animated checkmark
+                  ScaleTransition(
+                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                      CurvedAnimation(
+                        parent: AlwaysStoppedAnimation(1),
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.check,
+                      size: 60.0,
+                      color: CustomColors.whiteColor,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  // Login success text
+                  Text(
+                    "Gagal Mengubah Informasi!",
+                    style: CustomText.TextArvoBold(16, CustomColors.whiteColor),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20.0),
+                  // "OK" button with navigation
+                  // ElevatedButton(
+                  //   onPressed: () => , // Dismiss dialog
+                  //   child: Text(
+                  //     "Ok",
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //       fontSize: 16.0,
+                  //     ),
+                  //   ),
+                  //   style: CustomButton.DefaultButton(CustomColors.primaryColor)
+                  // ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ); 
+  }
   static void NotifBerhasilEditProfil(
       BuildContext context) {
     showDialog(
@@ -431,18 +494,7 @@ class CustomWidget {
           ),
         ],
       ),
-    ).then((_) => Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                utama(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            }))); 
+    ).then((_) => Navigator.pop(context)); 
   }
   static void NotifGagalEditPassword(
       BuildContext context) {
@@ -484,6 +536,58 @@ class CustomWidget {
                   Text(
                     "Konfirmasi Kata Sandi\nHarus Sesuai Dengan\nKata Sandi Baru!",
                     style: CustomText.TextArvoBold(16, CustomColors.whiteColor),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20.0),
+                
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  static void NotifGagalBayar(
+      BuildContext context) {
+    showDialog(
+      context: context,
+
+      barrierDismissible: false, // Prevent dismissal by tapping outside
+      builder: (context) => Stack(
+        children: <Widget>[
+          // Transparent background with a slight dimming effect
+          ModalBarrier(color: Colors.black.withOpacity(0.3)),
+          Center(
+            child: Container(
+              width: 300.0, // Adjust width as needed
+              height: 200.0, // Adjust height as needed
+              decoration: BoxDecoration(
+                color: CustomColors.redColor,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Animated checkmark
+                  ScaleTransition(
+                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                      CurvedAnimation(
+                        parent: AlwaysStoppedAnimation(1),
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.check,
+                      size: 60.0,
+                      color: CustomColors.whiteColor,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  // Login success text
+                  Text(
+                    "PEMBAYARAN TIDAK MENCUKUPI!",
+                    style: CustomText.TextArvoBold(15, CustomColors.whiteColor),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20.0),
@@ -601,6 +705,70 @@ class CustomWidget {
   }
 
 
+ static void NotifBerhasilTtransaaksi(
+      BuildContext context) {
+    showDialog(
+      context: context,
+
+      barrierDismissible: false, // Prevent dismissal by tapping outside
+      builder: (context) => Stack(
+        children: <Widget>[
+          // Transparent background with a slight dimming effect
+          ModalBarrier(color: Colors.black.withOpacity(0.3)),
+          Center(
+            child: Container(
+              width: 300.0, // Adjust width as needed
+              height: 200.0, // Adjust height as needed
+              decoration: BoxDecoration(
+                color: CustomColors.secondaryColor,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Animated checkmark
+                  ScaleTransition(
+                    scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                      CurvedAnimation(
+                        parent: AlwaysStoppedAnimation(1),
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.check,
+                      size: 60.0,
+                      color: CustomColors.whiteColor,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  // Login success text
+                  Text(
+                    "Transaksi Berhasil!",
+                    style: CustomText.TextArvoBold(20, CustomColors.whiteColor),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20.0),
+                  // "OK" button with navigation
+                  // ElevatedButton(
+                  //   onPressed: () => , // Dismiss dialog
+                  //   child: Text(
+                  //     "Ok",
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //       fontSize: 16.0,
+                  //     ),
+                  //   ),
+                  //   style: CustomButton.DefaultButton(CustomColors.primaryColor)
+                  // ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ); 
+  }
+
  static void NotifBerhasilTambahProduk(
       BuildContext context, Widget nextPage) {
     showDialog(
@@ -675,4 +843,6 @@ class CustomWidget {
               );
             }))); 
   }
+
+
 }

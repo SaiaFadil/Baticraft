@@ -88,7 +88,10 @@ class _menu_transaksiState extends State<menu_transaksi> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>HomeRiwayat(),transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return FadeTransition(opacity: animation,child:child);
+                            },));},
                           style: CustomButton.DefaultButton(
                               CustomColors.secondaryColor),
                           child: Padding(

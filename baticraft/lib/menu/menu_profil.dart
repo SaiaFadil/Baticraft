@@ -107,7 +107,7 @@ class _menu_profilState extends State<menu_profil> {
                                     ? CircleAvatar(
                                         radius: 30, // Ubah ukuran avatar
                                         backgroundImage: NetworkImage(
-                                            Server.urlLaravelImage(detailUser[
+                                            Server.urlLaravelImageUser(detailUser[
                                                 'image'])) // Ganti URL gambar sesuai kebutuhan
                                         )
                                     : Shimmer.fromColors(

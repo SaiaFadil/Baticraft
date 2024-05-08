@@ -34,26 +34,39 @@ class _InformasiTokoState extends State<InformasiToko> {
   String image = "";
 
   Future getDetailInformasi() async {
+    final response = await http.get(Server.urlLaravel("DetailInformasiMobile"));
+    List<dynamic> detailInformasiList = [];
     try {
-      final response =
-          await http.get(Server.urlLaravel("DetailInformasiMobile"));
-
+      setState(() {});
       if (response.statusCode == 200) {
-        List<dynamic> detailInformasiList = json.decode(response.body);
+        detailInformasiList = json.decode(response.body);
         if (detailInformasiList.isNotEmpty) {
           Map<String, dynamic> detailInformasi = detailInformasiList[0];
-          setState(() {
-            nama_pemilik = detailInformasi['nama_pemilik'];
-            nama_toko = detailInformasi['nama_toko'];
-            alamat = detailInformasi['alamat'];
-            deskripsi = detailInformasi['deskripsi'];
-            no_telpon = detailInformasi['no_telpon'];
-            email = detailInformasi['email'];
-            akun_ig = detailInformasi['akun_ig'];
+          setState(() {});
+          nama_pemilik = detailInformasi['nama_pemilik'].toString();
+          nama_toko = detailInformasi['nama_toko'].toString();
+          alamat = detailInformasi['alamat'].toString();
+          deskripsi = detailInformasi['deskripsi'].toString();
+          no_telpon = detailInformasi['no_telpon'].toString();
+          email = detailInformasi['email'].toString();
+          if (detailInformasi['akun_fb'].toString() == "null") {
+            akun_fb = "";
+          } else {
             akun_fb = detailInformasi['akun_fb'];
+          }
+          if (detailInformasi['akun_ig'].toString()== "null") {
+            akun_ig = "";
+          } else {
+            akun_ig = detailInformasi['akun_ig'];
+          }
+          if (detailInformasi['akun_tiktok'].toString()== "null") {
+            akun_tiktok = "";
+          } else {
             akun_tiktok = detailInformasi['akun_tiktok'];
-            image = detailInformasi['image'];
-          });
+          }
+          image = detailInformasi['image'].toString();
+
+          print(detailInformasiList.toString());
         } else {
           print("No data available");
         }
@@ -61,8 +74,7 @@ class _InformasiTokoState extends State<InformasiToko> {
         print("HTTP Request failed with status: ${response.statusCode}");
       }
     } catch ($e) {
-      print($e);
-      ;
+      print("ERRORRR " + $e.toString());
     }
   }
 
@@ -117,7 +129,7 @@ class _InformasiTokoState extends State<InformasiToko> {
               child: image.isNotEmpty
                   ? Container(
                       child: Image.network(
-                        Server.urlLaravelImage(image),
+                        Server.urlLaravelImageInformation(image),
                         fit: BoxFit.fitWidth,
                         alignment: Alignment.center,
                       ),

@@ -34,7 +34,7 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
   Future<String> generateNextProductCode() async {
     // Mengirim permintaan HTTP ke backend untuk mendapatkan kode produk berikutnya
     // Gantilah URL di bawah sesuai dengan endpoint yang tepat pada backend Anda
-    var response = await http.get(Server.urlLaravel("get_next_id_products.php"));
+    var response = await http.get(Server.urlLaravel("generateProductCode"));
 
     if (response.statusCode == 200) {
       // Jika permintaan berhasil, gunakan kode produk berikutnya yang diterima dari backend
@@ -124,13 +124,16 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
           .add(await http.MultipartFile.fromPath('images[]', image.path));
     }
 
-    var response = await request.send();
+    final response = await request.send();
     if (response.statusCode == 200) {
       print('Data sended successfully');
       CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
       // Handle success response
     } else {
       print('Failed to upload data. Error: ${response.reasonPhrase}');
+      print('Failed to upload data. Error: ${response.statusCode}');
+      print('Failed to upload data. Erroree: ${request.fields.toString()}');
+      // Handle error response
       // Handle error response
     }
   }

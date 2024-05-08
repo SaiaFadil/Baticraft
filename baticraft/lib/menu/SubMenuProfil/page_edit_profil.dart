@@ -100,7 +100,7 @@ class edit_profilState extends State<edit_profil> {
 
     // Menyiapkan request untuk mengunggah gambar ke server
     request = http.MultipartRequest(
-        'POST', Server.urlLaravel("UploadGambarInformasi"));
+        'POST', Server.urlLaravel("UploadGambarUser"));
 
     // Menambahkan file gambar ke dalam request
 
@@ -229,7 +229,7 @@ String jenisKelamin = "laki-laki";
                                         CustomColors.secondaryColor,
                                     radius: 55, // Ubah ukuran avatar
                                     backgroundImage: NetworkImage(
-                                        Server.urlLaravelImage(detailUser[
+                                        Server.urlLaravelImageUser(detailUser[
                                             'image'])) // Ganti URL gambar sesuai kebutuhan
                                     ),
                           ),

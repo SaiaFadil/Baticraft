@@ -37,9 +37,9 @@ class _ubah_kata_sandiState extends State<ubah_kata_sandi> {
     // Periksa respons dari server
     if (response.statusCode == 200) {
       print(response.body);
-      // CustomWidget.NotifGagalEditPassword2(context);
     postDataToServer();
     } else {
+      CustomWidget.NotifGagalEditPassword2(context);
 
     }
 
