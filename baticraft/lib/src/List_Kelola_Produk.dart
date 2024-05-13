@@ -93,7 +93,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                 onTap: () {
                   List_Kelola_Produk.id_produk = listKemeja[index]['id'].toString();
                   print("id produk = " + List_Kelola_Produk.id_produk);
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       PageRouteBuilder(
                           pageBuilder:
@@ -280,7 +280,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                 onTap: () {
                   List_Kelola_Produk.id_produk = listBaju[index]['id'].toString();
                   print("id produk = " + List_Kelola_Produk.id_produk);
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       PageRouteBuilder(
                           pageBuilder:
@@ -465,7 +465,7 @@ class _List_Kelola_ProdukState extends State<List_Kelola_Produk> {
                 onTap: () {
                   List_Kelola_Produk.id_produk = listKain[index]['id'].toString();
                   print("id produk = " + List_Kelola_Produk.id_produk);
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       PageRouteBuilder(
                           pageBuilder:

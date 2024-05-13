@@ -1,5 +1,7 @@
 class Server {
-  static String ROUTE = "http://172.16.103.137:8000/";
+
+
+  static String ROUTE = "http://172.16.106.246:8000/";
 
 
   static Uri urlLaravel(url) {

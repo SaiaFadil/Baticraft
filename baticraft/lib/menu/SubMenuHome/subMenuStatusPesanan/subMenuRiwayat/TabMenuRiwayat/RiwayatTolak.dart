@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:baticraft/menu/SubMenuHome/subMenuStatusPesanan/subMenuRiwayat/TabMenuRiwayat/DetailRiwayatTransaksi/page_detail_ditolak.dart';
 import 'package:baticraft/menu/TabTransaksi/subMenuRiwayatTransaksi/page_detail_riwayat_selesai.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -8,21 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 
-class HomeRiwayat extends StatefulWidget {
-  const HomeRiwayat({super.key});
-  static String id_transaksi = "";
+class RiwayatTolak extends StatefulWidget {
+  const RiwayatTolak({super.key});
 
   @override
-  State<HomeRiwayat> createState() => _HomeRiwayatState();
+  State<RiwayatTolak> createState() => _RiwayatTolakState();
 }
 
-class _HomeRiwayatState extends State<HomeRiwayat> {
+class _RiwayatTolakState extends State<RiwayatTolak> {
   String jsonProdukRiwayat = "{}";
   List<Map<String, dynamic>> listRiwayat = [];
   final TextEditingController cariController = TextEditingController();
   Future<void> showRiwayat() async {
     final response =
-        await http.get(Server.urlLaravel("showCompletedTransactions"));
+        await http.get(Server.urlLaravel("showRiwayatTolak"));
     jsonProdukRiwayat = response.body.toString();
     setState(() {
       listRiwayat =
@@ -39,7 +39,7 @@ class _HomeRiwayatState extends State<HomeRiwayat> {
   }
 
   Future showPencarian(String searchText) async {
-    final response = await http.post(Server.urlLaravel("searchTransaksi"),
+    final response = await http.post(Server.urlLaravel("searchTolak"),
         body: {'search': searchText});
     jsonProdukRiwayat = response.body.toString();
     setState(() {
@@ -71,13 +71,12 @@ class _HomeRiwayatState extends State<HomeRiwayat> {
                   child: GestureDetector(
                     onTap: () {
                       String id = listRiwayat[index]['id'].toString();
-                      print("id transaksi = " + HomeRiwayat.id_transaksi);
                       Navigator.push(
                         context,
                         PageRouteBuilder(
                             pageBuilder:
                                 (context, animation, secondaryAnimation) =>
-                                    TransactionDetailsPage(transactionId: id),
+                                    DetailDitolak(transactionId: id),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
                               return FadeTransition(
@@ -112,7 +111,7 @@ class _HomeRiwayatState extends State<HomeRiwayat> {
                                     14, CustomColors.blackColor),
                               ),
                               Card(
-                                color: CustomColors.greenColor,
+                                color: CustomColors.redColor,
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 2),
@@ -144,22 +143,6 @@ class _HomeRiwayatState extends State<HomeRiwayat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 5,
-        title: Text("Riwayat Transaksi",
-            style: CustomText.TextArvoBold(16, CustomColors.threertyColor),
-            textAlign: TextAlign.center),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios),
-          color: CustomColors.threertyColor,
-        ),
-        shadowColor: CustomColors.blackColor,
-        centerTitle: true,
-        surfaceTintColor: CustomColors.whiteColor,
-      ),
       body: Container(
         padding: EdgeInsets.all(10),
         child: SingleChildScrollView(
@@ -245,7 +228,7 @@ class _HomeRiwayatState extends State<HomeRiwayat> {
             SizedBox(
               height: 20,
             ),
-            listRiwayat.isNotEmpty ? KumpulanRiwayat() : SizedBox()
+            listRiwayat.isNotEmpty ? KumpulanRiwayat() :  Center(child: Text("Tidak Ada Riwayat",style: CustomText.TextArvoBold(18, CustomColors.blackColor),),)
           ]),
         ),
       ),

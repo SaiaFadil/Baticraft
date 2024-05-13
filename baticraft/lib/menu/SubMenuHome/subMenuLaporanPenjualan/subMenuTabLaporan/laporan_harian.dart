@@ -1,10 +1,16 @@
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:excel/excel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 
 class laporan_harian extends StatefulWidget {
   const laporan_harian({super.key});
@@ -14,29 +20,46 @@ class laporan_harian extends StatefulWidget {
 }
 
 class _laporan_harianState extends State<laporan_harian> {
+  late String jsonDataPenjualan = "";
+  late List<Map<String, dynamic>> listDataPenjualan = [];
+
   @override
   void initState() {
     super.initState();
-
-    showDataPenjualan();
-    setState(() {
-      showDataPenjualan();
-    });
+    fetchDataPenjualan();
   }
 
-  String jsonDataPenjualan = """[
-    {"tanggal": "01/03/2024", "totalPendapatan": "550000"},
-    {"tanggal": "01/03/2024", "totalPendapatan": "550000"},
-    {"tanggal": "01/03/2024", "totalPendapatan": "550000"}
-  ]""";
-  List<Map<String, dynamic>> listDataPenjualan = [];
-  Future<void> showDataPenjualan() async {
-    listDataPenjualan =
-        List<Map<String, dynamic>>.from(json.decode(jsonDataPenjualan));
+  String produkTerjual = "0";
+  String pembeli = "0";
 
-    print("panjang data = " + listDataPenjualan.length.toString());
+  Future<void> fetchDataPenjualan() async {
+    final response = await http.get(Server.urlLaravel('pendapatanHariIni'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final DateTime date = DateTime.parse(data["date"]);
+      final formattedDate = DateFormat('EEEE, dd MMMM yyyy').format(date);
+      setState(() {
+        jsonDataPenjualan = json.encode([
+          {
+            "tanggal": formattedDate,
+            "tanggalnow": data["date"],
+            "totalPendapatan": data["total_revenue"].toString(),
+            "produk": data["total_products_sold"].toString(),
+            "pembeli": data["total_buyers"].toString(),
+          }
+        ]);
+        listDataPenjualan =
+            List<Map<String, dynamic>>.from(json.decode(jsonDataPenjualan));
+        produkTerjual = listDataPenjualan[0]['produk'];
+        pembeli = listDataPenjualan[0]['pembeli'];
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
+ 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +118,9 @@ class _laporan_harianState extends State<laporan_harian> {
                                 width: 10,
                               ),
                               Text(
-                                "550.000",
+                                listDataPenjualan.isEmpty
+                                    ? "0"
+                                    : listDataPenjualan[0]['totalPendapatan'],
                                 style: CustomText.TextArvoBold(
                                     30, CustomColors.whiteColor),
                               )
@@ -104,7 +129,9 @@ class _laporan_harianState extends State<laporan_harian> {
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
-                              "Jumat, 01 Maret 2024",
+                              listDataPenjualan.isEmpty
+                                  ? ""
+                                  : listDataPenjualan[0]['tanggal'],
                               style: CustomText.TextArvo(
                                   14, CustomColors.whiteColor),
                             ),
@@ -162,7 +189,11 @@ class _laporan_harianState extends State<laporan_harian> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text("23",
+                                            Text(
+                                                listDataPenjualan.isEmpty
+                                                    ? "0"
+                                                    : listDataPenjualan[0]
+                                                        ['produk'],
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: CustomText
@@ -208,7 +239,11 @@ class _laporan_harianState extends State<laporan_harian> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text("243",
+                                            Text(
+                                                listDataPenjualan.isEmpty
+                                                    ? "0"
+                                                    : listDataPenjualan[0]
+                                                        ['pembeli'],
                                                 style: CustomText
                                                     .TextArvoBoldItalic(
                                                         30,
@@ -249,7 +284,9 @@ class _laporan_harianState extends State<laporan_harian> {
                                 style: CustomText.TextArvoBold(
                                     16, CustomColors.whiteColor),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                print("PRESSED1");
+                              },
                             ),
                           )),
                     ],
@@ -274,17 +311,21 @@ class _laporan_harianState extends State<laporan_harian> {
               DataColumn(
                 label: Text(
                   'No.',
-                  style: TextStyle( fontSize: 12,
+                  style: TextStyle(
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Arvo',),
+                    fontFamily: 'Arvo',
+                  ),
                 ),
               ),
               DataColumn(
                 label: Text(
                   'Tanggal',
-                  style: TextStyle( fontSize: 12,
+                  style: TextStyle(
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Arvo',),
+                    fontFamily: 'Arvo',
+                  ),
                 ),
               ),
               DataColumn(
@@ -299,13 +340,13 @@ class _laporan_harianState extends State<laporan_harian> {
               ),
             ],
             rows: List<DataRow>.generate(
-              listDataPenjualan.length,
+              listDataPenjualan.isEmpty ? 0 : listDataPenjualan.length,
               (index) => DataRow(
                 cells: <DataCell>[
                   DataCell(Text((index + 1).toString(),
                       style: CustomText.TextArvoBold(
                           14, CustomColors.blackColor))),
-                  DataCell(Text(listDataPenjualan[index]['tanggal'],
+                  DataCell(Text(listDataPenjualan[index]['tanggalnow'],
                       style: CustomText.TextArvoBold(
                           14, CustomColors.blackColor))),
                   DataCell(Row(

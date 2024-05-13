@@ -7,6 +7,8 @@ static Color secondaryColor = Color.fromRGBO(56, 135, 190, 1);
 static Color primaryColor = Color.fromRGBO(82, 211, 216, 1);
 static Color hintprimary = Color.fromRGBO(230, 230, 254, 1);
 static Color greenColor = Color.fromRGBO(0, 209, 129, 1);
+static Color yellowColor = Color.fromRGBO(251, 188, 5, 1);
+static Color iosColor = Color.fromRGBO(226, 226, 226, 1);
 
 
 static Color card1 = Color.fromRGBO(56, 65, 157, 1);

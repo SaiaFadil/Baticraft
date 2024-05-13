@@ -6,6 +6,8 @@ import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 
+import 'package:http/http.dart' as http;
+
 class laporan_bulanan extends StatefulWidget {
   const laporan_bulanan({super.key});
 
@@ -14,32 +16,55 @@ class laporan_bulanan extends StatefulWidget {
 }
 
 class _laporan_bulananState extends State<laporan_bulanan> {
+  String? _tahunSelected;
+  String pendapatan = "0";
+  String produk = "0";
+  String pembeli = "0";
 
+  List<String> _listTahun =
+      List.generate(10, (index) => (2024 + index).toString());
 
-String? _tahunSelected ;
-  List<String> _listTahun = List.generate(10, (index) => (2022 + index).toString());
-
-
+  List<Map<String, dynamic>> _listDataPenjualan = [];
+  List<Map<String, dynamic>> listDataUtama = [];
   @override
   void initState() {
     super.initState();
-
-    showDataPenjualan();
-    setState(() {
-      showDataPenjualan();
-    });
+    _tahunSelected = _listTahun.first; // Set tahun awal saat inisialisasi
+    _fetchDataPenjualan();
   }
 
-  String jsonDataPenjualan = """[
-    {"tanggal": "Februari", "totalPendapatan": "5000000"},
-    {"tanggal": "Maret", "totalPendapatan": "5000000"}
-  ]""";
-  List<Map<String, dynamic>> listDataPenjualan = [];
-  Future<void> showDataPenjualan() async {
-    listDataPenjualan =
-        List<Map<String, dynamic>>.from(json.decode(jsonDataPenjualan));
+  DateTime? year;
+  late String jsonDataPenjualan = "";
+  Future<void> _fetchDataPenjualan() async {
+    final response = await http.post(
+      Server.urlLaravel('pendapatanBulanan'),
+      body: {
+        'year': _tahunSelected.toString().isEmpty
+            ? DateTime.now().year
+            : _tahunSelected.toString(),
+      },
+    );
 
-    print("panjang data = " + listDataPenjualan.length.toString());
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        jsonDataPenjualan = json.encode([
+          {
+            "totalPendapatan": data["pendapatanTahunIni"].toString(),
+            "produk": data["ProdukTerjualBulanIni"].toString(),
+            "pembeli": data["pembeliBulanIni"].toString(),
+          }
+        ]);
+        _listDataPenjualan = List<Map<String, dynamic>>.from(data['data']);
+        listDataUtama =
+              List<Map<String, dynamic>>.from(json.decode(jsonDataPenjualan));
+        pendapatan = listDataUtama[0]['totalPendapatan'];
+          produk = listDataUtama[0]['produk'];
+          pembeli = listDataUtama[0]['pembeli'];
+      });
+    } else {
+      print("ERRORRv: " + response.statusCode.toString());
+    }
   }
 
   @override
@@ -49,40 +74,47 @@ String? _tahunSelected ;
           child: Column(
         children: [
           Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              margin: EdgeInsets.only(top:20,left: 20),
-              width: 120,
-              height: 40,
-              child:  Card(
-                color: CustomColors.whiteColor,
-                surfaceTintColor: CustomColors.whiteColor,
-                elevation: 5,
-                borderOnForeground: true,
-                shadowColor: CustomColors.secondaryColor,
-shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(10.0), // Atur bentuk border
-    side: BorderSide(color: CustomColors.secondaryColor, width: 2), // Atur warna dan ketebalan border
-  ),
-                
-                child: Align(
-                  alignment: Alignment.center,
-                  child: DropdownButton<String>(
-                    hint: Text("Pilih",style: CustomText.TextArvoBold(16, CustomColors.blackColor)),
+              alignment: Alignment.centerLeft,
+              child: Container(
+                  margin: EdgeInsets.only(top: 20, left: 20),
+                  width: 120,
+                  height: 40,
+                  child: Card(
+                    color: CustomColors.whiteColor,
+                    surfaceTintColor: CustomColors.whiteColor,
+                    elevation: 5,
+                    borderOnForeground: true,
+                    shadowColor: CustomColors.secondaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: BorderSide(
+                        color: CustomColors.secondaryColor,
+                        width: 2,
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: DropdownButton<String>(
+                        hint: Text(
+                          "Pilih",
+                          style: CustomText.TextArvoBold(
+                              16, CustomColors.blackColor),
+                        ),
                         value: _tahunSelected,
-                        icon: Icon(Icons.arrow_drop_down, color: CustomColors.blackColor),
+                        icon: Icon(Icons.arrow_drop_down,
+                            color: CustomColors.blackColor),
                         iconSize: 24,
                         elevation: 16,
-                        style: TextStyle(color: CustomColors.blackColor, fontSize: 18),
+                        style: TextStyle(
+                            color: CustomColors.blackColor, fontSize: 18),
                         underline: Container(
                           height: 0,
                           color: CustomColors.whiteColor,
                         ),
-                        
-                        
                         onChanged: (newValue) {
                           setState(() {
                             _tahunSelected = newValue;
+                            _fetchDataPenjualan(); // Ambil data saat tahun berubah
                             print("Tahun yang dipilih: $_tahunSelected");
                           });
                         },
@@ -91,13 +123,14 @@ shape: RoundedRectangleBorder(
                             value: tahun,
                             child: Text(
                               tahun,
-                              style: CustomText.TextArvoBold(16, CustomColors.blackColor),
+                              style: CustomText.TextArvoBold(
+                                  16, CustomColors.blackColor),
                             ),
                           );
                         }).toList(),
                       ),
-                ),
-              ))  ),
+                    ),
+                  ))),
           Container(
             child: Stack(
               children: [
@@ -150,13 +183,12 @@ shape: RoundedRectangleBorder(
                                 width: 10,
                               ),
                               Text(
-                                "10.000.000",
+                                pendapatan,
                                 style: CustomText.TextArvoBold(
                                     30, CustomColors.whiteColor),
                               )
                             ],
                           ),
-                         
                         ]),
                   ),
                 )
@@ -200,17 +232,20 @@ shape: RoundedRectangleBorder(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Container(padding: EdgeInsets.symmetric(horizontal: 20),
-                                          child: Text("Produk Terjual\nBulan Ini",textAlign: TextAlign.center,
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Text(
+                                              "Produk Terjual\nBulan Ini",
+                                              textAlign: TextAlign.center,
                                               style: CustomText.TextArvoBold(12,
                                                   CustomColors.threertyColor)),
                                         ),
-                                        
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text("23",
+                                            Text(produk,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: CustomText
@@ -249,12 +284,11 @@ shape: RoundedRectangleBorder(
                                         Text("Pembeli Bulan Ini\n ",
                                             style: CustomText.TextArvoBold(12,
                                                 CustomColors.threertyColor)),
-                                       
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text("243",
+                                            Text(pembeli,
                                                 style: CustomText
                                                     .TextArvoBoldItalic(
                                                         30,
@@ -320,17 +354,21 @@ shape: RoundedRectangleBorder(
               DataColumn(
                 label: Text(
                   'No.',
-                  style: TextStyle( fontSize: 12,
+                  style: TextStyle(
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Arvo',),
+                    fontFamily: 'Arvo',
+                  ),
                 ),
               ),
               DataColumn(
                 label: Text(
                   'Bulan',
-                  style: TextStyle( fontSize: 12,
+                  style: TextStyle(
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Arvo',),
+                    fontFamily: 'Arvo',
+                  ),
                 ),
               ),
               DataColumn(
@@ -345,13 +383,13 @@ shape: RoundedRectangleBorder(
               ),
             ],
             rows: List<DataRow>.generate(
-              listDataPenjualan.length,
+              _listDataPenjualan.length,
               (index) => DataRow(
                 cells: <DataCell>[
                   DataCell(Text((index + 1).toString(),
                       style: CustomText.TextArvoBold(
                           14, CustomColors.blackColor))),
-                  DataCell(Text(listDataPenjualan[index]['tanggal'],
+                  DataCell(Text(_listDataPenjualan[index]['bulan'],
                       style: CustomText.TextArvoBold(
                           14, CustomColors.blackColor))),
                   DataCell(Row(
@@ -361,7 +399,7 @@ shape: RoundedRectangleBorder(
                           style: CustomText.TextArvoBold(
                               14, CustomColors.blackColor)),
                       Text(
-                          listDataPenjualan[index]['totalPendapatan']
+                          _listDataPenjualan[index]['total_pendapatan']
                               .toString(),
                           style: CustomText.TextArvoBold(
                               14, CustomColors.blackColor))

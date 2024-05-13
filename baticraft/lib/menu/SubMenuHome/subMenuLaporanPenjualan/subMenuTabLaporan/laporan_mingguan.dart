@@ -6,6 +6,8 @@ import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 
+import 'package:http/http.dart' as http;
+
 class laporan_mingguan extends StatefulWidget {
   const laporan_mingguan({super.key});
 
@@ -14,31 +16,73 @@ class laporan_mingguan extends StatefulWidget {
 }
 
 class _laporan_mingguanState extends State<laporan_mingguan> {
-  DateTime? tanggalAwal;
-  DateTime? tanggalAkhir;
+  DateTime? startDate;
+  DateTime? endDate;
 
+  List<Map<String, dynamic>> listDataPenjualan = [];
+  List<Map<String, dynamic>> listDataUtama = [];
+  String pendapatan = "0";
+  String produk = "0";
+  String pembeli = "0";
+
+  DateTime _getSevenDaysAgo() {
+    return DateTime.now().subtract(Duration(days: 7));
+  }
+
+  String tanggalIni =
+      '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
+  String tanggal7hrisblmini = "";
   @override
   void initState() {
     super.initState();
+    tanggal7hrisblmini =
+        '${_getSevenDaysAgo().year}-${_getSevenDaysAgo().month}-${_getSevenDaysAgo().day}';
 
-    showDataPenjualan();
-    setState(() {
-      showDataPenjualan();
-    });
+    print(tanggal7hrisblmini);
+    print(tanggalIni);
   }
 
-  String jsonDataPenjualan = """[
-    {"tanggal": "24/04/2024", "totalPendapatan": "5000000"},
-    {"tanggal": "24/04/2024", "totalPendapatan": "5000000"}
-  ]""";
-  List<Map<String, dynamic>> listDataPenjualan = [];
-  Future<void> showDataPenjualan() async {
-    listDataPenjualan =
-        List<Map<String, dynamic>>.from(json.decode(jsonDataPenjualan));
+  late String jsonDataPenjualan = "";
+  Future<void> fetchDataPenjualan() async {
+    try {
+      final response = await http.post(
+        Server.urlLaravel('pendapatanJangkaWaktu'),
+        body: {
+          'start_date': startDate.toString().isEmpty
+              ? tanggal7hrisblmini
+              : startDate.toString(),
+          'end_date':
+              endDate.toString().isEmpty ? tanggalIni : endDate.toString(),
+        },
+      );
 
-    print("panjang data = " + listDataPenjualan.length.toString());
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          jsonDataPenjualan = json.encode([
+            {
+              "totalPendapatan": data["TotalPendapatan"].toString(),
+              "produk": data["TotalprodukTerjual"].toString(),
+              "pembeli": data["JumlahPembeli"].toString(),
+            }
+          ]);
+
+          listDataPenjualan = List<Map<String, dynamic>>.from(data['data']);
+          listDataUtama =
+              List<Map<String, dynamic>>.from(json.decode(jsonDataPenjualan));
+          pendapatan = listDataUtama[0]['totalPendapatan'];
+          produk = listDataUtama[0]['produk'];
+          pembeli = listDataUtama[0]['pembeli'];
+        });
+      } else {
+        print("ERRORRv: " + response.statusCode.toString());
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
+  DateTime? selectedDate;
   Widget _buildDatePickerContainer(
       {required String labelText,
       required DateTime? selectedDate,
@@ -66,9 +110,8 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
               context: context,
               initialDate: selectedDate ?? DateTime.now(),
               firstDate: DateTime(2020),
-              lastDate: DateTime(2025),
+              lastDate: DateTime(2026),
               locale: const Locale('id'),
-              // Set locale to Indonesian
             );
             if (picked != null) {
               onDateSelected(picked);
@@ -98,9 +141,6 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
 
   final TextEditingController tglAwal = TextEditingController();
   final TextEditingController tglAkhir = TextEditingController();
-
-  DateTime? startDate;
-  DateTime? endDate;
 
   Future<void> _showDatePicker(BuildContext context, bool isStartDate) async {
     DateTime? picked = await showDatePicker(
@@ -141,9 +181,8 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
                     child: Row(
                       children: [
                         Text(
-                          
                           startDate != null
-                              ? "${startDate!.day}/${startDate!.month}/${startDate!.year}"
+                              ? "${startDate!.year}/${startDate!.month}/${startDate!.day}"
                               : "Tanggal Awal",
                           style: CustomText.TextArvoBold(
                               12, CustomColors.blackColor),
@@ -181,7 +220,7 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
                       children: [
                         Text(
                           endDate != null
-                              ? "${endDate!.day}/${endDate!.month}/${endDate!.year}"
+                              ? "${endDate!.year}-${endDate!.month}-${endDate!.day}"
                               : "Tanggal Akhir",
                           style: CustomText.TextArvoBold(
                               12, CustomColors.blackColor),
@@ -197,12 +236,11 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
                 ),
                 SizedBox(width: 8),
                 InkWell(
-                  onTap: (){
-                    
+                  onTap: () {
+                    fetchDataPenjualan();
                   },
                   child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                       decoration: BoxDecoration(
                         border: Border.all(color: CustomColors.secondaryColor),
                         borderRadius: BorderRadius.circular(4),
@@ -267,7 +305,7 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
                                   width: 10,
                                 ),
                                 Text(
-                                  "5.000.000",
+                                  pendapatan,
                                   style: CustomText.TextArvoBold(
                                       30, CustomColors.whiteColor),
                                 )
@@ -331,7 +369,7 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Text("23",
+                                              Text(produk,
                                                   maxLines: 1,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -378,7 +416,7 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Text("243",
+                                              Text(pembeli,
                                                   style: CustomText
                                                       .TextArvoBoldItalic(
                                                           30,
@@ -482,7 +520,7 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
                     DataCell(Text((index + 1).toString(),
                         style: CustomText.TextArvoBold(
                             14, CustomColors.blackColor))),
-                    DataCell(Text(listDataPenjualan[index]['tanggal'],
+                    DataCell(Text(listDataPenjualan[index]['date'],
                         style: CustomText.TextArvoBold(
                             14, CustomColors.blackColor))),
                     DataCell(Row(
@@ -492,7 +530,7 @@ class _laporan_mingguanState extends State<laporan_mingguan> {
                             style: CustomText.TextArvoBold(
                                 14, CustomColors.blackColor)),
                         Text(
-                            listDataPenjualan[index]['totalPendapatan']
+                            listDataPenjualan[index]['total_revenue']
                                 .toString(),
                             style: CustomText.TextArvoBold(
                                 14, CustomColors.blackColor))

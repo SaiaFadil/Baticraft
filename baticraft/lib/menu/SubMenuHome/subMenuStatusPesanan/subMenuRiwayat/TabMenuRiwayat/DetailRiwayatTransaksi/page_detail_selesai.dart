@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-class TransactionDetailsPage extends StatelessWidget {
+class DetailSelesai extends StatelessWidget {
   final String transactionId;
 
-  TransactionDetailsPage({Key? key, required this.transactionId})
+  DetailSelesai({Key? key, required this.transactionId})
       : super(key: key);
 
   Future<Map<String, dynamic>> fetchTransaction() async {
@@ -20,6 +20,7 @@ class TransactionDetailsPage extends StatelessWidget {
         Server.urlLaravel("showTransactionAndDetails"),
         body: {"id": transactionId.toString()});
 
+print(transactionId);
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -129,13 +130,16 @@ class TransactionDetailsPage extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Detail Transaksi",
+                          Text("Kode Pesanan",
                               style: CustomText.TextArvoBold(
                                   14, CustomColors.blackColor)),
                           SizedBox(
                             height: 5,
                           ),
                           Text("Tanggal",
+                              style: CustomText.TextArvoBold(
+                                  14, CustomColors.blackColor)),
+                          Text("Nama",
                               style: CustomText.TextArvoBold(
                                   14, CustomColors.blackColor)),
                           SizedBox(
@@ -149,6 +153,12 @@ class TransactionDetailsPage extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text("  :  ",
+                              style: CustomText.TextArvoBold(
+                                  14, CustomColors.blackColor)),
+                          SizedBox(
+                            height: 5,
+                          ),
                           Text("  :  ",
                               style: CustomText.TextArvoBold(
                                   14, CustomColors.blackColor)),
@@ -191,7 +201,13 @@ class TransactionDetailsPage extends StatelessWidget {
                           SizedBox(
                             height: 5,
                           ),
-                          Text(MenuDashboard.nama,
+                          Text("${transaction['nama_pembeli']}",
+                              style: CustomText.TextArvoBold(
+                                  14, CustomColors.blackColor)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(transaction['kasir'] != null ?"${transaction['kasir']}":MenuDashboard.nama,
                               style: CustomText.TextArvoBold(
                                   14, CustomColors.blackColor)),
                         ],

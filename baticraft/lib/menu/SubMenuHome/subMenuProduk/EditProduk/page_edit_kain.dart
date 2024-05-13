@@ -183,7 +183,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
       if (response.statusCode == 200) {
         print('Data sended successfully');
 
-        CustomWidget.NotifBerhasilTambahProduk(context, KelolaProduk());
+        CustomWidget.NotifBerhasilEditProduk(context, KelolaProduk());
         // Handle success response
       } else {
         print('Failed to upload data. Errorrr: ${response.statusCode}');
@@ -751,18 +751,7 @@ class Edit_Produk_KainState extends State<Edit_Produk_Kain> {
               textAlign: TextAlign.center),
           leading: IconButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          KelolaProduk(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      }));
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios),
             color: CustomColors.threertyColor,

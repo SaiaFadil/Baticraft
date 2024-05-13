@@ -17,14 +17,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
-class transaksi_berhasil extends StatefulWidget {
-  transaksi_berhasil({super.key});
+class konfirmasi_berhasil extends StatefulWidget {
+  konfirmasi_berhasil({super.key});
 
   @override
-  State<transaksi_berhasil> createState() => _transaksi_berhasilState();
+  State<konfirmasi_berhasil> createState() => _konfirmasi_berhasilState();
 }
 
-class _transaksi_berhasilState extends State<transaksi_berhasil> {
+class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
   late String tanggalSekarang;
   late List<Products> productList = [];
 

@@ -1,20 +1,28 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:baticraft/menu/SubMenuHome/subMenuInformasiToko/page_informasi_toko.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuKelolaPengguna/page_kelola_pengguna.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuLaporanPenjualan/Laporan.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_kain.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_kaos.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_kemeja.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuProduk/page_kelola_produk.dart';
+import 'package:baticraft/menu/SubMenuHome/subMenuStatusPesanan/page_status_pesanan.dart';
 import 'package:baticraft/page/page_login.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
+import 'package:baticraft/src/List_Kelola_Produk.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import 'package:shimmer/shimmer.dart';
 
 class MenuDashboard extends StatefulWidget {
   const MenuDashboard({Key? key}) : super(key: key);
   static String nama = "";
+  static String kategori = "";
 
   @override
   State<MenuDashboard> createState() => _MenuDashboardState();
@@ -29,6 +37,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
   String jsonDetailInformasi = "{}";
   Map<String, dynamic> detailInformasi = {};
 
+
+
   Future getDetailInformasi() async {
     try {
       final response =
@@ -40,16 +50,6 @@ class _MenuDashboardState extends State<MenuDashboard> {
           Map<String, dynamic> detailInformasi = detailInformasiList[0];
           setState(() {
             alamat = detailInformasi['alamat'];
-            print("nama_pemilik = " + detailInformasi['nama_pemilik']);
-            print("nama_toko = " + detailInformasi['nama_toko']);
-            print("alamatnya = " + detailInformasi['alamat']);
-            print("deskripsi = " + detailInformasi['deskripsi']);
-            print("no_telpon = " + detailInformasi['no_telpon']);
-            print("email = " + detailInformasi['email']);
-            print("akun_ig = " + detailInformasi['akun_ig']);
-            print("akun_fb = " + detailInformasi['akun_fb']);
-            print("akun_tiktok = " + detailInformasi['akun_tiktok']);
-            print("image = " + detailInformasi['image']);
           });
         } else {
           print("No data available");
@@ -73,8 +73,8 @@ class _MenuDashboardState extends State<MenuDashboard> {
         setState(() {
           nama = detailUser['nama'];
           MenuDashboard.nama = detailUser['nama'];
-          
-    print("Namaaaa "+MenuDashboard.nama);
+
+          print("Namaaaa " + MenuDashboard.nama);
         });
       } else {
         print("No data available");
@@ -86,11 +86,39 @@ class _MenuDashboardState extends State<MenuDashboard> {
 
   String alamat = "";
   String nama = "";
+  String produkTerjual = "0";
+  String pembeli = "0";
+  late String jsonDataPenjualan = "";
+  late List<Map<String, dynamic>> listDataPenjualan = [];
+
+  Future<void> fetchDataPenjualan() async {
+    final response = await http.get(Server.urlLaravel('pendapatanHariIni'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final DateTime date = DateTime.parse(data["date"]);
+      setState(() {
+        jsonDataPenjualan = json.encode([
+          {
+            "tanggalnow": data["date"],
+            "totalPendapatan": data["total_revenue"].toString(),
+            "produk": data["total_products_sold"].toString(),
+            "pembeli": data["total_buyers"].toString(),
+          }
+        ]);
+        listDataPenjualan =
+            List<Map<String, dynamic>>.from(json.decode(jsonDataPenjualan));
+        produkTerjual = listDataPenjualan[0]['produk'];
+        pembeli = listDataPenjualan[0]['pembeli'];
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-
-    
+    fetchDataPenjualan();
     getDetailInformasi();
     showProduk();
     showPesanan();
@@ -98,34 +126,34 @@ class _MenuDashboardState extends State<MenuDashboard> {
     setState(() {
       print("idddddd = " + page_login.id_user);
       showProduk();
-      print(listProdukTerlaris[0]['image_path'].toString());
-      print(listProdukTerlaris[0]['nama'].toString());
-      print(listProdukTerlaris[0]['harga'].toString());
     });
   }
 
-  String jsonProduk = """[
-    {"image_path": "1AifcyhbwoR0dt0I1tIn3FsmzavmpHHUUxq6WCpA.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "1AifcyhbwoR0dt0I1tIn3FsmzavmpHHUUxq6WCpA.png", "nama": "Batik Palembang", "harga": "74000"},
-    {"image_path": "1AifcyhbwoR0dt0I1tIn3FsmzavmpHHUUxq6WCpA.png", "nama": "Batik Palembang", "harga": "74000"}
-    
-  ]""";
-  String jsonPesanan = """[
-    {"nomor": 120, "nama": "Fadillah Wahyu"},
-    {"nomor": 122, "nama": "Tria Yunita"},
-    {"nomor": 121, "nama": "Evita Sianturi"}
-  ]""";
-
+  String jsonProduk = "";
+  String jsonProdukPesanan = "";
+ Future<void> showPesanan() async {
+    final response = await http.get(Server.urlLaravel("getTransactionDataLimit"));
+    jsonProdukPesanan = response.body.toString();
+    setState(() {
+      listPesanan =
+          List<Map<String, dynamic>>.from(json.decode(jsonProdukPesanan));
+    });
+  }
   List<Map<String, dynamic>> listProdukTerlaris = [];
   List<Map<String, dynamic>> listPesanan = [];
   Future<void> showProduk() async {
-    listProdukTerlaris =
-        List<Map<String, dynamic>>.from(json.decode(jsonProduk));
+    final response = await http.get(Server.urlLaravel('produkTerlaris'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      setState(() {
+        listProdukTerlaris = List<Map<String, dynamic>>.from(data);
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
-  Future<void> showPesanan() async {
-    listPesanan = List<Map<String, dynamic>>.from(json.decode(jsonPesanan));
-  }
+ int nomor = 1;
 
   Widget KumpulanPesanan() {
     return Column(
@@ -147,7 +175,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                       Padding(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          '${listPesanan[index]['nomor']}.',
+                          "${(nomor+index)} .",
                           style: CustomText.TextArvoBold(
                             16,
                             CustomColors.blackColor,
@@ -156,11 +184,15 @@ class _MenuDashboardState extends State<MenuDashboard> {
                       ),
                       Padding(
                         padding: EdgeInsets.all(5),
-                        child: Text(
-                          listPesanan[index]['nama'],
-                          style: CustomText.TextArvoBold(
-                            18,
-                            CustomColors.blackColor,
+                        child: Container(
+                          width: 280,
+                          child: Text(
+                            listPesanan[index]['nama'],
+                            overflow: TextOverflow.ellipsis,
+                            style: CustomText.TextArvoBold(
+                              18,
+                              CustomColors.blackColor,
+                            ),
                           ),
                         ),
                       ),
@@ -188,7 +220,36 @@ class _MenuDashboardState extends State<MenuDashboard> {
                 left: 10,
               ),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  List_Kelola_Produk.id_produk =
+                      listProdukTerlaris[index]['id'].toString();
+                  MenuDashboard.kategori =
+                      listProdukTerlaris[index]['kategori'].toString();
+                  print("id produk = " + List_Kelola_Produk.id_produk);
+
+                  if (MenuDashboard.kategori == "kain") {
+                    Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    Edit_Produk_Kain()));
+                  } else if (MenuDashboard.kategori == "kemeja") {
+                    Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    Edit_Produk_Kemeja()));
+                  } else if (MenuDashboard.kategori == "kaos") {
+                    Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    Edit_Produk_Kaos()));
+                  }
+                },
                 child: Container(
                   width: 170,
                   child: Card(
@@ -225,17 +286,12 @@ class _MenuDashboardState extends State<MenuDashboard> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Rp." + listProdukTerlaris[index]['harga'],
+                                Text(
+                                    "Rp." +
+                                        listProdukTerlaris[index]['harga']
+                                            .toString(),
                                     style: CustomText.TextArvoBold(
                                         12, CustomColors.blackColor)),
-                                Container(
-                                  child: IconButton(
-                                      onPressed: () {},
-                                      icon: Image.asset(
-                                        Server.urlGambar("icons_sampah.png"),
-                                        height: 20,
-                                      )),
-                                )
                               ],
                             ),
                           )
@@ -343,7 +399,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                     ),
                                   ),
                                   subtitle: Text(
-                                    'RP 2.430.000',
+                                    'RP ${listDataPenjualan.isEmpty ? "0" : listDataPenjualan[0]['totalPendapatan']}',
                                     style: CustomText.TextArvoBoldItalic(
                                         25, CustomColors.blackColor),
                                   ),
@@ -376,7 +432,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                                                 .whiteColor)),
                                                     Row(
                                                       children: [
-                                                        Text("243",
+                                                        Text(produkTerjual,
                                                             style: CustomText
                                                                 .TextArvoBoldItalic(
                                                                     20 *
@@ -427,7 +483,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                                                 .whiteColor)),
                                                     Row(
                                                       children: [
-                                                        Text("243",
+                                                        Text(pembeli,
                                                             style: CustomText
                                                                 .TextArvoBoldItalic(
                                                                     20 *
@@ -502,7 +558,14 @@ class _MenuDashboardState extends State<MenuDashboard> {
                       child: Align(
                         alignment: Alignment.topRight,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                                     Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      StatusPesanan()));
+                          },
                           child: Text(
                             "Lihat Semua ..",
                             style: CustomText.TextArvoItalic(
@@ -568,63 +631,93 @@ class _MenuDashboardState extends State<MenuDashboard> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                Card(
-                                  elevation: 5,
-                                  surfaceTintColor: CustomColors.whiteColor,
-                                  color: CustomColors.card3,
-                                  child: Column(children: [
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(30, 20, 30, 10),
-                                      child: Text(
-                                        "KELOLA\nPENGGUNA",
-                                        textAlign: TextAlign.center,
-                                        style: CustomText.TextArvoBold(
-                                          16 * mediaQuery.textScaleFactor,
-                                          CustomColors.whiteColor,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation,
+                                                  secondaryAnimation) =>
+                                              KelolaPengguna(),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            return SizeTransition(
+                                              sizeFactor: animation,
+                                              child: child,
+                                            );
+                                          },
+                                        ));
+                                  },
+                                  child: Card(
+                                    elevation: 5,
+                                    surfaceTintColor: CustomColors.whiteColor,
+                                    color: CustomColors.card3,
+                                    child: Column(children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(30, 20, 30, 10),
+                                        child: Text(
+                                          "KELOLA\nPENGGUNA",
+                                          textAlign: TextAlign.center,
+                                          style: CustomText.TextArvoBold(
+                                            16 * mediaQuery.textScaleFactor,
+                                            CustomColors.whiteColor,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10, 0, 10, 20),
-                                      child: Image.asset(
-                                        Server.urlGambar("imgcard3.png"),
-                                        fit: BoxFit.contain,
-                                      ),
-                                    )
-                                  ]),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 0, 10, 20),
+                                        child: Image.asset(
+                                          Server.urlGambar("imgcard3.png"),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      )
+                                    ]),
+                                  ),
                                 ),
                               ],
                             ),
                             Column(
                               children: [
-                                Card(
-                                  elevation: 5,
-                                  surfaceTintColor: CustomColors.whiteColor,
-                                  color: CustomColors.card2,
-                                  child: Column(children: [
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(40, 20, 40, 10),
-                                      child: Text(
-                                        "STATUS\nPESANAN",
-                                        textAlign: TextAlign.center,
-                                        style: CustomText.TextArvoBold(
-                                          16 * mediaQuery.textScaleFactor,
-                                          CustomColors.whiteColor,
+                                InkWell(
+                                  onTap: (){
+                                      Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      StatusPesanan()));
+                                  },
+                                  child: Card(
+                                    elevation: 5,
+                                    surfaceTintColor: CustomColors.whiteColor,
+                                    color: CustomColors.card2,
+                                    child: Column(children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(40, 20, 40, 10),
+                                        child: Text(
+                                          "STATUS\nPESANAN",
+                                          textAlign: TextAlign.center,
+                                          style: CustomText.TextArvoBold(
+                                            16 * mediaQuery.textScaleFactor,
+                                            CustomColors.whiteColor,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(20, 0, 20, 20),
-                                      child: Image.asset(
-                                        Server.urlGambar("imgcard2.png"),
-                                        fit: BoxFit.contain,
-                                      ),
-                                    )
-                                  ]),
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(20, 0, 20, 20),
+                                        child: Image.asset(
+                                          Server.urlGambar("imgcard2.png"),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      )
+                                    ]),
+                                  ),
                                 ),
                                 SizedBox(height: 10),
                                 InkWell(

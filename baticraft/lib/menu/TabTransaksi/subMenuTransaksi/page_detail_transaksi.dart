@@ -17,9 +17,9 @@ import 'dart:math';
 
 class detail_transaksi extends StatefulWidget {
   const detail_transaksi({super.key});
-static String kode_transaksi = "";
-static String tunai = "";
-static String kembalian = "";
+  static String kode_transaksi = "";
+  static String tunai = "";
+  static String kembalian = "";
   @override
   State<detail_transaksi> createState() => _detail_transaksiState();
 }
@@ -39,14 +39,13 @@ class _detail_transaksiState extends State<detail_transaksi> {
         "${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}";
     tanggal_sekarang =
         "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
-    
+
     const possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    
+
     String randomChars = List.generate(
             4, (index) => possibleChars[Random().nextInt(possibleChars.length)])
         .join();
 
-    
     String randomString = '$formattedDate$randomChars';
 
     return randomString;
@@ -55,9 +54,9 @@ class _detail_transaksiState extends State<detail_transaksi> {
   Future<void> insertNewTransaction(List<Products> products) async {
     final transactionData = {
       'kode_transaksi': KodeTransaksi,
-      'user_id': page_login.id_user, // Ganti dengan ID user yang sesuai
-      'kasir': page_login.id_user, // Ganti dengan ID kasir yang sesuai
-      'jenis_transaksi': 'langsung', // Ganti dengan jenis transaksi yang sesuai
+      'user_id': page_login.id_user,
+      'kasir': MenuDashboard.nama,
+      'jenis_transaksi': 'langsung',
       'total_item': products.length,
       'total_harga': HomeTransaksi.totalPrice,
       'status_transaksi':
@@ -80,9 +79,18 @@ class _detail_transaksiState extends State<detail_transaksi> {
         print('Transaksi berhasil ditambahkan');
         detail_transaksi.tunai = tunaiController.text.toString();
         detail_transaksi.kembalian = kembalianController.text.toString();
-       Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>transaksi_berhasil(),transitionsBuilder: (context,animation,secondaryAnimation,child){
-        return FadeTransition(opacity: animation,child:child,);
-       }));
+        Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    transaksi_berhasil(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                }));
       } else {
         print('Gagal menambahkan transaksi: ${response.body}');
 
@@ -99,7 +107,7 @@ class _detail_transaksiState extends State<detail_transaksi> {
     super.initState();
     KodeTransaksi = generateRandomString();
     detail_transaksi.kode_transaksi = KodeTransaksi;
-    print("detail kode = "+detail_transaksi.kode_transaksi);
+    print("detail kode = " + detail_transaksi.kode_transaksi);
     print(KodeTransaksi);
     final transactionManager =
         Provider.of<TransactionManager>(context, listen: false);
@@ -375,10 +383,9 @@ class _detail_transaksiState extends State<detail_transaksi> {
         ));
   }
 
-    TextEditingController tunaiController = TextEditingController();
-    TextEditingController kembalianController = TextEditingController();
+  TextEditingController tunaiController = TextEditingController();
+  TextEditingController kembalianController = TextEditingController();
   showPaymentDialog(BuildContext context) {
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -504,10 +511,12 @@ class _detail_transaksiState extends State<detail_transaksi> {
             ElevatedButton(
               style: CustomButton.NewModel(CustomColors.secondaryColor),
               onPressed: () {
-                if (kembalianController.text != "Tunai Tidak Mencukupi" && kembalianController.text.isNotEmpty && tunaiController.text.isNotEmpty) {
-                   Navigator.of(context).pop();
+                if (kembalianController.text != "Tunai Tidak Mencukupi" &&
+                    kembalianController.text.isNotEmpty &&
+                    tunaiController.text.isNotEmpty) {
+                  Navigator.of(context).pop();
                   insertNewTransaction(productList);
-                }else{
+                } else {
                   CustomWidget.NotifGagalBayar(context);
                 }
               },

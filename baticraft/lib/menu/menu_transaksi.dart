@@ -51,9 +51,18 @@ class _menu_transaksiState extends State<menu_transaksi> {
                           style: CustomButton.DefaultButton(
                               CustomColors.secondaryColor),
                           onPressed: () {
-                            Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>HomeTransaksi(),transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return FadeTransition(opacity: animation,child:child);
-                            },));
+                            Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      HomeTransaksi(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                        opacity: animation, child: child);
+                                  },
+                                ));
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(0),
@@ -89,9 +98,19 @@ class _menu_transaksiState extends State<menu_transaksi> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(context, PageRouteBuilder(pageBuilder: (context,animation,secondaryAnimation)=>HomeRiwayat(),transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return FadeTransition(opacity: animation,child:child);
-                            },));},
+                            Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      HomeRiwayat(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return FadeTransition(
+                                        opacity: animation, child: child);
+                                  },
+                                ));
+                          },
                           style: CustomButton.DefaultButton(
                               CustomColors.secondaryColor),
                           child: Padding(
