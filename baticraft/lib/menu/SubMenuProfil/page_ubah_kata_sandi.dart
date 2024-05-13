@@ -113,173 +113,175 @@ class _ubah_kata_sandiState extends State<ubah_kata_sandi> {
           ),
           child: Container(
             padding: EdgeInsets.fromLTRB(15, 50, 15, 50),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Image.asset(Server.urlGambar("ic_pw.png"),
-                        height: 25, width: 25, color: CustomColors.whiteColor),
-                    SizedBox(
-                      width: 10,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(Server.urlGambar("ic_pw.png"),
+                          height: 25, width: 25, color: CustomColors.whiteColor),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Kata Sandi Saat Ini",
+                            style: CustomText.TextArvoBold(
+                                16, CustomColors.whiteColor),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(30, 0, 0, 20),
+                    child: TextField(
+                      obscureText: !_showPassword,
+                      keyboardType: TextInputType.text,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      controller: katasandisaatini,
+                      decoration: InputDecoration(
+                        // Add underline using UnderlineInputBorder
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: CustomColors.whiteColor),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: CustomColors.whiteColor),
+                        ),
+                      ),
+                      style: CustomText.TextArvo(16, CustomColors.whiteColor),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 0),
+                  ),
+                  Row(
+                    children: [
+                      Image.asset(Server.urlGambar("ic_pw.png"),
+                          height: 25, width: 25, color: CustomColors.whiteColor),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Kata Sandi Baru",
+                            style: CustomText.TextArvoBold(
+                                16, CustomColors.whiteColor),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(30, 0, 0, 20),
+                    child: TextField(
+                      obscureText: !_showPassword,
+                      keyboardType: TextInputType.text,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      controller: katabaru,
+                      decoration: InputDecoration(
+                        // Add underline using UnderlineInputBorder
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: CustomColors.whiteColor),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: CustomColors.whiteColor),
+                        ),
+                      ),
+                      style: CustomText.TextArvo(16, CustomColors.whiteColor),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Image.asset(Server.urlGambar("ic_pw.png"),
+                          height: 25, width: 25, color: CustomColors.whiteColor),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Konfirmasi Kata Sandi",
+                            style: CustomText.TextArvoBold(
+                                16, CustomColors.whiteColor),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    child: TextField(
+                      obscureText: !_showPassword,
+                      keyboardType: TextInputType.text,
+                      textAlign: TextAlign.start,
+                      textInputAction: TextInputAction.next,
+                      controller: katasandikonfirmasi,
+                      decoration: InputDecoration(
+                        // Add underline using UnderlineInputBorder
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: CustomColors.whiteColor),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: CustomColors.whiteColor),
+                        ),
+                      ),
+                      style: CustomText.TextArvo(16, CustomColors.whiteColor),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: CheckboxListTile(
+                      checkColor: CustomColors.blackColor,
+                      activeColor: CustomColors.whiteColor,
+                      title: Text(
+                        'Tampilkan Kata Sandi',
+                        style: CustomText.TextArvo(14, CustomColors.whiteColor),
+                      ), // Judul checkbox
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value: _showPassword,
+                      onChanged: (value) {
+                        setState(() {
+                          _showPassword = !_showPassword;
+                        });
+                      },
+                    ),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 50),
                       child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Kata Sandi Saat Ini",
-                          style: CustomText.TextArvoBold(
-                              16, CustomColors.whiteColor),
+                        alignment: Alignment.center,
+                        child: ElevatedButton(
+                          style:
+                              CustomButton.DefaultButton(CustomColors.whiteColor),
+                          child: Text(
+                            "Simpan",
+                            style: CustomText.TextArvoBold(
+                                20, CustomColors.secondaryColor),
+                          ),
+                          onPressed: () {
+                            if (katasandisaatini.text.isEmpty ||
+                                katabaru.text.isEmpty ||
+                                katasandikonfirmasi.text.isEmpty) {
+                              CustomWidget.KolomKosong(context);
+                            } else if (katabaru.text !=
+                                katasandikonfirmasi.text) {
+                              CustomWidget.NotifGagalEditPassword(context);
+                            } else {
+                              checkCurrentPassword();
+                            }
+                          },
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(30, 0, 0, 20),
-                  child: TextField(
-                    obscureText: !_showPassword,
-                    keyboardType: TextInputType.text,
-                    textAlign: TextAlign.start,
-                    textInputAction: TextInputAction.next,
-                    controller: katasandisaatini,
-                    decoration: InputDecoration(
-                      // Add underline using UnderlineInputBorder
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.whiteColor),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.whiteColor),
-                      ),
-                    ),
-                    style: CustomText.TextArvo(16, CustomColors.whiteColor),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Image.asset(Server.urlGambar("ic_pw.png"),
-                        height: 25, width: 25, color: CustomColors.whiteColor),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Kata Sandi Baru",
-                          style: CustomText.TextArvoBold(
-                              16, CustomColors.whiteColor),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(30, 0, 0, 20),
-                  child: TextField(
-                    obscureText: !_showPassword,
-                    keyboardType: TextInputType.text,
-                    textAlign: TextAlign.start,
-                    textInputAction: TextInputAction.next,
-                    controller: katabaru,
-                    decoration: InputDecoration(
-                      // Add underline using UnderlineInputBorder
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.whiteColor),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.whiteColor),
-                      ),
-                    ),
-                    style: CustomText.TextArvo(16, CustomColors.whiteColor),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Image.asset(Server.urlGambar("ic_pw.png"),
-                        height: 25, width: 25, color: CustomColors.whiteColor),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Konfirmasi Kata Sandi",
-                          style: CustomText.TextArvoBold(
-                              16, CustomColors.whiteColor),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                  child: TextField(
-                    obscureText: !_showPassword,
-                    keyboardType: TextInputType.text,
-                    textAlign: TextAlign.start,
-                    textInputAction: TextInputAction.next,
-                    controller: katasandikonfirmasi,
-                    decoration: InputDecoration(
-                      // Add underline using UnderlineInputBorder
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.whiteColor),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.whiteColor),
-                      ),
-                    ),
-                    style: CustomText.TextArvo(16, CustomColors.whiteColor),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: CheckboxListTile(
-                    checkColor: CustomColors.blackColor,
-                    activeColor: CustomColors.whiteColor,
-                    title: Text(
-                      'Tampilkan Kata Sandi',
-                      style: CustomText.TextArvo(14, CustomColors.whiteColor),
-                    ), // Judul checkbox
-                    controlAffinity: ListTileControlAffinity.leading,
-                    value: _showPassword,
-                    onChanged: (value) {
-                      setState(() {
-                        _showPassword = !_showPassword;
-                      });
-                    },
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(top: 50),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: ElevatedButton(
-                        style:
-                            CustomButton.DefaultButton(CustomColors.whiteColor),
-                        child: Text(
-                          "Simpan",
-                          style: CustomText.TextArvoBold(
-                              20, CustomColors.secondaryColor),
-                        ),
-                        onPressed: () {
-                          if (katasandisaatini.text.isEmpty ||
-                              katabaru.text.isEmpty ||
-                              katasandikonfirmasi.text.isEmpty) {
-                            CustomWidget.KolomKosong(context);
-                          } else if (katabaru.text !=
-                              katasandikonfirmasi.text) {
-                            CustomWidget.NotifGagalEditPassword(context);
-                          } else {
-                            checkCurrentPassword();
-                          }
-                        },
-                      ),
-                    )),
-              ],
+                      )),
+                ],
+              ),
             ),
           ),
         ),

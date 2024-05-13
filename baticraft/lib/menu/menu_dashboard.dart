@@ -37,8 +37,6 @@ class _MenuDashboardState extends State<MenuDashboard> {
   String jsonDetailInformasi = "{}";
   Map<String, dynamic> detailInformasi = {};
 
-
-
   Future getDetailInformasi() async {
     try {
       final response =
@@ -131,14 +129,16 @@ class _MenuDashboardState extends State<MenuDashboard> {
 
   String jsonProduk = "";
   String jsonProdukPesanan = "";
- Future<void> showPesanan() async {
-    final response = await http.get(Server.urlLaravel("getTransactionDataLimit"));
+  Future<void> showPesanan() async {
+    final response =
+        await http.get(Server.urlLaravel("getTransactionDataLimit"));
     jsonProdukPesanan = response.body.toString();
     setState(() {
       listPesanan =
           List<Map<String, dynamic>>.from(json.decode(jsonProdukPesanan));
     });
   }
+
   List<Map<String, dynamic>> listProdukTerlaris = [];
   List<Map<String, dynamic>> listPesanan = [];
   Future<void> showProduk() async {
@@ -153,7 +153,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
     }
   }
 
- int nomor = 1;
+  int nomor = 1;
 
   Widget KumpulanPesanan() {
     return Column(
@@ -175,7 +175,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                       Padding(
                         padding: EdgeInsets.all(5),
                         child: Text(
-                          "${(nomor+index)} .",
+                          "${(nomor + index)} .",
                           style: CustomText.TextArvoBold(
                             16,
                             CustomColors.blackColor,
@@ -526,56 +526,65 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         )
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: mediaQuery.size.width * 0.05,
-                        top: 25 * mediaQuery.textScaleFactor,
-                      ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Pesanan Masuk",
-                          style: CustomText.TextArvoBold(
-                            14 * mediaQuery.textScaleFactor,
-                            CustomColors.blackColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        mediaQuery.size.width * 0.01,
-                        5 * mediaQuery.textScaleFactor,
-                        mediaQuery.size.width * 0.01,
-                        0,
-                      ),
-                      child: KumpulanPesanan(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: mediaQuery.size.width * 0.01,
-                      ),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: TextButton(
-                          onPressed: () {
-                                     Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      StatusPesanan()));
-                          },
-                          child: Text(
-                            "Lihat Semua ..",
-                            style: CustomText.TextArvoItalic(
-                              14 * mediaQuery.textScaleFactor,
-                              CustomColors.HintColor,
+                    Visibility(
+                      visible: listPesanan.isNotEmpty? true : false ,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: mediaQuery.size.width * 0.05,
+                              top: 25 * mediaQuery.textScaleFactor,
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Pesanan Masuk",
+                                style: CustomText.TextArvoBold(
+                                  14 * mediaQuery.textScaleFactor,
+                                  CustomColors.blackColor,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              mediaQuery.size.width * 0.01,
+                              5 * mediaQuery.textScaleFactor,
+                              mediaQuery.size.width * 0.01,
+                              0,
+                            ),
+                            child: KumpulanPesanan(),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: mediaQuery.size.width * 0.01,
+                            ),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                          pageBuilder: (context, animation,
+                                                  secondaryAnimation) =>
+                                              StatusPesanan()));
+                                },
+                                child: Text(
+                                  "Lihat Semua ..",
+                                  style: CustomText.TextArvoItalic(
+                                    14 * mediaQuery.textScaleFactor,
+                                    CustomColors.HintColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
+                    SizedBox(height: 20,),
                     Padding(
                       padding: EdgeInsets.all(0),
                       child: SingleChildScrollView(
@@ -683,13 +692,13 @@ class _MenuDashboardState extends State<MenuDashboard> {
                             Column(
                               children: [
                                 InkWell(
-                                  onTap: (){
-                                      Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      StatusPesanan()));
+                                  onTap: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        PageRouteBuilder(
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimation) =>
+                                                StatusPesanan()));
                                   },
                                   child: Card(
                                     elevation: 5,

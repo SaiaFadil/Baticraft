@@ -7,6 +7,7 @@ import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -103,7 +104,8 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
   }
 
   Future<void> uploadData() async {
-    var request = http.MultipartRequest('POST', Server.urlLaravel("insertProduk"));
+    var request =
+        http.MultipartRequest('POST', Server.urlLaravel("insertProduk"));
     request.fields['kode_product'] = _nextProductCode;
     request.fields['nama'] = namaController.text;
     request.fields['deskripsi'] = deskripsiController.text;
@@ -226,6 +228,9 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: TextField(
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-z A-Z .,0-9]')),
+            ],
             controller: ukuranController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
@@ -262,6 +267,10 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: TextField(
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-z A-Z .,0-9]')),
+            ],
+            maxLength: 11,
             controller: panjangKainController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
@@ -298,6 +307,10 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: TextField(
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-z A-Z .,0-9]')),
+            ],
+            maxLength: 11,
             controller: lebarKainController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
@@ -343,6 +356,9 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: TextField(
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-z A-Z .,0-9]')),
+            ],
             controller: ukuranController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
@@ -445,6 +461,9 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
           child: TextField(
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-z A-Z .,0-9]')),
+            ],
             controller: ukuranController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
@@ -994,6 +1013,10 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-z A-Z .,0-9]')),
+                      ],
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -1036,6 +1059,10 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-z A-Z .,0-9]')),
+                      ],
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -1078,6 +1105,10 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      maxLength: 11,
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -1178,6 +1209,10 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      maxLength: 11,
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -1220,6 +1255,10 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-z A-Z .,0-9]')),
+                      ],
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -1262,6 +1301,10 @@ class Tambah_ProdukState extends State<Tambah_Produk> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-z A-Z .,0-9]')),
+                      ],
                       onTap: () {
                         DataTidakLengkap = false;
                       },

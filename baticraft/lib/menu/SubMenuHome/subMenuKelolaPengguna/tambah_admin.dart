@@ -10,6 +10,7 @@ import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
@@ -36,31 +37,39 @@ class tambah_adminState extends State<tambah_admin> {
   File? _profileImage;
   String? fileName;
   DateTime? startDate;
- Future<void> _selectDate(BuildContext context) async {
-  final DateTime? picked = await showDatePicker(
-    context: context,
-    initialDate: DateTime.now(),
-    firstDate: DateTime(1900),
-    lastDate: DateTime.now(),
-  );
-  if (picked != null && picked != startDate) {
-    setState(() {
-      startDate = picked;
-      TanggalLahirController.text = formatTanggal(picked);
-    });
+    final emailFocus = FocusNode();
+    final NoHpNode = FocusNode();
+
+  @override
+  void dispose() {
+    emailFocus.dispose();
+    NoHpNode.dispose();
+    super.dispose();
   }
-}
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != startDate) {
+      setState(() {
+        startDate = picked;
+        TanggalLahirController.text = formatTanggal(picked);
+      });
+    }
+  }
 
-String formatTanggal(DateTime picked) {
-  // Memperoleh tanggal, bulan, dan tahun dari DateTime
-  String day = picked.day.toString().padLeft(2, '0');
-  String month = picked.month.toString().padLeft(2, '0');
-  String year = picked.year.toString();
-  
-  // Menggabungkan dalam format yang diinginkan
-  return '$year-$month-$day';
-}
+  String formatTanggal(DateTime picked) {
+    // Memperoleh tanggal, bulan, dan tahun dari DateTime
+    String day = picked.day.toString().padLeft(2, '0');
+    String month = picked.month.toString().padLeft(2, '0');
+    String year = picked.year.toString();
 
+    // Menggabungkan dalam format yang diinginkan
+    return '$year-$month-$day';
+  }
 
   String ImageSaatIni = "";
   Future<void> _getImage() async {
@@ -108,6 +117,8 @@ String formatTanggal(DateTime picked) {
     }
   }
 
+  bool emailError = false;
+  bool NoTelpError = false;
   Future<void> postDataToServer() async {
     // Persiapkan data yang akan dikirim
     Map<String, dynamic> data = {
@@ -393,6 +404,11 @@ String formatTanggal(DateTime picked) {
                                               ),
                                               child: TextField(
                                                 maxLines: 1,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(
+                                                          r'[0-9 a-z A-Z]')),
+                                                ],
                                                 keyboardType:
                                                     TextInputType.text,
                                                 textAlign: TextAlign.start,
@@ -477,17 +493,41 @@ String formatTanggal(DateTime picked) {
                                               ),
                                               child: TextField(
                                                 maxLines: 1,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(
+                                                          r'[0-9a-zA-Z@.]')),
+                                                ],
                                                 keyboardType:
                                                     TextInputType.emailAddress,
                                                 textAlign: TextAlign.start,
                                                 textInputAction:
                                                     TextInputAction.next,
+                                                    focusNode:emailFocus,
                                                 controller: emailController,
                                                 style: CustomText.TextArvoBold(
                                                   12,
                                                   CustomColors.blackColor,
                                                 ),
+                                                onTap: () {
+                                                  emailError = false;
+                                                  setState(() {});
+                                                },
                                                 decoration: InputDecoration(
+                                                    error: emailError
+                                                        ? Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Text(
+                                                                "Email Tidak Valid!",
+                                                                style: CustomText
+                                                                    .TextArvoBold(
+                                                                        12,
+                                                                        CustomColors
+                                                                            .redColor)),
+                                                          )
+                                                        : null,
                                                     contentPadding:
                                                         EdgeInsets.only(
                                                             left: 10)),
@@ -561,11 +601,21 @@ String formatTanggal(DateTime picked) {
                                               ),
                                               child: TextField(
                                                 maxLines: 1,
+                                                  onTap: () {
+                                                  NoTelpError = false;
+                                                  setState(() {});
+                                                },
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(r'[+0-9]')),
+                                                ],
                                                 keyboardType:
-                                                    TextInputType.number,
+                                                    TextInputType.phone,
                                                 textAlign: TextAlign.start,
                                                 textInputAction:
                                                     TextInputAction.next,
+                                                    maxLength: 15,
+                                                    focusNode:NoHpNode,
                                                 controller:
                                                     nomorTeleponController,
                                                 style: CustomText.TextArvoBold(
@@ -573,9 +623,23 @@ String formatTanggal(DateTime picked) {
                                                   CustomColors.blackColor,
                                                 ),
                                                 decoration: InputDecoration(
+                                                   error: NoTelpError
+                                                        ? Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Text(
+                                                                "No Telepon Tidak Valid!",
+                                                                style: CustomText
+                                                                    .TextArvoBold(
+                                                                        12,
+                                                                        CustomColors
+                                                                            .redColor)),
+                                                          )
+                                                        : null,
                                                     contentPadding:
                                                         EdgeInsets.only(
-                                                            left: 10)),
+                                                            left: 10,right: 10,bottom: 5)),
                                               ),
                                             )),
                                       )))
@@ -646,6 +710,11 @@ String formatTanggal(DateTime picked) {
                                               ),
                                               child: TextField(
                                                 maxLines: 5,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(
+                                                          r'[0-9 ,.`a-z A-Z]')),
+                                                ],
                                                 keyboardType:
                                                     TextInputType.text,
                                                 textAlign: TextAlign.start,
@@ -730,6 +799,11 @@ String formatTanggal(DateTime picked) {
                                               ),
                                               child: TextField(
                                                 maxLines: 1,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(
+                                                          r'[0-9.a-z A-Z]')),
+                                                ],
                                                 keyboardType:
                                                     TextInputType.text,
                                                 textAlign: TextAlign.start,
@@ -903,6 +977,10 @@ String formatTanggal(DateTime picked) {
                                       ),
                                       child: TextField(
                                         maxLines: 1,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9.,a-z A-Z]')),
+                                        ],
                                         keyboardType: TextInputType.text,
                                         textAlign: TextAlign.start,
                                         textInputAction: TextInputAction.next,
@@ -989,16 +1067,16 @@ String formatTanggal(DateTime picked) {
                             TempatLahirController.text.isEmpty ||
                             TanggalLahirController.text.isEmpty ||
                             ImageSaatIni.isEmpty) {
-                          print("output : " + namaController.text);
-                          print("output : " + emailController.text);
-                          print("output : " + nomorTeleponController.text);
-                          print("output : " + alamatController.text);
-                          print("output : " + jenisKelamin);
-                          print("output : " + TempatLahirController.text);
-                          print("output : " + TanggalLahirController.text);
-                          print("output : " + passwordController.text);
-                          print("output : " + ImageSaatIni);
                           CustomWidget.KolomKosong(context);
+                        } else if (!emailController.text
+                            .endsWith("@gmail.com")) {
+                          emailError = true;
+                           FocusScope.of(context).requestFocus(emailFocus);
+                          setState(() {});
+                        } else if (nomorTeleponController.text.length <= 10) {
+                        NoTelpError = true;
+                           FocusScope.of(context).requestFocus(NoHpNode);
+                          setState(() {});
                         } else {
                           postDataToServer();
                         }

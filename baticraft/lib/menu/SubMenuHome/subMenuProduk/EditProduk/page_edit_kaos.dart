@@ -9,6 +9,7 @@ import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/List_Kelola_Produk.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -269,7 +270,9 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
         ),
         Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-          child: TextField(
+          child: TextField(    inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-z A-Z .,0-9]')),
+            ],
             controller: ukuranController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.start,
@@ -852,7 +855,10 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    child: TextField(
+                    child: TextField(  inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-z A-Z .,0-9]')),
+                      ],
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -894,7 +900,10 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    child: TextField(
+                    child: TextField( inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-z A-Z .,0-9]')),
+                      ],
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -936,7 +945,10 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    child: TextField(
+                    child: TextField( inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      maxLength: 11,
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -978,7 +990,10 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    child: TextField(
+                    child: TextField( inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
+                      maxLength: 11,
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -1020,7 +1035,10 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    child: TextField(
+                    child: TextField(inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-z A-Z .,0-9]')),
+                      ],
                       onTap: () {
                         DataTidakLengkap = false;
                       },
@@ -1063,6 +1081,10 @@ class Edit_Produk_KaosState extends State<Edit_Produk_Kaos> {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                     child: TextField(
+                       inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[a-z A-Z .,0-9]')),
+                      ],
                       onTap: () {
                         DataTidakLengkap = false;
                       },

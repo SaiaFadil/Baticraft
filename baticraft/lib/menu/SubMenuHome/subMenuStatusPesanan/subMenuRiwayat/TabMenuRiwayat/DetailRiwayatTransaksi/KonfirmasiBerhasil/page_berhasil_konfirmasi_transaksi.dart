@@ -19,6 +19,12 @@ import 'dart:math';
 
 class konfirmasi_berhasil extends StatefulWidget {
   konfirmasi_berhasil({super.key});
+  static String kodeTR = "";
+  static String totalPesanan = "";
+  static String tunai = "";
+  static String kembalian = "";
+  static String nama = "";
+  static String namaKasir = "";
 
   @override
   State<konfirmasi_berhasil> createState() => _konfirmasi_berhasilState();
@@ -38,19 +44,12 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
     productList = transactionManager.productList;
   }
 
-  int calculateTotalPrice(List<Products> productList) {
-    int totalPrice = 0;
-    for (var product in productList) {
-      totalPrice += product.price * product.quantity;
-    }
-    return totalPrice;
-  }
-
   @override
   Widget build(BuildContext context) {
     final transactionManager = Provider.of<TransactionManager>(context);
     final productList = transactionManager.productList;
     this.productList = productList;
+    print("LIST "+productList.toString());
     return Scaffold(
         appBar: AppBar(
           elevation: 5,
@@ -60,7 +59,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
           leading: IconButton(
             onPressed: () {
               productList.clear();
-             Navigator.pop(context);
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios),
             color: CustomColors.threertyColor,
@@ -106,7 +105,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Detail Transaksi",
+                        Text("Kode Pesanan",
                             style: CustomText.TextArvoBold(
                                 14, CustomColors.blackColor)),
                         SizedBox(
@@ -118,7 +117,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                         SizedBox(
                           height: 5,
                         ),
-                        Text("Nama Kasir",
+                        Text("Nama",
                             style: CustomText.TextArvoBold(
                                 14, CustomColors.blackColor)),
                       ],
@@ -146,7 +145,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(detail_transaksi.kode_transaksi,
+                        Text(konfirmasi_berhasil.kodeTR,
                             style: CustomText.TextArvoBold(
                                 14, CustomColors.blackColor)),
                         SizedBox(
@@ -158,7 +157,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                         SizedBox(
                           height: 5,
                         ),
-                        Text(MenuDashboard.nama,
+                        Text(konfirmasi_berhasil.nama,
                             style: CustomText.TextArvoBold(
                                 14, CustomColors.blackColor)),
                       ],
@@ -334,7 +333,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text("Rp ${HomeTransaksi.totalPrice.toInt()}",
+                        Text("Rp ${konfirmasi_berhasil.totalPesanan}",
                             style: CustomText.TextArvoBold(
                                 14, CustomColors.blackColor)),
                         SizedBox(
@@ -346,13 +345,13 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                         SizedBox(
                           height: 5,
                         ),
-                        Text("Rp ${detail_transaksi.tunai}",
+                        Text("Rp ${konfirmasi_berhasil.tunai}",
                             style: CustomText.TextArvoBold(
                                 14, CustomColors.blackColor)),
                         SizedBox(
                           height: 5,
                         ),
-                        Text("Rp ${detail_transaksi.kembalian}",
+                        Text("Rp ${konfirmasi_berhasil.kembalian}",
                             style: CustomText.TextArvoBold(
                                 14, CustomColors.blackColor)),
                       ],
@@ -376,8 +375,8 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                   ElevatedButton(
                       style: CustomButton.NewModel(CustomColors.greenColor),
                       onPressed: () {
-                           productList.clear();
-             Navigator.pop(context);
+                        productList.clear();
+                        Navigator.pop(context);
                       },
                       child: Text("Selesai",
                           style: CustomText.TextArvoBold(

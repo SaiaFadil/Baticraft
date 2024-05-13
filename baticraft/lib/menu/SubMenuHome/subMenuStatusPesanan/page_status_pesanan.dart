@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:baticraft/menu/SubMenuHome/subMenuStatusPesanan/subMenuPesanan/page_detail_pesanan.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuStatusPesanan/subMenuRiwayat/page_riwayat_semua.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuStatusPesanan/subMenuPesanan/page_list_pesanan.dart';
+import 'package:baticraft/menu/menu_dashboard.dart';
+import 'package:baticraft/navigation/utama.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -53,7 +55,12 @@ class _StatusPesananState extends State<StatusPesanan> {
               color: CustomColors.threertyColor,
             ), // Icon panah di platform iOS
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pushReplacement(
+                                        context,
+                                        PageRouteBuilder(
+                                            pageBuilder: (context, animation,
+                                                    secondaryAnimation) =>
+                                                utama()));
             },
           ),
           title: Row(

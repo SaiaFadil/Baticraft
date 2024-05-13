@@ -395,7 +395,7 @@ class _detail_transaksiState extends State<detail_transaksi> {
 
           // Hitung kembalian
           double kembalian = tunai - HomeTransaksi.totalPrice;
-          if (kembalian <= 0) {
+          if (kembalian < 0) {
             print("NILAI NEGATIF");
             kembalianController.text = "Tunai Tidak Mencukupi";
           } else {

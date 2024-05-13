@@ -107,8 +107,10 @@ class KelolaProdukState extends State<KelolaProduk> {
                         ),
                         Text(
                           "TAMBAH\nPRODUK",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: CustomText.TextArvoBold(
-                              22, CustomColors.whiteColor),
+                              20, CustomColors.whiteColor),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(

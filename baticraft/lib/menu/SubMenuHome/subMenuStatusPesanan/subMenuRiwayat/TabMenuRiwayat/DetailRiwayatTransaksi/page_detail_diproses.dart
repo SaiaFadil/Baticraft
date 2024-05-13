@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:baticraft/menu/SubMenuHome/subMenuStatusPesanan/page_status_pesanan.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuStatusPesanan/subMenuRiwayat/TabMenuRiwayat/DetailRiwayatTransaksi/KonfirmasiBerhasil/page_berhasil_konfirmasi_transaksi.dart';
+import 'package:baticraft/menu/TabTransaksi/subMenuTransaksi/transactionManager.dart';
 import 'package:baticraft/menu/menu_dashboard.dart';
+import 'package:baticraft/models/products.dart';
 import 'package:baticraft/navigation/utama.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
@@ -11,6 +13,7 @@ import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class DetailDiproses extends StatefulWidget {
   final String transactionId;
@@ -22,6 +25,38 @@ class DetailDiproses extends StatefulWidget {
 }
 
 class _DetailDiprosesState extends State<DetailDiproses> {
+// Fungsi untuk menambahkan produk ke dalam list produk
+  void addProductToList(Map<dynamic, dynamic> productData) {
+    bool isProductExist = productList
+        .any((product) => product.id == productData['id'].toString());
+
+    if (!isProductExist) {
+      Products newProduct = Products(
+        id: productData['id'].toString(),
+        image: productData['image_path'].toString(),
+        name: productData['nama_product'],
+        price: productData['harga_total'],
+        quantity: 1, // Jumlah awal produk adalah 1
+      );
+      productList.add(newProduct);
+      setState(() {}); // Perbarui widget setelah penambahan produk
+    } else {
+      print('Produk sudah ada dalam list');
+    }
+  }
+
+  void updateProductQuantity(int index, int quantity) {
+    if (index >= 0 && index < productList.length) {
+      productList[index].quantity += quantity;
+      if (productList[index].quantity < 0) {
+        productList[index].quantity = 1;
+      }
+      setState(() {}); // Perbarui widget setelah mengubah jumlah produk
+    }
+  }
+
+  List<Products> productList = [];
+
   Future<void> TransactionDone(String id) async {
     try {
       var response = await http.post(
@@ -54,7 +89,6 @@ class _DetailDiprosesState extends State<DetailDiproses> {
   }
 
   TextEditingController tunaiController = TextEditingController();
-
   TextEditingController kembalianController = TextEditingController();
 
   showPaymentDialog(BuildContext context) {
@@ -67,7 +101,7 @@ class _DetailDiprosesState extends State<DetailDiproses> {
 
           // Hitung kembalian
           double kembalian = tunai - totalHarga;
-          if (kembalian <= 0) {
+          if (kembalian < 0) {
             print("NILAI NEGATIF");
             kembalianController.text = "Tunai Tidak Mencukupi";
           } else {
@@ -186,7 +220,14 @@ class _DetailDiprosesState extends State<DetailDiproses> {
                 if (kembalianController.text != "Tunai Tidak Mencukupi" &&
                     kembalianController.text.isNotEmpty &&
                     tunaiController.text.isNotEmpty) {
-                      Navigator.pop(context);
+                  Navigator.pop(context);
+
+                  konfirmasi_berhasil.kembalian = kembalianController.text;
+                  konfirmasi_berhasil.tunai = tunaiController.text;
+
+                  print(konfirmasi_berhasil.kembalian);
+                  print(konfirmasi_berhasil.tunai);
+
                   TransactionDone(widget.transactionId);
                 } else {
                   CustomWidget.NotifGagalBayar(context);
@@ -218,6 +259,12 @@ class _DetailDiprosesState extends State<DetailDiproses> {
   }
 
   int totalHarga = 0;
+  @override
+  void initState() {
+    TransactionManager tm = TransactionManager();
+    tm.clearTransactionData();
+    super.initState();
+  }
 
   // Fungsi untuk memformat tanggal ke dalam format dd/mm/yyyy
   String formatTanggal(String tanggal) {
@@ -236,6 +283,34 @@ class _DetailDiprosesState extends State<DetailDiproses> {
 
   @override
   Widget build(BuildContext context) {
+    final transactionManager =
+        Provider.of<TransactionManager>(context, listen: false);
+    void addAllProductsToTransaction() {
+      // Pastikan productList tidak kosong
+      if (productList.isNotEmpty) {
+        // Iterasi melalui semua produk dalam productList
+        for (int i = 0; i < productList.length; i++) {
+          // Ambil informasi produk dari productList berdasarkan indeks
+          Products productToAdd = productList[i];
+
+          // Periksa apakah produk sudah ada dalam daftar transaksi berdasarkan ID
+          bool isProductExist = transactionManager.productList
+              .any((product) => product.id == productToAdd.id);
+
+          // Jika produk belum ada dalam daftar transaksi, tambahkan produk
+          if (!isProductExist) {
+            transactionManager.addProduct(productToAdd);
+          } else {
+            print(
+                'Produk dengan ID ${productToAdd.id} sudah ada dalam daftar transaksi');
+          }
+        }
+        // Setelah selesai menambahkan produk, pindahkan ke halaman detail transaksi
+      } else {
+        print('ProductList kosong');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 5,
@@ -263,7 +338,9 @@ class _DetailDiprosesState extends State<DetailDiproses> {
           } else {
             Map<String, dynamic> transaction = snapshot.data!;
             List<dynamic> details = transaction['details'];
+
             totalHarga = transaction['total_harga'];
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -332,7 +409,7 @@ class _DetailDiprosesState extends State<DetailDiproses> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Detail Transaksi",
+                          Text("Kode Pesanan",
                               style: CustomText.TextArvoBold(
                                   14, CustomColors.blackColor)),
                           SizedBox(
@@ -344,7 +421,7 @@ class _DetailDiprosesState extends State<DetailDiproses> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text("Nama Kasir",
+                          Text("Nama",
                               style: CustomText.TextArvoBold(
                                   14, CustomColors.blackColor)),
                         ],
@@ -394,7 +471,7 @@ class _DetailDiprosesState extends State<DetailDiproses> {
                           SizedBox(
                             height: 5,
                           ),
-                          Text(MenuDashboard.nama,
+                          Text("${transaction['nama_pembeli']}",
                               style: CustomText.TextArvoBold(
                                   14, CustomColors.blackColor)),
                         ],
@@ -562,6 +639,24 @@ class _DetailDiprosesState extends State<DetailDiproses> {
                     padding: const EdgeInsets.all(20),
                     child: ElevatedButton(
                         onPressed: () {
+                          konfirmasi_berhasil.kodeTR =
+                              "${transaction['kode_transaksi']}";
+                          konfirmasi_berhasil.totalPesanan =
+                              "${transaction['total_harga']}";
+                              
+                          konfirmasi_berhasil.nama =
+                              "${transaction['nama_pembeli']}";
+                          konfirmasi_berhasil.namaKasir =
+                              "${transaction['kasir']}";
+
+                          print(konfirmasi_berhasil.kodeTR);
+                          print(konfirmasi_berhasil.totalPesanan);
+                          if (details.isNotEmpty) {
+                            for (int i = 0; i < details.length; i++) {
+                              addProductToList(details[i]);
+                              addAllProductsToTransaction();
+                            }
+                          }
                           showPaymentDialog(context);
                         },
                         style: CustomButton.DefaultButton(
