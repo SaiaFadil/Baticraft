@@ -38,7 +38,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
 
   Future showPencarianKain(String searchText) async {
     final response = await http
-        .post(Server.urlLaravel("searchKain"), body: {'search': searchText});
+        .post(Server.urlLaravel("searchKaintr"), body: {'search': searchText});
     jsonProdukKain = response.body.toString();
     setState(() {
       listKain = List<Map<String, dynamic>>.from(json.decode(jsonProdukKain));
@@ -50,7 +50,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
 
   Future showPencarianKemeja(String searchText) async {
     final response = await http
-        .post(Server.urlLaravel("searchKemeja"), body: {'search': searchText});
+        .post(Server.urlLaravel("searchKemejatr"), body: {'search': searchText});
     jsonProdukKemeja = response.body.toString();
     setState(() {
       listKemeja =
@@ -63,7 +63,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
 
   Future showPencarianKaos(String searchText) async {
     final response = await http
-        .post(Server.urlLaravel("searchKaos"), body: {'search': searchText});
+        .post(Server.urlLaravel("searchKaostr"), body: {'search': searchText});
     jsonProdukBaju = response.body.toString();
     setState(() {
       listBaju = List<Map<String, dynamic>>.from(json.decode(jsonProdukBaju));
@@ -74,7 +74,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
   }
 
   Future<void> showKemeja() async {
-    final response = await http.get(Server.urlLaravel("showKemeja"));
+    final response = await http.get(Server.urlLaravel("getProductsKemejatr"));
     jsonProdukKemeja = response.body.toString();
     setState(() {
       listKemeja =
@@ -84,7 +84,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
   }
 
   Future<void> showKaos() async {
-    final response = await http.get(Server.urlLaravel("showKaos"));
+    final response = await http.get(Server.urlLaravel("getProductsKaostr"));
     jsonProdukBaju = response.body.toString();
     setState(() {
       listBaju = List<Map<String, dynamic>>.from(json.decode(jsonProdukBaju));
@@ -93,7 +93,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
   }
 
   Future<void> showKain() async {
-    final response = await http.get(Server.urlLaravel("showKain"));
+    final response = await http.get(Server.urlLaravel("getProductsKaintr"));
     jsonProdukKain = response.body.toString();
     setState(() {
       listKain = List<Map<String, dynamic>>.from(json.decode(jsonProdukKain));

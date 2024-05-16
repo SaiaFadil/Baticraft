@@ -270,25 +270,7 @@ class _laporan_harianState extends State<laporan_harian> {
                           )
                         ],
                       ),
-                      Padding(
-                          padding: EdgeInsets.only(
-                            top: 25,
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: ElevatedButton(
-                              style: CustomButton.DefaultButton(
-                                  CustomColors.greenColor),
-                              child: Text(
-                                "Ekspor",
-                                style: CustomText.TextArvoBold(
-                                    16, CustomColors.whiteColor),
-                              ),
-                              onPressed: () {
-                                print("PRESSED1");
-                              },
-                            ),
-                          )),
+                     
                     ],
                   )),
             ),

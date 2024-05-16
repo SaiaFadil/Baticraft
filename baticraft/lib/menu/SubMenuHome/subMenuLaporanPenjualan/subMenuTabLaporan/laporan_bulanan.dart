@@ -315,23 +315,7 @@ class _laporan_bulananState extends State<laporan_bulanan> {
                           )
                         ],
                       ),
-                      Padding(
-                          padding: EdgeInsets.only(
-                            top: 25,
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: ElevatedButton(
-                              style: CustomButton.DefaultButton(
-                                  CustomColors.greenColor),
-                              child: Text(
-                                "Ekspor",
-                                style: CustomText.TextArvoBold(
-                                    16, CustomColors.whiteColor),
-                              ),
-                              onPressed: () {},
-                            ),
-                          )),
+                     
                     ],
                   )),
             ),

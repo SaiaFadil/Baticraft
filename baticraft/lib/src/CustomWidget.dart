@@ -296,10 +296,10 @@ class CustomWidget {
                 opacity: animation,
                 child: child,
               );
-            }))); 
+            })));
   }
-  static void NotifGagalEditInformasi(
-      BuildContext context) {
+
+  static void NotifGagalEditInformasi(BuildContext context) {
     showDialog(
       context: context,
 
@@ -359,10 +359,10 @@ class CustomWidget {
           ),
         ],
       ),
-    ); 
+    );
   }
-  static void NotifBerhasilEditProfil(
-      BuildContext context) {
+
+  static void NotifBerhasilEditProfil(BuildContext context) {
     showDialog(
       context: context,
 
@@ -425,18 +425,17 @@ class CustomWidget {
     ).then((_) => Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                utama(),
+            pageBuilder: (context, animation, secondaryAnimation) => utama(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: animation,
                 child: child,
               );
-            }))); 
+            })));
   }
- static void NotifBerhasilTambahAdmin(
-      BuildContext context) {
+
+  static void NotifBerhasilTambahAdmin(BuildContext context) {
     showDialog(
       context: context,
 
@@ -507,10 +506,10 @@ class CustomWidget {
                 opacity: animation,
                 child: child,
               );
-            }))); 
+            })));
   }
-  static void NotifBerhasilEditPassword(
-      BuildContext context) {
+
+  static void NotifBerhasilEditPassword(BuildContext context) {
     showDialog(
       context: context,
 
@@ -570,10 +569,10 @@ class CustomWidget {
           ),
         ],
       ),
-    ).then((_) => Navigator.pop(context)); 
+    ).then((_) => Navigator.pop(context));
   }
-  static void NotifGagalEditPassword(
-      BuildContext context) {
+
+  static void NotifGagalEditPassword(BuildContext context) {
     showDialog(
       context: context,
 
@@ -615,7 +614,6 @@ class CustomWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20.0),
-                
                 ],
               ),
             ),
@@ -624,8 +622,8 @@ class CustomWidget {
       ),
     );
   }
-  static void NotifGagalBayar(
-      BuildContext context) {
+
+  static void NotifGagalBayar(BuildContext context) {
     showDialog(
       context: context,
 
@@ -667,7 +665,6 @@ class CustomWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20.0),
-                
                 ],
               ),
             ),
@@ -676,8 +673,8 @@ class CustomWidget {
       ),
     );
   }
-  static void NotifGagalEditPassword2(
-      BuildContext context) {
+
+  static void NotifGagalEditPassword2(BuildContext context) {
     showDialog(
       context: context,
 
@@ -719,7 +716,6 @@ class CustomWidget {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20.0),
-                
                 ],
               ),
             ),
@@ -729,8 +725,7 @@ class CustomWidget {
     );
   }
 
-  static void KolomKosong(
-      BuildContext context) {
+  static void KolomKosong(BuildContext context) {
     showDialog(
       context: context,
 
@@ -780,9 +775,7 @@ class CustomWidget {
     );
   }
 
-
- static void NotifBerhasilTtransaaksi(
-      BuildContext context) {
+  static void NotifBerhasilTtransaaksi(BuildContext context) {
     showDialog(
       context: context,
 
@@ -842,11 +835,10 @@ class CustomWidget {
           ),
         ],
       ),
-    ); 
+    );
   }
 
- static void NotifBerhasilTambahProduk(
-      BuildContext context, Widget nextPage) {
+  static void NotifBerhasilTambahProduk(BuildContext context, Widget nextPage) {
     showDialog(
       context: context,
 
@@ -909,18 +901,17 @@ class CustomWidget {
     ).then((_) => Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                nextPage,
+            pageBuilder: (context, animation, secondaryAnimation) => nextPage,
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: animation,
                 child: child,
               );
-            }))); 
+            })));
   }
-static void NotifBerhasilEditProduk(
-      BuildContext context, Widget nextPage) {
+
+  static void NotifBerhasilEditProduk(BuildContext context, Widget nextPage) {
     showDialog(
       context: context,
 
@@ -962,7 +953,6 @@ static void NotifBerhasilEditProduk(
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20.0),
-                  
                 ],
               ),
             ),
@@ -972,18 +962,17 @@ static void NotifBerhasilEditProduk(
     ).then((_) => Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                nextPage,
+            pageBuilder: (context, animation, secondaryAnimation) => nextPage,
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: animation,
                 child: child,
               );
-            }))); 
+            })));
   }
-static void NotifBerhasil(
-      BuildContext context) {
+
+  static void NotifBerhasil(BuildContext context) {
     showDialog(
       context: context,
 
@@ -1025,7 +1014,6 @@ static void NotifBerhasil(
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20.0),
-                  
                 ],
               ),
             ),
@@ -1034,8 +1022,8 @@ static void NotifBerhasil(
       ),
     ).then((_) => Navigator.pop(context));
   }
-static void NotifGagal(
-      BuildContext context) {
+
+  static void NotifGagal(BuildContext context) {
     showDialog(
       context: context,
 
@@ -1077,7 +1065,6 @@ static void NotifGagal(
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20.0),
-                  
                 ],
               ),
             ),
@@ -1086,6 +1073,4 @@ static void NotifGagal(
       ),
     );
   }
-
-
 }

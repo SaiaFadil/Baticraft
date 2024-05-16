@@ -277,7 +277,6 @@ class _KelolaPenggunaState extends State<KelolaPengguna> {
                         textInputAction: TextInputAction.next,
                         controller: cariController,
                         onChanged: (value) {
-                          showData("admin");
                           if (value.isNotEmpty) {
                             showPencarian("admin", value);
                           } else {
@@ -370,7 +369,6 @@ class _KelolaPenggunaState extends State<KelolaPengguna> {
                     textInputAction: TextInputAction.next,
                     controller: cariController,
                     onChanged: (value) {
-                      showData("pembeli");
                       if (value.isNotEmpty) {
                         showPencarian("pembeli", value);
                       } else {

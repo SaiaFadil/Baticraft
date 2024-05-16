@@ -10,7 +10,7 @@ import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_ke
 import 'package:baticraft/src/List_Kelola_Produk.dart';
 
 import 'package:flutter/material.dart';
-import 'package:baticraft/page/page_login.dart';
+import 'package:baticraft/pageSebelumLogin/page_login.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
@@ -48,17 +48,15 @@ class _cari_produkState extends State<cari_produk> {
   }
 
   Future showPencarian(String searchText) async {
-    final response =
-        await http.post(Server.urlLaravel("search"),body: {
-          'search' : searchText
-        });
+    final response = await http
+        .post(Server.urlLaravel("search"), body: {'search': searchText});
     jsonProdukProduk = response.body.toString();
     setState(() {
       listProduk =
           List<Map<String, dynamic>>.from(json.decode(jsonProdukProduk));
     });
-     print("GAMBARNYAAAAAA "+listProduk[0]['image_path'].toString());
-    print("NAMANYAA "+listProduk[0]['nama']);
+    print("GAMBARNYAAAAAA " + listProduk[0]['image_path'].toString());
+    print("NAMANYAA " + listProduk[0]['nama']);
     print(jsonProdukProduk);
   }
 
@@ -80,85 +78,60 @@ class _cari_produkState extends State<cari_produk> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: listProduk.isEmpty ? List.empty(): List.generate(
-            listProduk.length,
-            (index) => Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  List_Kelola_Produk.id_produk =
-                      listProduk[index]['id'].toString();
-                  cari_produk.kategori =
-                      listProduk[index]['kategori'].toString();
-                  print("id produk = " + List_Kelola_Produk.id_produk);
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: listProduk.isEmpty
+                ? List.empty()
+                : List.generate(
+                    listProduk.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          List_Kelola_Produk.id_produk =
+                              listProduk[index]['id'].toString();
+                          cari_produk.kategori =
+                              listProduk[index]['kategori'].toString();
+                          print("id produk = " + List_Kelola_Produk.id_produk);
 
-                  if (cari_produk.kategori == "kain") {
-                    Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    Edit_Produk_Kain()));
-                  } else if (cari_produk.kategori == "kemeja") {
-                    Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    Edit_Produk_Kemeja()));
-                  } else if (cari_produk.kategori == "kaos") {
-                    Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    Edit_Produk_Kaos()));
-                  }
-                },
-                child: Container(
-                  width: double.infinity,
-                  child: Card(
-                    surfaceTintColor: CustomColors.whiteColor,
-                    color: CustomColors.whiteColor,
-                    elevation: 10,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          listProduk.isEmpty
-                              ? Shimmer.fromColors(
-                                  baseColor:
-                                      Color.fromARGB(255, 104, 102, 102)!,
-                                  highlightColor:
-                                      const Color.fromARGB(255, 202, 200, 200)!,
-                                  child: Text(
-                                    '...',
-                                    style: CustomText.TextArvo(
-                                      14,
-                                      CustomColors.blackColor,
-                                    ),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                )
-                              : Container(
-                                  child: Image.network(
-                                    fit: BoxFit.fitWidth,
-                                    height: 120,
-                                    Server.urlLaravelImageProduct(
-                                        listProduk[index]['image_path']),
-                                  ),
-                                ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: listProduk.isEmpty
+                          if (cari_produk.kategori == "kain") {
+                            Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        Edit_Produk_Kain()));
+                          } else if (cari_produk.kategori == "kemeja") {
+                            Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        Edit_Produk_Kemeja()));
+                          } else if (cari_produk.kategori == "kaos") {
+                            Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        Edit_Produk_Kaos()));
+                          }
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          child: Card(
+                            surfaceTintColor: CustomColors.whiteColor,
+                            color: CustomColors.whiteColor,
+                            elevation: 10,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  listProduk.isEmpty
                                       ? Shimmer.fromColors(
                                           baseColor: Color.fromARGB(
                                               255, 104, 102, 102)!,
@@ -174,127 +147,178 @@ class _cari_produkState extends State<cari_produk> {
                                           ),
                                         )
                                       : Container(
-                                          width: 200,
-                                          child: Text(
-                                            listProduk[index]['nama'],
-                                            style: CustomText.TextArvoBold(
-                                                14, CustomColors.blackColor),
-                                            maxLines: 3,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.start,
+                                          child: Image.network(
+                                            fit: BoxFit.contain,
+                                            height: 100,
+                                            Server.urlLaravelImageProduct(
+                                                listProduk[index]
+                                                    ['image_path']),
                                           ),
-                                        )),
-                              Container(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    listProduk.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: Color.fromARGB(
-                                                255, 104, 102, 102)!,
-                                            highlightColor:
-                                                const Color.fromARGB(
-                                                    255, 202, 200, 200)!,
-                                            child: Text(
-                                              '...',
-                                              style: CustomText.TextArvo(
-                                                14,
-                                                CustomColors.blackColor,
-                                              ),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                          )
-                                        : Text(
-                                            "Rp." +
-                                                listProduk[index]['harga']
-                                                    .toString(),
-                                            style: CustomText.TextArvoBold(
-                                                12, CustomColors.blackColor)),
-                                    Container(
-                                      child: IconButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                    "Konfirmasi",
+                                        ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: listProduk.isEmpty
+                                              ? Shimmer.fromColors(
+                                                  baseColor: Color.fromARGB(
+                                                      255, 104, 102, 102)!,
+                                                  highlightColor:
+                                                      const Color.fromARGB(
+                                                          255, 202, 200, 200)!,
+                                                  child: Text(
+                                                    '...',
+                                                    style: CustomText.TextArvo(
+                                                      14,
+                                                      CustomColors.blackColor,
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                  ),
+                                                )
+                                              : Container(
+                                                  width: 200,
+                                                  child: Text(
+                                                    listProduk[index]['nama'],
                                                     style:
                                                         CustomText.TextArvoBold(
-                                                            18,
+                                                            14,
                                                             CustomColors
-                                                                .whiteColor),
+                                                                .blackColor),
+                                                    maxLines: 3,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.start,
                                                   ),
-                                                  backgroundColor: CustomColors
-                                                      .secondaryColor,
-                                                  content: Text(
-                                                    "Apakah Anda yakin ingin HAPUS produk ini?",
-                                                    style: CustomText.TextArvo(
-                                                        16,
-                                                        CustomColors
-                                                            .whiteColor),
-                                                  ),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                        deleteProductAndImages(
-                                                            listProduk[index]
-                                                                    ['id']
-                                                                .toString());
-                                                        print("pressed");
-                                                      },
-                                                      child: Text(
-                                                        "Ya",
-                                                        style: CustomText
-                                                            .TextArvoBold(
-                                                                18,
-                                                                CustomColors
-                                                                    .whiteColor),
+                                                )),
+                                      Container(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            listProduk.isEmpty
+                                                ? Shimmer.fromColors(
+                                                    baseColor: Color.fromARGB(
+                                                        255, 104, 102, 102)!,
+                                                    highlightColor:
+                                                        const Color.fromARGB(
+                                                            255,
+                                                            202,
+                                                            200,
+                                                            200)!,
+                                                    child: Text(
+                                                      '...',
+                                                      style:
+                                                          CustomText.TextArvo(
+                                                        14,
+                                                        CustomColors.blackColor,
                                                       ),
+                                                      textAlign:
+                                                          TextAlign.start,
                                                     ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(); // Tutup dialog
+                                                  )
+                                                : Text(
+                                                    "Rp." +
+                                                        listProduk[index]
+                                                                ['harga']
+                                                            .toString(),
+                                                    style:
+                                                        CustomText.TextArvoBold(
+                                                            12,
+                                                            CustomColors
+                                                                .blackColor)),
+                                            Container(
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                            "Konfirmasi",
+                                                            style: CustomText
+                                                                .TextArvoBold(
+                                                                    18,
+                                                                    CustomColors
+                                                                        .whiteColor),
+                                                          ),
+                                                          backgroundColor:
+                                                              CustomColors
+                                                                  .secondaryColor,
+                                                          content: Text(
+                                                            "Apakah Anda yakin ingin HAPUS produk ini?",
+                                                            style: CustomText
+                                                                .TextArvo(
+                                                                    16,
+                                                                    CustomColors
+                                                                        .whiteColor),
+                                                          ),
+                                                          actions: <Widget>[
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                deleteProductAndImages(
+                                                                    listProduk[index]
+                                                                            [
+                                                                            'id']
+                                                                        .toString());
+                                                                print(
+                                                                    "pressed");
+                                                              },
+                                                              child: Text(
+                                                                "Ya",
+                                                                style: CustomText
+                                                                    .TextArvoBold(
+                                                                        18,
+                                                                        CustomColors
+                                                                            .whiteColor),
+                                                              ),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(); // Tutup dialog
+                                                              },
+                                                              child: Text(
+                                                                "Tidak",
+                                                                style: CustomText
+                                                                    .TextArvoBold(
+                                                                        18,
+                                                                        CustomColors
+                                                                            .whiteColor),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
                                                       },
-                                                      child: Text(
-                                                        "Tidak",
-                                                        style: CustomText
-                                                            .TextArvoBold(
-                                                                18,
-                                                                CustomColors
-                                                                    .whiteColor),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          icon: Image.asset(
-                                            Server.urlGambar(
-                                                "icons_sampah.png"),
-                                            height: 20,
-                                          )),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                                                    );
+                                                  },
+                                                  icon: Image.asset(
+                                                    Server.urlGambar(
+                                                        "icons_sampah.png"),
+                                                    height: 20,
+                                                  )),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            ),
-          )
-        ),
+                  )),
       ),
     );
   }
@@ -356,9 +380,14 @@ class _cari_produkState extends State<cari_produk> {
                       textInputAction: TextInputAction.next,
                       controller: cariController,
                       onChanged: (value) {
+                        if (value.isEmpty) {
                           showProduk();
-                       
-                        showPencarian(value);
+                        } else {
+                          
+                            
+                          showPencarian(value);
+                         
+                        }
                       },
                       decoration: InputDecoration(
                         hintText: 'Cari Produk...',
@@ -372,7 +401,7 @@ class _cari_produkState extends State<cari_produk> {
             SizedBox(
               height: 20,
             ),
-            listProduk.isNotEmpty? KumpulanProduk() :SizedBox()
+            listProduk.isNotEmpty ? KumpulanProduk() : SizedBox()
           ]),
         ),
       ),

@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:baticraft/navigation/utama.dart';
-import 'package:baticraft/page/page_login.dart';
+import 'package:baticraft/pageSebelumLogin/page_login.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shimmer/shimmer.dart';
@@ -99,8 +100,8 @@ class edit_profilState extends State<edit_profil> {
     }
 
     // Menyiapkan request untuk mengunggah gambar ke server
-    request = http.MultipartRequest(
-        'POST', Server.urlLaravel("UploadGambarUser"));
+    request =
+        http.MultipartRequest('POST', Server.urlLaravel("UploadGambarUser"));
 
     // Menambahkan file gambar ke dalam request
 
@@ -140,28 +141,29 @@ class edit_profilState extends State<edit_profil> {
     // Buat request POST ke URL server
     Uri url = Server.urlLaravel("EditProfil");
 
-      try {
-        // Kirim request POST ke server
-        final response = await http.post(url, body: data);
+    try {
+      // Kirim request POST ke server
+      final response = await http.post(url, body: data);
 
-        // Periksa kode status respons
-        if (response.statusCode == 200) {
-          _uploadImage();
-        
-          CustomWidget.NotifBerhasilEditProfil(context);
-          // Sukses mengirim data
-          print(response.body);
-          print('Data berhasil dikirim');
-        } else {
-          // Gagal mengirim data
-          print('Gagal mengirim data. Kode status: ${response.statusCode}');
-        }
-      } catch (error) {
-        // Tangani kesalahan jika terjadi
-        print('Terjadi kesalahan: $error');
+      // Periksa kode status respons
+      if (response.statusCode == 200) {
+        _uploadImage();
+
+        CustomWidget.NotifBerhasilEditProfil(context);
+        // Sukses mengirim data
+        print(response.body);
+        print('Data berhasil dikirim');
+      } else {
+        // Gagal mengirim data
+        print('Gagal mengirim data. Kode status: ${response.statusCode}');
       }
+    } catch (error) {
+      // Tangani kesalahan jika terjadi
+      print('Terjadi kesalahan: $error');
+    }
   }
-String jenisKelamin = "laki-laki";
+
+  String jenisKelamin = "laki-laki";
   @override
   void initState() {
     super.initState();
@@ -234,7 +236,7 @@ String jenisKelamin = "laki-laki";
                                     ),
                           ),
                         )
-                      : Shimmer.fromColors( 
+                      : Shimmer.fromColors(
                           baseColor: Color.fromARGB(255, 42, 5, 146)!,
                           highlightColor: Color.fromARGB(255, 255, 254, 254)!,
                           child: CircleAvatar(
@@ -360,6 +362,10 @@ String jenisKelamin = "laki-laki";
                                     ? Align(
                                         alignment: Alignment.centerLeft,
                                         child: TextField(
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9`.,a-z A-Z]')),
+                                          ],
                                           maxLines: 1,
                                           keyboardType: TextInputType.text,
                                           textAlign: TextAlign.start,
@@ -425,7 +431,11 @@ String jenisKelamin = "laki-laki";
                                     ? Align(
                                         alignment: Alignment.centerLeft,
                                         child: TextField(
-
+                                          maxLength: 15,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9+]')),
+                                          ],
                                           maxLines: 1,
                                           keyboardType: TextInputType.number,
                                           textAlign: TextAlign.start,
@@ -491,6 +501,12 @@ String jenisKelamin = "laki-laki";
                                     ? Align(
                                         alignment: Alignment.centerLeft,
                                         child: TextField(
+                                          
+                                          inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(r'[0-9`.,-()/a-z A-Z]')),
+                                                ],
+                                                maxLength: 255,
                                           maxLines: 1,
                                           keyboardType: TextInputType.text,
                                           textAlign: TextAlign.start,
@@ -629,82 +645,90 @@ String jenisKelamin = "laki-laki";
                         Padding(
                           padding: const EdgeInsets.only(top: 10, left: 40),
                           child: detailUser['nama'] != null
-                                    ? TextField(
-                            maxLines: 1,
-                            keyboardType: TextInputType.text,
-                            textAlign: TextAlign.start,
-                            textInputAction: TextInputAction.next,
-                            controller: TempatLahirController,
-                            style: CustomText.TextArvoBold(
-                              12,
-                              CustomColors.blackColor,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'Tempat Lahir',
-                              // Jika Anda ingin menambahkan label, Anda bisa menggunakan labelText
-                              // labelText: 'Tempat Lahir',
-                              // Atur style label jika diperlukan
-                              // labelStyle: CustomText.TextArvo(14, CustomColors.blackColor),
-                              // Jika Anda ingin menambahkan ikon di depan input, Anda bisa menggunakan prefixIcon
-                              // prefixIcon: Icon(Icons.location_on),
-                            ),
-                          ) : Shimmer.fromColors(
-                                        baseColor:
-                                            Color.fromARGB(255, 104, 102, 102)!,
-                                        highlightColor: const Color.fromARGB(
-                                            255, 202, 200, 200)!,
-                                        child: Text(
-                                          'Loading...',
-                                          style: CustomText.TextArvo(
-                                            14,
-                                            CustomColors.blackColor,
-                                          ),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                      ),
+                              ? TextField(
+                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(r'[0-9.,`a-z A-Z]')),
+                                                ],
+                                  maxLines: 1,
+                                  maxLength: 100,
+                                  keyboardType: TextInputType.text,
+                                  textAlign: TextAlign.start,
+                                  textInputAction: TextInputAction.next,
+                                  controller: TempatLahirController,
+                                  style: CustomText.TextArvoBold(
+                                    12,
+                                    CustomColors.blackColor,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: 'Tempat Lahir',
+                                    // Jika Anda ingin menambahkan label, Anda bisa menggunakan labelText
+                                    // labelText: 'Tempat Lahir',
+                                    // Atur style label jika diperlukan
+                                    // labelStyle: CustomText.TextArvo(14, CustomColors.blackColor),
+                                    // Jika Anda ingin menambahkan ikon di depan input, Anda bisa menggunakan prefixIcon
+                                    // prefixIcon: Icon(Icons.location_on),
+                                  ),
+                                )
+                              : Shimmer.fromColors(
+                                  baseColor:
+                                      Color.fromARGB(255, 104, 102, 102)!,
+                                  highlightColor:
+                                      const Color.fromARGB(255, 202, 200, 200)!,
+                                  child: Text(
+                                    'Loading...',
+                                    style: CustomText.TextArvo(
+                                      14,
+                                      CustomColors.blackColor,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
                         ),
                         // Tambahkan input tanggal lahir di sini
                         Padding(
                           padding: const EdgeInsets.only(top: 10, left: 40),
                           child: detailUser['nama'] != null
-                                    ? TextFormField(
-                            maxLines: 1,
-                            keyboardType: TextInputType.datetime,
-                            textAlign: TextAlign.start,
-                            textInputAction: TextInputAction.next,
-                            controller: TanggalLahirController,
-                            style: CustomText.TextArvoBold(
-                              12,
-                              CustomColors.blackColor,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'Tanggal Lahir',
-                              // Jika Anda ingin menambahkan label, Anda bisa menggunakan labelText
-                              // labelText: 'Tanggal Lahir',
-                              // Atur style label jika diperlukan
-                              // labelStyle: CustomText.TextArvo(14, CustomColors.blackColor),
-                              // Jika Anda ingin menambahkan ikon di depan input, Anda bisa menggunakan prefixIcon
-                              // prefixIcon: Icon(Icons.calendar_today),
-                            ),
-                            // Jika Anda ingin menggunakan date picker untuk memilih tanggal, Anda dapat menggunakan properti onTap
-                            onTap: () {
-                              // Panggil fungsi untuk menampilkan date picker di sini
-                              _selectDate(context);
-                            },
-                          ): Shimmer.fromColors(
-                                        baseColor:
-                                            Color.fromARGB(255, 104, 102, 102)!,
-                                        highlightColor: const Color.fromARGB(
-                                            255, 202, 200, 200)!,
-                                        child: Text(
-                                          'Loading...',
-                                          style: CustomText.TextArvo(
-                                            14,
-                                            CustomColors.blackColor,
-                                          ),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                      ),
+                              ? TextFormField(
+                                
+                                  maxLines: 1,
+                                  keyboardType: TextInputType.datetime,
+                                  textAlign: TextAlign.start,
+                                  textInputAction: TextInputAction.next,
+                                  controller: TanggalLahirController,
+                                  style: CustomText.TextArvoBold(
+                                    12,
+                                    CustomColors.blackColor,
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: 'Tanggal Lahir',
+                                    // Jika Anda ingin menambahkan label, Anda bisa menggunakan labelText
+                                    // labelText: 'Tanggal Lahir',
+                                    // Atur style label jika diperlukan
+                                    // labelStyle: CustomText.TextArvo(14, CustomColors.blackColor),
+                                    // Jika Anda ingin menambahkan ikon di depan input, Anda bisa menggunakan prefixIcon
+                                    // prefixIcon: Icon(Icons.calendar_today),
+                                  ),
+                                  // Jika Anda ingin menggunakan date picker untuk memilih tanggal, Anda dapat menggunakan properti onTap
+                                  onTap: () {
+                                    // Panggil fungsi untuk menampilkan date picker di sini
+                                    _selectDate(context);
+                                  },
+                                )
+                              : Shimmer.fromColors(
+                                  baseColor:
+                                      Color.fromARGB(255, 104, 102, 102)!,
+                                  highlightColor:
+                                      const Color.fromARGB(255, 202, 200, 200)!,
+                                  child: Text(
+                                    'Loading...',
+                                    style: CustomText.TextArvo(
+                                      14,
+                                      CustomColors.blackColor,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
                         ),
                       ],
                     ),

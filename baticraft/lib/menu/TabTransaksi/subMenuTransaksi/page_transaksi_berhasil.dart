@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:baticraft/menu/TabTransaksi/subMenuTransaksi/page_detail_transaksi.dart';
 import 'package:baticraft/menu/TabTransaksi/subMenuTransaksi/page_transaksi_berhasil.dart';
 import 'package:baticraft/models/products.dart';
 import 'package:baticraft/navigation/utama.dart';
-import 'package:baticraft/page/page_login.dart';
+import 'package:baticraft/pageSebelumLogin/page_login.dart';
 import 'package:baticraft/src/CustomWidget.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:baticraft/menu/TabTransaksi/HomeTransaksi.dart';
 import 'package:baticraft/menu/TabTransaksi/subMenuTransaksi/transactionManager.dart';
@@ -17,6 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
+// import 'package:screenshot/screenshot.dart';
+// import 'package:path_provider/path_provider.dart';
+
 class transaksi_berhasil extends StatefulWidget {
   transaksi_berhasil({super.key});
 
@@ -28,6 +34,18 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
   late String tanggalSekarang;
   late List<Products> productList = [];
 
+  Future<Uint8List> readFileBytes(String path) async {
+    ByteData fileData = await rootBundle.load(path);
+    Uint8List fileUnit8List = fileData.buffer
+        .asUint8List(fileData.offsetInBytes, fileData.lengthInBytes);
+    return fileUnit8List;
+  }
+
+  Future<Uint8List> _getImageFromAsset(String iconPath) async {
+    return await readFileBytes(iconPath);
+  }
+
+// all method from sunmi printer need to async await
   @override
   void initState() {
     super.initState();
@@ -36,6 +54,7 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
     tanggalSekarang =
         "${DateTime.now().day.toString().padLeft(2, '0')}/${DateTime.now().month.toString().padLeft(2, '0')}/${DateTime.now().year}";
     productList = transactionManager.productList;
+   
   }
 
   int calculateTotalPrice(List<Products> productList) {
@@ -45,6 +64,46 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
     }
     return totalPrice;
   }
+
+// ScreenshotController screenshotController = ScreenshotController();
+
+
+  
+  // Future<void> _saveScreenshot() async {
+  //   final directory = (await getApplicationDocumentsDirectory()).path;
+  //   final path = '$directory/screenshot.png';
+
+  //   screenshotController.capture().then((Uint8List? image) async {
+  //     if (image != null) {
+  //       final file = File(path);
+  //       await file.writeAsBytes(image);
+
+  //       // Save image to gallery
+  //       // final result = await ImageGallerySaver.saveImage(image, quality: 100, name: "screenshot");
+  //       // print(result);
+
+  //       // Show preview dialog
+  //       showDialog(
+  //         context: context,
+  //         builder: (_) => AlertDialog(
+  //           content: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Image.memory(image),
+  //               SizedBox(height: 20),
+  //               TextButton(
+  //                 onPressed: () => Navigator.of(context).pop(),
+  //                 child: Text('Close'),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     }
+  //   }).catchError((onError) {
+  //     print(onError);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +119,7 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
           leading: IconButton(
             onPressed: () {
               productList.clear();
-             Navigator.pop(context);
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back_ios),
             color: CustomColors.threertyColor,
@@ -376,8 +435,9 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
                   ElevatedButton(
                       style: CustomButton.NewModel(CustomColors.greenColor),
                       onPressed: () {
-                           productList.clear();
-             Navigator.pop(context);
+                        
+                        productList.clear();
+                        Navigator.pop(context);
                       },
                       child: Text("Selesai",
                           style: CustomText.TextArvoBold(
@@ -387,7 +447,9 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
                   ),
                   ElevatedButton(
                       style: CustomButton.NewModel(CustomColors.secondaryColor),
-                      onPressed: () {},
+                      onPressed: () {
+                        // _saveScreenshot();
+                      },
                       child: Text("Cetak",
                           style: CustomText.TextArvoBold(
                               18, CustomColors.whiteColor))),

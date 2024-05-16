@@ -1,12 +1,18 @@
+import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
-import 'package:baticraft/page/page_atur_ulang_sandi.dart';
+import 'package:baticraft/pageSebelumLogin/page_atur_ulang_sandi.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
+import 'package:baticraft/src/otp_field.dart';
+import 'package:baticraft/src/style.dart';
 
 class page_kodeotp extends StatefulWidget {
-  const page_kodeotp({super.key});
+  final String email;
+  final EmailOTP myauth;
+  page_kodeotp({super.key, required this.email,required this.myauth});
 
   @override
   State<page_kodeotp> createState() => page_kodeotpState();
@@ -18,7 +24,17 @@ class page_kodeotpState extends State<page_kodeotp> {
   bool isKeyboardActive = false;
   bool isWrong = false;
   String errorText = "";
+  
 
+  
+  @override
+  void initState() {
+    print(widget.email);
+   
+    super.initState();
+  }
+
+  String otp = "";
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -30,7 +46,6 @@ class page_kodeotpState extends State<page_kodeotp> {
         });
         isWrong = false;
         FocusScope.of(context).unfocus();
-
         return true;
       },
       child: MaterialApp(
@@ -99,7 +114,25 @@ class page_kodeotpState extends State<page_kodeotp> {
                                       ),
                                     ),
                                     Padding(
-                                        padding: EdgeInsets.only(top: 120),
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: OTPTextField(
+                                        length: 5,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        fieldWidth: 50,
+                                        style: TextStyle(fontSize: 17),
+                                        textFieldAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        fieldStyle: FieldStyle.underline,
+                                        onCompleted: (value) {
+                                          setState(() {
+                                            otp = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(top: 50),
                                         child: Align(
                                           alignment: Alignment.center,
                                           child: ElevatedButton(
@@ -110,24 +143,36 @@ class page_kodeotpState extends State<page_kodeotp> {
                                               style: CustomText.TextArvoBold(
                                                   18, CustomColors.whiteColor),
                                             ),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (context,
-                                                            animation,
-                                                            secondaryAnimation) =>
-                                                        page_atur_ulang_sandi(),
-                                                    transitionsBuilder:
-                                                        (context,
-                                                            animation,
-                                                            secondaryAnimation,
-                                                            child) {
-                                                      return FadeTransition(
-                                                          opacity: animation,
-                                                          child: child);
-                                                    },
-                                                  ));
+                                            onPressed: () async {
+                                              if (await widget.myauth.verifyOTP(
+                                                      otp: otp) ==
+                                                  true) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content:
+                                                      Text("OTP is verified"),
+                                                ));
+                                                Navigator.push(
+                                                    context,
+                                                    PageRouteBuilder(
+                                                      pageBuilder: (context,
+                                                              animation,
+                                                              secondaryAnimation) =>
+                                                          page_atur_ulang_sandi(email: widget.email),
+                                                    ));
+                                                print("OTP BENAR");
+                                              } else {
+                                                print(otp);
+                                                CustomWidget.NotifGagal(
+                                                    context);
+                                                print("OTP SALAH");
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content: Text("Invalid OTP"),
+                                                ));
+                                              }
                                             },
                                           ),
                                         )),

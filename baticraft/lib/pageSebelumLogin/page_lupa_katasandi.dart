@@ -1,9 +1,14 @@
+import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
-import 'package:baticraft/page/page_kodeotp.dart';
+import 'package:baticraft/pageSebelumLogin/page_kodeotp.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class page_lupa_katasandi extends StatefulWidget {
   const page_lupa_katasandi({super.key});
@@ -14,12 +19,98 @@ class page_lupa_katasandi extends StatefulWidget {
 
 class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
   FocusNode emailFocusNode = FocusNode();
+  TextEditingController emailController = TextEditingController();
 
   bool isEmailFocused = false;
   String statusKeyboard = "tidak aktif";
   bool isKeyboardActive = false;
   bool isWrong = false;
   String errorText = "";
+  String message = '';
+
+  EmailOTP myauth = EmailOTP();
+
+  Future<void> showLoadingDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
+                Text("Sedang Mengirim Otp..."),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future SendOtp() async {
+    myauth.setConfig(
+        appEmail: "dappganzzshop@gmail.com",
+        userEmail: emailController.text,
+        appName: "Baticraft",
+        otpLength: 5,
+        otpType: OTPType.digitsOnly);
+    showLoadingDialog(context); // Show loading dialog
+
+    if (await myauth.sendOTP() == true) {
+      print("BERHASIL");
+      Navigator.pop(context); // Close loading dialog
+
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                page_kodeotp(email: emailController.text, myauth: myauth),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ));
+    } else {
+      Navigator.pop(context); // Close loading dialog
+
+      CustomWidget.NotifGagal(context);
+      print("GAGAL");
+
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Oops, OTP send failed"),
+      ));
+    }
+  }
+
+  Future<void> checkEmail(String email) async {
+    final response = await http.post(
+      Server.urlLaravel('checkEmail'), // Ganti dengan URL Laravel Anda
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"email": email}),
+    );
+    message = "";
+    if (response.statusCode == 200) {
+      print("Email : " + emailController.text);
+      SendOtp();
+    } else if (response.statusCode == 404) {
+      setState(() {
+        isWrong = true;
+        message = 'Email belum terdaftar';
+        errorText = "Email Belum Terdaftar!";
+      });
+    } else {
+      setState(() {
+        isWrong = true;
+        message = 'Gagal memeriksa email';
+      });
+    }
+    print(message);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,19 +154,6 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
                           CustomText.TextArvoBold(30, CustomColors.whiteColor),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(30, 20, 30, 10),
-                      child: Visibility(
-                        visible: isWrong,
-                        child: Text(errorText,
-                            textAlign: TextAlign.center,
-                            style: CustomText.TextArvoBold(
-                                14, CustomColors.redColor)),
-                      ),
-                    ),
-                  ),
                   Positioned(
                       bottom: -5,
                       left: -5,
@@ -107,8 +185,21 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
+                                    Visibility(
+                                      visible: isWrong,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: Text(
+                                          errorText,
+                                          style: CustomText.TextArvoBold(
+                                              14, CustomColors.redColor),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
                                     Padding(
-                                      padding: EdgeInsets.fromLTRB(5, 45, 5, 0),
+                                      padding: EdgeInsets.fromLTRB(5, 25, 5, 0),
                                       child: Container(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
@@ -122,12 +213,17 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
                                       height: 50,
                                       padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                                       child: TextField(
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9a-z@.A-Z]')),
+                                        ],
+                                        controller: emailController,
                                         focusNode: emailFocusNode,
                                         onTap: () {
                                           setState(() {
+                                            isWrong = false;
                                             statusKeyboard = "aktif";
                                             emailFocusNode.requestFocus();
-                                            isEmailFocused = true;
                                           });
                                         },
                                         keyboardType:
@@ -180,23 +276,24 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
                                                   20, CustomColors.whiteColor),
                                             ),
                                             onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (context,
-                                                            animation,
-                                                            secondaryAnimation) =>
-                                                        page_kodeotp(),
-                                                    transitionsBuilder:
-                                                        (context,
-                                                            animation,
-                                                            secondaryAnimation,
-                                                            child) {
-                                                      return FadeTransition(
-                                                          opacity: animation,
-                                                          child: child);
-                                                    },
-                                                  ));
+                                              print("PRESSED");
+                                              if (emailController.text
+                                                      .endsWith("@gmail.com") &&
+                                                  emailController
+                                                      .text.isNotEmpty) {
+                                                checkEmail(
+                                                    emailController.text);
+                                                print("eksekusi");
+                                              } else {
+                                                setState(() {
+                                                  isWrong = true;
+                                                  errorText =
+                                                      "Email Tidak Valid!";
+                                                });
+                                                FocusScope.of(context)
+                                                    .requestFocus(
+                                                        emailFocusNode);
+                                              }
                                             },
                                           ),
                                         )),

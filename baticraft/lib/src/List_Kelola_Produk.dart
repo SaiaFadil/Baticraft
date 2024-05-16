@@ -5,7 +5,7 @@ import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_ka
 import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_kaos.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuProduk/EditProduk/page_edit_kemeja.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuProduk/page_kelola_produk.dart';
-import 'package:baticraft/page/page_login.dart';
+import 'package:baticraft/pageSebelumLogin/page_login.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';

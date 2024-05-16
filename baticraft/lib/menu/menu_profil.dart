@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:baticraft/menu/SubMenuProfil/page_detail_profil.dart';
 import 'package:baticraft/menu/SubMenuProfil/page_edit_profil.dart';
 import 'package:baticraft/menu/SubMenuProfil/page_ubah_kata_sandi.dart';
-import 'package:baticraft/page/page_login.dart';
+import 'package:baticraft/pageSebelumLogin/page_login.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:baticraft/src/CustomColors.dart';

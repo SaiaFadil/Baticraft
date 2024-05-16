@@ -1,13 +1,16 @@
+import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
-import 'package:baticraft/page/page_login.dart';
+import 'package:baticraft/pageSebelumLogin/page_login.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class page_atur_ulang_sandi extends StatefulWidget {
-  const page_atur_ulang_sandi({super.key});
+  final String email;
+  page_atur_ulang_sandi({super.key, required this.email});
 
   @override
   State<page_atur_ulang_sandi> createState() => _page_atur_ulang_sandiState();
@@ -26,6 +29,16 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
   bool isKeyboardActive = false;
   String statusKeyboard = "tidak aktif";
 
+  @override
+  void initState() {
+    setState(() {
+      isWrong = false;
+    });
+    super.initState();
+  }
+
+  TextEditingController pw = TextEditingController();
+  TextEditingController konfpw = TextEditingController();
   FocusNode KonfpasswordFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
   @override
@@ -33,6 +46,27 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
     KonfpasswordFocusNode.dispose();
     passwordFocusNode.dispose();
     super.dispose();
+  }
+
+  Future sendDataToServer() async {
+    final response = await http.post(
+        Server.urlLaravel("updatePasswordLupaSandi"),
+        body: {'email': widget.email, 'password_baru': pw.text});
+
+    if (response.statusCode == 200) {
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                KonfirmasiAturUlang(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+          ));
+    } else {
+      CustomWidget.NotifGagal(context);
+    }
   }
 
   @override
@@ -118,8 +152,20 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
+                                  Visibility(
+                                    visible: isWrong,
+                                    child: Container(
+                                      padding: EdgeInsets.only(top: 10),
+                                      child: Text(
+                                        errorText,
+                                        style: CustomText.TextArvoBold(
+                                            14, CustomColors.redColor),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(5, 40, 5, 0),
+                                    padding: EdgeInsets.fromLTRB(5, 20, 5, 0),
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       child: Text('Kata Sandi',
@@ -132,6 +178,7 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                     height: 50,
                                     padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                                     child: TextField(
+                                      controller: pw,
                                       keyboardType:
                                           TextInputType.visiblePassword,
                                       textAlign: TextAlign.start,
@@ -209,6 +256,7 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                     height: 50,
                                     padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                                     child: TextField(
+                                      controller: konfpw,
                                       focusNode: KonfpasswordFocusNode,
                                       onTap: () {
                                         isWrong = false;
@@ -286,22 +334,37 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                                 25, CustomColors.whiteColor),
                                           ),
                                           onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                PageRouteBuilder(
-                                                  pageBuilder: (context,
-                                                          animation,
-                                                          secondaryAnimation) =>
-                                                      KonfirmasiAturUlang(),
-                                                  transitionsBuilder: (context,
-                                                      animation,
-                                                      secondaryAnimation,
-                                                      child) {
-                                                    return FadeTransition(
-                                                        opacity: animation,
-                                                        child: child);
-                                                  },
-                                                ));
+                                            if (pw.text.isEmpty ||
+                                                konfpw.text.isEmpty) {
+                                              CustomWidget.KolomKosong(context);
+                                            } else if (pw.text.length < 8 ||
+                                                konfpw.text.length < 8) {
+                                              setState(() {
+                                                isWrong = true;
+                                                errorText =
+                                                    "Kata Sandi Minimal 8";
+                                                print("minimal " + errorText);
+                                                print("minimal " +
+                                                    isWrong.toString());
+                                              });
+                                            } else if (pw.text.length > 20 ||
+                                                konfpw.text.length > 20) {
+                                              setState(() {
+                                                isWrong = true;
+                                                errorText =
+                                                    "Kata Sandi Maksimal 15";
+                                                print("maksimal " + errorText);
+                                              });
+                                            } else if (pw.text != konfpw.text) {
+                                              setState(() {
+                                                isWrong = true;
+                                                errorText =
+                                                    "Konfirmasi Password Tidak Cocok!";
+                                                print("maksimal " + errorText);
+                                              });
+                                            } else {
+                                              sendDataToServer();
+                                            }
                                           },
                                         ),
                                       )),
@@ -352,20 +415,19 @@ class KonfirmasiAturUlang extends StatelessWidget {
             fit: StackFit.expand,
             alignment: Alignment.bottomCenter,
             children: [
-               Padding(
-                      padding: EdgeInsets.only(left: 30, top: 40),
-                      child: Text(
-                        "YEY\nBERHASIL !",
-                        style:
-                            CustomText.TextArvoBold(30, CustomColors.whiteColor),
-                      ),
-                    ),
+              Padding(
+                padding: EdgeInsets.only(left: 30, top: 40),
+                child: Text(
+                  "YEY\nBERHASIL !",
+                  style: CustomText.TextArvoBold(30, CustomColors.whiteColor),
+                ),
+              ),
               Positioned(
                   bottom: -5,
                   left: -5,
                   right: -5,
                   child: Container(
-                    height: 300,
+                    height: 390,
                     child: Card(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
@@ -386,6 +448,15 @@ class KonfirmasiAturUlang extends StatelessWidget {
                                   "Berhasil !!",
                                   style: CustomText.TextArvoBold(
                                       20, CustomColors.blackColor),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Text(
+                                  "Kata sandi anda berhasil di ubah\nSilahkan masuk ke akun anda",
+                                  style: CustomText.TextArvo(
+                                      18, CustomColors.blackColor),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               Container(
@@ -433,9 +504,9 @@ class KonfirmasiAturUlang extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ))
-            ,Positioned(
-                top: screenHeight *.245,
+                  )),
+              Positioned(
+                top: screenHeight * .135,
                 right: 10,
                 child: Image.asset(Server.urlGambar("anim11.png")),
                 height: 350,
