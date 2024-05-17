@@ -456,8 +456,8 @@ class _page_login extends State<page_login> {
                       curve: Curves.bounceOut,
                       top: (isEmailFocused && isPasswordFocused) ||
                               statusKeyboard == "Aktif"
-                          ? -190
-                          : 80,
+                          ? -150
+                          : 150,
                       right: 20,
                       child: Image.asset(Server.urlGambar('anim12.png'))),
                 ],

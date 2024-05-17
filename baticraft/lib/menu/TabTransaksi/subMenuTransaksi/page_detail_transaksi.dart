@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
+import 'package:shimmer/shimmer.dart';
+
 class detail_transaksi extends StatefulWidget {
   const detail_transaksi({super.key});
   static String kode_transaksi = "";
@@ -264,12 +266,38 @@ class _detail_transaksiState extends State<detail_transaksi> {
                                                   Radius.circular(10),
                                                 ),
                                               ),
-                                              child: Image.network(
-                                                fit: BoxFit.fitWidth,
-                                                height: 120,
-                                                Server.urlLaravelImageProduct(
-                                                    productList[index].image),
-                                              ),
+                                              child: productList[index]
+                                                      .image
+                                                      .isEmpty
+                                                  ? Shimmer.fromColors(
+                                                      baseColor: Color.fromARGB(
+                                                          255, 104, 102, 102)!,
+                                                      highlightColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              202,
+                                                              200,
+                                                              200)!,
+                                                      child: Text(
+                                                        '...',
+                                                        style:
+                                                            CustomText.TextArvo(
+                                                          14,
+                                                          CustomColors
+                                                              .blackColor,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                      ),
+                                                    )
+                                                  : Image.network(
+                                                      fit: BoxFit.fitWidth,
+                                                      height: 120,
+                                                      Server
+                                                          .urlLaravelImageProduct(
+                                                              productList[index]
+                                                                  .image),
+                                                    ),
                                             ),
                                           ),
                                           Column(

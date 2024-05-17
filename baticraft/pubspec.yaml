@@ -34,6 +34,11 @@ dependencies:
   excel: 4.0.2
   email_otp: ^2.1.2
   animated_splash_screen: ^1.3.0
+  pdf: ^3.10.8
+  printing: ^5.12.0
+  open_file: ^3.3.2
+  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -50,6 +55,10 @@ flutter:
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto-Regular.ttf
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans-Italic.ttf
+        - asset: assets/fonts/OpenSans-VariableFont_wdth,wght.ttf
 
     - family: Arvo
       fonts:

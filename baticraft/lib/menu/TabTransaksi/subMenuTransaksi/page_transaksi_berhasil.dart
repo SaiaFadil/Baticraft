@@ -17,11 +17,14 @@ import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
+import 'package:pdf/src/widgets/document.dart';
 import 'dart:math';
-
-// import 'package:screenshot/screenshot.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class transaksi_berhasil extends StatefulWidget {
   transaksi_berhasil({super.key});
@@ -45,7 +48,6 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
     return await readFileBytes(iconPath);
   }
 
-// all method from sunmi printer need to async await
   @override
   void initState() {
     super.initState();
@@ -54,7 +56,6 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
     tanggalSekarang =
         "${DateTime.now().day.toString().padLeft(2, '0')}/${DateTime.now().month.toString().padLeft(2, '0')}/${DateTime.now().year}";
     productList = transactionManager.productList;
-   
   }
 
   int calculateTotalPrice(List<Products> productList) {
@@ -65,45 +66,23 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
     return totalPrice;
   }
 
-// ScreenshotController screenshotController = ScreenshotController();
+  final pdf = pw.Document();
+ 
 
+  Future<void> printAndSavePdf(pw.Document pdf) async {
+    // Use the Printing package to handle the printing/layout
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => pdf.save());
 
-  
-  // Future<void> _saveScreenshot() async {
-  //   final directory = (await getApplicationDocumentsDirectory()).path;
-  //   final path = '$directory/screenshot.png';
+    // Optionally, save the document to a file for further use
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
+    Directory newDirectory =
+        await Directory('${appDocDirectory.path}/dir').create(recursive: true);
+    print('Path of New Dir: ${newDirectory.path}');
 
-  //   screenshotController.capture().then((Uint8List? image) async {
-  //     if (image != null) {
-  //       final file = File(path);
-  //       await file.writeAsBytes(image);
-
-  //       // Save image to gallery
-  //       // final result = await ImageGallerySaver.saveImage(image, quality: 100, name: "screenshot");
-  //       // print(result);
-
-  //       // Show preview dialog
-  //       showDialog(
-  //         context: context,
-  //         builder: (_) => AlertDialog(
-  //           content: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               Image.memory(image),
-  //               SizedBox(height: 20),
-  //               TextButton(
-  //                 onPressed: () => Navigator.of(context).pop(),
-  //                 child: Text('Close'),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     }
-  //   }).catchError((onError) {
-  //     print(onError);
-  //   });
-  // }
+    final file = File('${newDirectory.path}/example1.pdf');
+    await file.writeAsBytes(await pdf.save());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -435,7 +414,6 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
                   ElevatedButton(
                       style: CustomButton.NewModel(CustomColors.greenColor),
                       onPressed: () {
-                        
                         productList.clear();
                         Navigator.pop(context);
                       },
@@ -447,8 +425,333 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
                   ),
                   ElevatedButton(
                       style: CustomButton.NewModel(CustomColors.secondaryColor),
-                      onPressed: () {
-                        // _saveScreenshot();
+                      onPressed: () async {
+                        final fontData = await rootBundle
+                            .load("assets/fonts/OpenSans-Italic.ttf");
+                        final ttf = pw.Font.ttf(fontData);
+
+                        // Create a new PDF document
+                        final pdf = pw.Document();
+
+                        pdf.addPage(
+                          pw.Page(
+                            pageFormat: PdfPageFormat.a5,
+                            build: (context) => pw.Center(
+                                child: pw.Column(
+                              children: [
+                                pw.SizedBox(
+                                  height: 20,
+                                ),
+                                pw.Align(
+                                    alignment: pw.Alignment.center,
+                                    child: pw.Text(
+                                      "Transaksi Berhasil!",style: pw.TextStyle(font: ttf)
+                                    )),
+                                pw.SizedBox(
+                                  height: 10,
+                                ),
+                                pw.Container(
+                                  color: HintColor,
+                                  height: 1,
+                                ),
+                                pw.SizedBox(
+                                  height: 10,
+                                ),
+                                pw.Container(
+                                  margin: pw.EdgeInsets.only(left: 20),
+                                  child: pw.Row(
+                                    mainAxisAlignment:
+                                        pw.MainAxisAlignment.start,
+                                    children: [
+                                      pw.Column(
+                                        crossAxisAlignment:
+                                            pw.CrossAxisAlignment.start,
+                                        children: [
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            "Detail Transaksi",
+                                          ),
+                                          pw.SizedBox(
+                                            height: 5,
+                                          ),
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            "Tanggal",
+                                          ),
+                                          pw.SizedBox(
+                                            height: 5,
+                                          ),
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            "Nama Kasir",
+                                          ),
+                                        ],
+                                      ),
+                                      pw.Column(
+                                        crossAxisAlignment:
+                                            pw.CrossAxisAlignment.start,
+                                        children: [
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            "  :  ",
+                                          ),
+                                          pw.SizedBox(
+                                            height: 5,
+                                          ),
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            "  :  ",
+                                          ),
+                                          pw.SizedBox(
+                                            height: 5,
+                                          ),
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            "  :  ",
+                                          ),
+                                        ],
+                                      ),
+                                      pw.Column(
+                                        crossAxisAlignment:
+                                            pw.CrossAxisAlignment.start,
+                                        children: [
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            detail_transaksi.kode_transaksi,
+                                          ),
+                                          pw.SizedBox(
+                                            height: 5,
+                                          ),
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            tanggalSekarang,
+                                          ),
+                                          pw.SizedBox(
+                                            height: 5,
+                                          ),
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            MenuDashboard.nama,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                pw.SizedBox(
+                                  height: 10,
+                                ),
+                                pw.Container(
+                                  color: HintColor,
+                                  height: 1,
+                                ),
+
+                                pw.Column(
+                                  crossAxisAlignment:
+                                      pw.CrossAxisAlignment.center,
+                                  children: productList.isEmpty
+                                      ? List.empty()
+                                      : List.generate(
+                                          productList.length,
+                                          (index) => pw.Column(
+                                            children: [
+                                              pw.Container(
+                                                height: 60,
+                                                width: double.infinity,
+                                                child: pw.Padding(
+                                                  padding:
+                                                      pw.EdgeInsets.symmetric(
+                                                          horizontal: 10),
+                                                  child: pw.Row(
+                                                    mainAxisAlignment: pw
+                                                        .MainAxisAlignment
+                                                        .spaceBetween,
+                                                    crossAxisAlignment: pw
+                                                        .CrossAxisAlignment
+                                                        .center,
+                                                    children: [
+                                                      pw.Row(
+                                                        children: [
+                                                          pw.Column(
+                                                            crossAxisAlignment: pw
+                                                                .CrossAxisAlignment
+                                                                .start,
+                                                            mainAxisAlignment: pw
+                                                                .MainAxisAlignment
+                                                                .center,
+                                                            children: [
+                                                              pw.Container(
+                                                                padding: pw
+                                                                        .EdgeInsets
+                                                                    .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                ),
+                                                                width: 200,
+                                                                child: pw.Text(style: pw.TextStyle(font: ttf),
+                                                                  productList[
+                                                                          index]
+                                                                      .name
+                                                                      .toString(),
+                                                                  maxLines: 1,
+                                                                  textAlign: pw
+                                                                      .TextAlign
+                                                                      .start,
+                                                                ),
+                                                              ),
+                                                              pw.SizedBox(
+                                                                  height: 5),
+                                                              pw.Container(
+                                                                padding: pw
+                                                                        .EdgeInsets
+                                                                    .only(
+                                                                        left:
+                                                                            10),
+                                                                child: pw
+                                                                    .Container(
+                                                                  child:
+                                                                      pw.Text(style: pw.TextStyle(font: ttf),
+                                                                    "${productList[index].quantity} x Rp ${productList[index].price}",
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      pw.Container(
+                                                        padding: pw
+                                                                .EdgeInsets
+                                                            .only(
+                                                                right: 0),
+                                                        child: pw.Text(style: pw.TextStyle(font: ttf),
+                                                          "Rp." +
+                                                              productList[
+                                                                      index]
+                                                                  .price
+                                                                  .toString(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                ),
+                                pw.Container(
+                                  color: HintColor,
+                                  height: 1,
+                                ),
+                                pw.SizedBox(
+                                  height: 10,
+                                ),
+                                //Total detail
+                                pw.Container(
+                                  margin:
+                                      pw.EdgeInsets.only(left: 20, right: 10),
+                                  child: pw.Row(
+                                    mainAxisAlignment:
+                                        pw.MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      pw.Row(
+                                        children: [
+                                          pw.Column(
+                                            crossAxisAlignment:
+                                                pw.CrossAxisAlignment.start,
+                                            children: [
+                                              pw.Text(style: pw.TextStyle(font: ttf),
+                                                "Total Pesanan",
+                                              ),
+                                              pw.SizedBox(
+                                                height: 5,
+                                              ),
+                                              pw.Text(style: pw.TextStyle(font: ttf),
+                                                "Total Item",
+                                              ),
+                                              pw.SizedBox(
+                                                height: 5,
+                                              ),
+                                              pw.Text(style: pw.TextStyle(font: ttf),
+                                                "Tunai",
+                                              ),
+                                              pw.SizedBox(
+                                                height: 5,
+                                              ),
+                                              pw.Text(style: pw.TextStyle(font: ttf),
+                                                "Kembalian",
+                                              ),
+                                            ],
+                                          ),
+                                          pw.Column(
+                                            crossAxisAlignment:
+                                                pw.CrossAxisAlignment.start,
+                                            children: [
+                                              pw.Text(style: pw.TextStyle(font: ttf),
+                                                "  :  ",
+                                              ),
+                                              pw.SizedBox(
+                                                height: 5,
+                                              ),
+                                              pw.Text(style: pw.TextStyle(font: ttf),
+                                                "  :  ",
+                                              ),
+                                              pw.SizedBox(
+                                                height: 5,
+                                              ),
+                                              pw.Text(style: pw.TextStyle(font: ttf),
+                                                "  :  ",
+                                              ),
+                                              pw.SizedBox(
+                                                height: 5,
+                                              ),
+                                              pw.Text(style: pw.TextStyle(font: ttf),
+                                                "  :  ",
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      pw.Column(
+                                        crossAxisAlignment:
+                                            pw.CrossAxisAlignment.end,
+                                        children: [
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            "Rp ${HomeTransaksi.totalPrice.toInt()}",
+                                          ),
+                                          pw.SizedBox(
+                                            height: 5,
+                                          ),
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            " ${productList.length} item ",
+                                          ),
+                                          pw.SizedBox(
+                                            height: 5,
+                                          ),
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            "Rp ${detail_transaksi.tunai}",
+                                          ),
+                                          pw.SizedBox(
+                                            height: 5,
+                                          ),
+                                          pw.Text(style: pw.TextStyle(font: ttf),
+                                            "Rp ${detail_transaksi.kembalian}",
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                pw.SizedBox(
+                                  height: 10,
+                                ),
+                                pw.Container(
+                                  color: HintColor,
+                                  height: 1,
+                                ),
+                                pw.SizedBox(
+                                  height: 50,
+                                ),
+                                pw.SizedBox(
+                                  height: 50,
+                                ),
+                              ],
+                            )),
+                          ),
+                        );
+                        await printAndSavePdf(pdf);
                       },
                       child: Text("Cetak",
                           style: CustomText.TextArvoBold(
@@ -462,4 +765,20 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
           )),
         ));
   }
+
+  PdfColor secondaryColor = PdfColor(0, 0, 0); // Adjust color as needed
+  PdfColor blackColor = PdfColor(0, 0, 0); // Adjust color as needed
+  PdfColor HintColor = PdfColor(0.5, 0.5, 0.5);
+  // pw.TextStyle TextArvo(double fontSize, PdfColor colors) {
+  //   return pw.TextStyle(
+  //     fontSize: fontSize,
+  //     color: colors,
+  //   );
+  // }
+
+  // pw.TextStyle TextArvoBold(double fontSize, PdfColor colors) {
+  //   return pw.TextStyle(
+  //     fontSize: fontSize,
+  //     color: colors,
+  //   );
 }

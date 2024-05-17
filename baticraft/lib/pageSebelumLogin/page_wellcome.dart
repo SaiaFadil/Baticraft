@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:baticraft/pageSebelumLogin/page_login.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
@@ -5,8 +8,18 @@ import 'package:baticraft/src/CustomText.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/services.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:carousel_slider/carousel_controller.dart';
+
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:provider/provider.dart';
+import 'package:pdf/src/widgets/document.dart';
+import 'dart:math';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class SliderP extends StatefulWidget {
   SliderP({Key? key}) : super(key: key);
@@ -28,23 +41,27 @@ class _SliderPState extends State<SliderP> {
     "TRANSAKSI\nDAN PESANAN",
     "LAPORAN\nPENJUALAN"
   ];
-Future<void> Pindah() async {
-  await Navigator.push(
-    context,
-    PageRouteBuilder(
-      transitionDuration: Duration(milliseconds: 1500), // Durasi transisi 1.5 detik
-      pageBuilder: (context, animation, secondaryAnimation) => page_login(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
-      },
-    ),
-  );
-  print("Transisi Selesai"); // Ini akan dicetak setelah transisi selesai
-}
+ 
 
+ 
+
+  Future<void> Pindah() async {
+    await Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration:
+            Duration(milliseconds: 1500), // Durasi transisi 1.5 detik
+        pageBuilder: (context, animation, secondaryAnimation) => page_login(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    );
+    print("Transisi Selesai"); // Ini akan dicetak setelah transisi selesai
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +111,9 @@ Future<void> Pindah() async {
                     child: ElevatedButton(
                       style:
                           CustomButton.DefaultButton(CustomColors.primaryColor),
-                      onPressed: () {
-                        Pindah();
+                      onPressed: (){
+                          Pindah();
+
                         print(" presseedd");
                       },
                       child: Text("Mulai",

@@ -364,7 +364,7 @@ class edit_profilState extends State<edit_profil> {
                                         child: TextField(
                                           inputFormatters: [
                                             FilteringTextInputFormatter.allow(
-                                                RegExp(r'[0-9`.,a-z A-Z]')),
+                                                RegExp(r'[0-9`a-z A-Z]')),
                                           ],
                                           maxLines: 1,
                                           keyboardType: TextInputType.text,
@@ -504,7 +504,7 @@ class edit_profilState extends State<edit_profil> {
                                           
                                           inputFormatters: [
                                                   FilteringTextInputFormatter
-                                                      .allow(RegExp(r'[0-9`.,-()/a-z A-Z]')),
+                                                      .allow(RegExp(r'[0-9`.,-a-z A-Z]')),
                                                 ],
                                                 maxLength: 255,
                                           maxLines: 1,

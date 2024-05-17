@@ -137,7 +137,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          listKemeja.isEmpty
+                          listKemeja[index]['image_path'] == null
                               ? Shimmer.fromColors(
                                   baseColor:
                                       Color.fromARGB(255, 104, 102, 102)!,
@@ -262,7 +262,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          listBaju.isEmpty
+                          listBaju[index]['image_path'] == null
                               ? Shimmer.fromColors(
                                   baseColor:
                                       Color.fromARGB(255, 104, 102, 102)!,
@@ -386,7 +386,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                listKain.isEmpty
+                                listKain[index]['image_path'] == null
                                     ? Shimmer.fromColors(
                                         baseColor:
                                             Color.fromARGB(255, 104, 102, 102)!,
@@ -576,12 +576,38 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                                             Radius.circular(10),
                                           ),
                                         ),
-                                        child: Image.network(
-                                          fit: BoxFit.fitWidth,
-                                          height: 120,
-                                          Server.urlLaravelImageProduct(
-                                              productList[index].image),
-                                        ),
+                                        child: productList[index]
+                                                      .image  
+                                                       == null
+                                                  ? Shimmer.fromColors(
+                                                      baseColor: Color.fromARGB(
+                                                          255, 104, 102, 102)!,
+                                                      highlightColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              202,
+                                                              200,
+                                                              200)!,
+                                                      child: Text(
+                                                        '...',
+                                                        style:
+                                                            CustomText.TextArvo(
+                                                          14,
+                                                          CustomColors
+                                                              .blackColor,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                      ),
+                                                    )
+                                                  : Image.network(
+                                                      fit: BoxFit.fitWidth,
+                                                      height: 120,
+                                                      Server
+                                                          .urlLaravelImageProduct(
+                                                              productList[index]
+                                                                  .image),
+                                                    ),
                                       ),
                                     ),
                                     Column(

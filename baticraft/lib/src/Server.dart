@@ -1,7 +1,8 @@
 class Server {
 
 
-  static String ROUTE = "http://172.16.106.95:8000/";
+  static String ROUTE = "http://172.16.106.39:8000/";
+  
   static Uri urlLaravel(url) {
     Uri Server = Uri.parse(ROUTE+"api/MobileApi/" + url); 
     return Server;
