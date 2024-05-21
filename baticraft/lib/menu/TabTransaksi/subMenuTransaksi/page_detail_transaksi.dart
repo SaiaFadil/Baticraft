@@ -77,6 +77,7 @@ class _detail_transaksiState extends State<detail_transaksi> {
         body: jsonEncode(transactionData),
       );
 
+    
       if (response.statusCode == 201) {
         print('Transaksi berhasil ditambahkan');
         detail_transaksi.tunai = tunaiController.text.toString();
@@ -95,12 +96,13 @@ class _detail_transaksiState extends State<detail_transaksi> {
                 }));
       } else {
         print('Gagal menambahkan transaksi: ${response.body}');
-
+        CustomWidget.NotifGagal(context);
         print(transactionData.toString());
       }
     } catch (e) {
+      CustomWidget.NotifGagal(context);
       print('Terjadi kesalahan: $e');
-    }
+    } 
   }
 
   String KodeTransaksi = "";
@@ -543,6 +545,7 @@ class _detail_transaksiState extends State<detail_transaksi> {
                     kembalianController.text.isNotEmpty &&
                     tunaiController.text.isNotEmpty) {
                   Navigator.of(context).pop();
+                  
                   insertNewTransaction(productList);
                 } else {
                   CustomWidget.NotifGagalBayar(context);

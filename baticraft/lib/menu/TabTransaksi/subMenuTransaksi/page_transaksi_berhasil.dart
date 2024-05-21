@@ -82,6 +82,9 @@ class _transaksi_berhasilState extends State<transaksi_berhasil> {
 
     final file = File('${newDirectory.path}/example1.pdf');
     await file.writeAsBytes(await pdf.save());
+     Navigator.push(context, PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => utama(),transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(opacity: animation,child: child,);
+    },));
   }
 
   @override

@@ -28,12 +28,14 @@ class _page_login extends State<page_login> {
   TextEditingController passwordController = TextEditingController();
   Future _ceklogin() async {
     try {
+      CustomWidget.NotifLoading(context);
       final response = await http.post(Server.urlLaravel("LoginMobile"), body: {
         "email": emailController.text,
         "password": passwordController.text
       });
       if (emailController.text.isEmpty || passwordController.text.isEmpty) {
         setState(() {
+          Navigator.pop(context);
           isWrong = true;
           sizeerror = 14;
           errorText = "Masukkan Email dan Password\ndengan benar!";
@@ -43,6 +45,7 @@ class _page_login extends State<page_login> {
         if (response.statusCode == 200) {
           jsonData = response.body.toString();
           if (jsonData != "[]") {
+            Navigator.pop(context);
             Map<String, dynamic> detailUser = json.decode(response.body);
             print("JsonData = " + jsonData);
             isWrong = false;
@@ -51,6 +54,7 @@ class _page_login extends State<page_login> {
             print("id user = " + detailUser['id'].toString());
             print("id user = " + response.body);
           } else {
+            Navigator.pop(context);
             setState(() {
               print("kesalahan");
               isWrong = true;
@@ -60,11 +64,12 @@ class _page_login extends State<page_login> {
             });
           }
         } else {
-          print("Status code = "+response.statusCode.toString());
-          print("Response = "+response.body.toString());
+          print("Status code = " + response.statusCode.toString());
+          print("Response = " + response.body.toString());
         }
       }
     } catch (e) {
+      Navigator.pop(context);
       CustomWidget.NotifGagal(context);
       // Tangani kesalahan koneksi atau kesalahan lainnya
       print("Error: $e");
@@ -249,9 +254,9 @@ class _page_login extends State<page_login> {
                                 padding: EdgeInsets.fromLTRB(30, 5, 30, 10),
                                 child: TextField(
                                   inputFormatters: [
-                                                  FilteringTextInputFormatter
-                                                      .allow(RegExp(r'[0-9@.a-zA-Z]')),
-                                                ],
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9@.a-zA-Z]')),
+                                  ],
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   textAlign: TextAlign.start,
@@ -428,7 +433,7 @@ class _page_login extends State<page_login> {
                                           print("press");
                                         } catch ($e) {
                                           CustomWidget.NotifGagal(context);
-                                          print("ERRORRR "+$e.toString());
+                                          print("ERRORRR " + $e.toString());
                                         }
                                       });
                                     },
@@ -457,7 +462,7 @@ class _page_login extends State<page_login> {
                       top: (isEmailFocused && isPasswordFocused) ||
                               statusKeyboard == "Aktif"
                           ? -150
-                          : 150,
+                          : 90,
                       right: 20,
                       child: Image.asset(Server.urlGambar('anim12.png'))),
                 ],

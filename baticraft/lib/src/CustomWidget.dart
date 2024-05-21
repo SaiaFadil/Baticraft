@@ -1,3 +1,4 @@
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuInformasiToko/page_informasi_toko.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuKelolaPengguna/page_kelola_pengguna.dart';
 import 'package:baticraft/menu/SubMenuHome/subMenuProduk/page_kelola_produk.dart';
@@ -1072,5 +1073,18 @@ class CustomWidget {
         ],
       ),
     );
+  }
+
+  static void NotifLoading(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true, 
+        builder: (context) => Stack(children: <Widget>[
+              Center(
+                  child: LoadingAnimationWidget.inkDrop(
+                color: CustomColors.whiteColor,
+                size: 70,
+              )),
+            ]));
   }
 }

@@ -426,7 +426,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
 
                         pdf.addPage(
                           pw.Page(
-                            pageFormat: PdfPageFormat.a6,
+                            pageFormat: PdfPageFormat.a5,
                             build: (context) => pw.Center(
                                 child: pw.Column(
                               children: [
@@ -471,7 +471,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                                             height: 5,
                                           ),
                                           pw.Text(style: pw.TextStyle(font: ttf),
-                                            "Nama Kasir",
+                                            "Nama",
                                           ),
                                         ],
                                       ),
@@ -501,7 +501,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                                             pw.CrossAxisAlignment.start,
                                         children: [
                                           pw.Text(style: pw.TextStyle(font: ttf),
-                                            detail_transaksi.kode_transaksi,
+                                            konfirmasi_berhasil.kodeTR,
                                           ),
                                           pw.SizedBox(
                                             height: 5,
@@ -513,7 +513,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                                             height: 5,
                                           ),
                                           pw.Text(style: pw.TextStyle(font: ttf),
-                                            MenuDashboard.nama,
+                                            konfirmasi_berhasil.nama,
                                           ),
                                         ],
                                       ),
@@ -563,6 +563,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                                                                 .center,
                                                             children: [
                                                               pw.Container(
+                                                                
                                                                 padding: pw
                                                                         .EdgeInsets
                                                                     .symmetric(
@@ -575,7 +576,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                                                                           index]
                                                                       .name
                                                                       .toString(),
-                                                                  maxLines: 1,
+                                                                  maxLines: 2,
                                                                   textAlign: pw
                                                                       .TextAlign
                                                                       .start,
@@ -707,7 +708,7 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                                             pw.CrossAxisAlignment.end,
                                         children: [
                                           pw.Text(style: pw.TextStyle(font: ttf),
-                                            "Rp ${HomeTransaksi.totalPrice.toInt()}",
+                                            "Rp ${konfirmasi_berhasil.totalPesanan}",
                                           ),
                                           pw.SizedBox(
                                             height: 5,
@@ -719,13 +720,13 @@ class _konfirmasi_berhasilState extends State<konfirmasi_berhasil> {
                                             height: 5,
                                           ),
                                           pw.Text(style: pw.TextStyle(font: ttf),
-                                            "Rp ${detail_transaksi.tunai}",
+                                            "Rp ${konfirmasi_berhasil.tunai}",
                                           ),
                                           pw.SizedBox(
                                             height: 5,
                                           ),
                                           pw.Text(style: pw.TextStyle(font: ttf),
-                                            "Rp ${detail_transaksi.kembalian}",
+                                            "Rp ${konfirmasi_berhasil.kembalian}",
                                           ),
                                         ],
                                       ),

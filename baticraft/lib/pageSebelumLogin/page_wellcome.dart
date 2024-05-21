@@ -5,6 +5,7 @@ import 'package:baticraft/pageSebelumLogin/page_login.dart';
 import 'package:baticraft/src/CustomButton.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
+import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -41,9 +42,6 @@ class _SliderPState extends State<SliderP> {
     "TRANSAKSI\nDAN PESANAN",
     "LAPORAN\nPENJUALAN"
   ];
- 
-
- 
 
   Future<void> Pindah() async {
     await Navigator.push(
@@ -111,10 +109,8 @@ class _SliderPState extends State<SliderP> {
                     child: ElevatedButton(
                       style:
                           CustomButton.DefaultButton(CustomColors.primaryColor),
-                      onPressed: (){
-                          Pindah();
-
-                        print(" presseedd");
+                      onPressed: () {
+                        Pindah();
                       },
                       child: Text("Mulai",
                           style: CustomText.TextArvoBold(
