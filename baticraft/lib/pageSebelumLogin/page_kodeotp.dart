@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:baticraft/src/CustomWidget.dart';
 import 'package:baticraft/src/Server.dart';
 import 'package:email_otp/email_otp.dart';
@@ -24,12 +26,94 @@ class page_kodeotpState extends State<page_kodeotp> {
   bool isKeyboardActive = false;
   bool isWrong = false;
   String errorText = "";
+  Timer? _timer;
+  int _waitTime = 30; // Waktu tunggu awal dalam detik
+  int _remainingTime = 30;
+  bool _isButtonEnabled = false;
+  void _startTimer() {
+    setState(() {
+      _isButtonEnabled = false;
+      _remainingTime = _waitTime;
+    });
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+        } else {
+          _isButtonEnabled = true;
+          _timer?.cancel();
+        }
+      });
+    });
+  }
+
+  EmailOTP myauth = EmailOTP();
+  Future SendOtp() async {
+    myauth.setConfig(
+        appEmail: "dappganzzshop@gmail.com",
+        userEmail: widget.email,
+        appName: "Baticraft",
+        otpLength: 5,
+        otpType: OTPType.digitsOnly);
+
+    if (await myauth.sendOTP() == true) {
+      print("BERHASIL");
+      Navigator.pop(context); // Close loading dialog
+    } else {
+      Navigator.pop(context); // Close loading dialog
+
+      CustomWidget.NotifGagal(context);
+      print("GAGAL");
+
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Oops, OTP send failed"),
+      ));
+    }
+  }
+
+  Future<void> showLoadingDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 20),
+                Text("Sedang Mengirim Ulang Otp..."),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _onButtonPressed() {
+    // Logika untuk mengirim ulang kode OTP
+    showLoadingDialog(context);
+    SendOtp();
+
+    // Atur waktu tunggu untuk klik berikutnya
+    _waitTime = _waitTime == 30 ? 60 : 60;
+    _startTimer();
+  }
 
   @override
   void initState() {
     print(widget.email);
-
+    _startTimer();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   String otp = "";
@@ -52,7 +136,6 @@ class page_kodeotpState extends State<page_kodeotp> {
           backgroundColor: CustomColors.secondaryColor,
           body: GestureDetector(
             onTap: () {
-            
               setState(() {
                 isWrong = false;
                 statusKeyboard = "tidak aktif";
@@ -113,20 +196,20 @@ class page_kodeotpState extends State<page_kodeotp> {
                                       ),
                                     ),
                                     GestureDetector(
-                                        onTap: () {
-                                          if (isKeyboardActive) {
-                                            // Jika keyboard aktif
-                                            _keyboardActiveFunction();
-                                          } else {
-                                            // Jika keyboard tidak aktif
-                                            _keyboardInactiveFunction();
-                                          }
-                                          setState(() {
-                                            isWrong = false;
-                                            statusKeyboard = "aktif";
-                                            isOtpFocused = true;
-                                          });
-                                        },
+                                      onTap: () {
+                                        if (isKeyboardActive) {
+                                          // Jika keyboard aktif
+                                          _keyboardActiveFunction();
+                                        } else {
+                                          // Jika keyboard tidak aktif
+                                          _keyboardInactiveFunction();
+                                        }
+                                        setState(() {
+                                          isWrong = false;
+                                          statusKeyboard = "aktif";
+                                          isOtpFocused = true;
+                                        });
+                                      },
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 10),
                                         child: OTPTextField(
@@ -142,8 +225,7 @@ class page_kodeotpState extends State<page_kodeotp> {
                                             setState(() {
                                               otp = value;
                                             });
-                                          }, 
-                                          
+                                          },
                                         ),
                                       ),
                                     ),
@@ -161,8 +243,9 @@ class page_kodeotpState extends State<page_kodeotp> {
                                             ),
                                             onPressed: () async {
                                               if (await widget.myauth
-                                                      .verifyOTP(otp: otp) ==
-                                                  true) {
+                                                      .verifyOTP(otp: otp) ||
+                                                  myauth.verifyOTP(otp: otp) ==
+                                                      true) {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                         const SnackBar(
@@ -194,6 +277,24 @@ class page_kodeotpState extends State<page_kodeotp> {
                                             },
                                           ),
                                         )),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextButton(
+                                        onPressed: _isButtonEnabled
+                                            ? _onButtonPressed
+                                            : null,
+                                        child: Text(
+                                          _isButtonEnabled
+                                              ? 'Kirim Ulang Kode OTP'
+                                              : 'Kirim ulang setelah $_remainingTime detik',
+                                          style: CustomText.TextArvoBold(
+                                              16,
+                                              _isButtonEnabled
+                                                  ? CustomColors.blackColor
+                                                  : CustomColors.redColor),
+                                        ),
+                                      ),
+                                    ),
                                     Text(
                                       'Status Keyboard: ${isKeyboardActive ? statusKeyboard = 'Aktif' : statusKeyboard = "tidak aktif"}' +
                                           statusKeyboard,
