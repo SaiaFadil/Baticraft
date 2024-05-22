@@ -179,6 +179,10 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                     padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                                     child: TextField(
                                       controller: pw,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9a-z.A-Z]')),
+                                      ],
                                       keyboardType:
                                           TextInputType.visiblePassword,
                                       textAlign: TextAlign.start,
@@ -233,6 +237,20 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                       focusNode: passwordFocusNode,
                                       onTap: () {
                                         isWrong = false;
+                                        if (isKeyboardActive) {
+                                          // Jika keyboard aktif
+                                          _keyboardActiveFunction();
+                                        } else {
+                                          // Jika keyboard tidak aktif
+                                          _keyboardInactiveFunction();
+                                        }
+                                        isWrong = false;
+                                        setState(() {
+                                          statusKeyboard = "aktif";
+                                          passwordFocusNode.requestFocus();
+                                          isPasswordFocused = true;
+                                        });
+
                                         setState(() {
                                           statusKeyboard = "aktif";
                                           passwordFocusNode.requestFocus();
@@ -257,6 +275,10 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                                     padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                                     child: TextField(
                                       controller: konfpw,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9a-z.A-Z]')),
+                                      ],
                                       focusNode: KonfpasswordFocusNode,
                                       onTap: () {
                                         isWrong = false;
@@ -386,7 +408,7 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
                   AnimatedPositioned(
                       duration: Duration(milliseconds: 1000),
                       curve: Curves.bounceOut,
-                      top: (isKonfFocused && isPasswordFocused) ||
+                      top: (isKonfFocused || isPasswordFocused) ||
                               statusKeyboard == "Aktif"
                           ? -220
                           : 60,
@@ -399,6 +421,14 @@ class _page_atur_ulang_sandiState extends State<page_atur_ulang_sandi> {
         ),
       ),
     );
+  }
+
+  void _keyboardActiveFunction() {
+    print('Keyboard aktif');
+  }
+
+  void _keyboardInactiveFunction() {
+    print('Keyboard tidak aktif');
   }
 }
 

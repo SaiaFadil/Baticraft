@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:baticraft/menu/SubMenuProfil/page_detail_profil.dart';
 import 'package:baticraft/menu/SubMenuProfil/page_edit_profil.dart';
 import 'package:baticraft/menu/SubMenuProfil/page_ubah_kata_sandi.dart';
+import 'package:baticraft/menu/menu_dashboard.dart';
 import 'package:baticraft/pageSebelumLogin/page_login.dart';
 import 'package:baticraft/src/Server.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:baticraft/src/CustomColors.dart';
 import 'package:baticraft/src/CustomText.dart';
@@ -106,8 +108,8 @@ class _menu_profilState extends State<menu_profil> {
                                 detailUser.isNotEmpty
                                     ? CircleAvatar(
                                         radius: 30, // Ubah ukuran avatar
-                                        backgroundImage: NetworkImage(
-                                            Server.urlLaravelImageUser(detailUser[
+                                        backgroundImage: NetworkImage(Server
+                                            .urlLaravelImageUser(detailUser[
                                                 'image'])) // Ganti URL gambar sesuai kebutuhan
                                         )
                                     : Shimmer.fromColors(
@@ -299,13 +301,7 @@ class _menu_profilState extends State<menu_profil> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                              pageBuilder:
-                                  ((context, animation, secondaryAnimation) =>
-                                      page_login())));
-                      page_login.id_user = "";
+                      _popUpKeluar(context);
                     },
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     child: Row(
@@ -343,5 +339,56 @@ class _menu_profilState extends State<menu_profil> {
         ),
       ),
     );
+  }
+
+  void _popUpKeluar(BuildContext context) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: Text(
+                    'Keluar?',
+                    style: CustomText.TextArvoBold(20, CustomColors.blackColor),
+                  ),
+              content: Center(
+                child: Column(
+                  children: [
+                    SizedBox(height: 20,),
+                    Text(
+                        'Anda Yakin Ingin Keluar?',
+                        style: CustomText.TextArvo(18, CustomColors.blackColor),
+                      ),
+                    SizedBox(height: 20,),
+                  ],
+                ),
+              ),
+              actions: <CupertinoDialogAction>[
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Tidak',
+                    style: CustomText.TextArvoBold(17, CustomColors.blackColor),
+                  ),
+                ),
+                CupertinoDialogAction(
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                            pageBuilder:
+                                ((context, animation, secondaryAnimation) =>
+                                    page_login())));
+                    page_login.id_user = "";
+                    MenuDashboard.nama = "";
+                  },
+                  child: Text('Keluar',
+                      style:
+                          CustomText.TextArvoBold(17, CustomColors.redColor)),
+                ),
+              ],
+            ));
   }
 }

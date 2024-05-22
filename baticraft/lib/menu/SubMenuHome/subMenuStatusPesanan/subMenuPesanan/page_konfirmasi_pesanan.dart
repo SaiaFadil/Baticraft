@@ -431,7 +431,6 @@ class _KonfirmasiPesananState extends State<KonfirmasiPesanan> {
                     } else {
                       processTransaction(widget.transactionId,
                           TglPengambilan.text, TglKadaluarsa.text);
-
                           print(TglPengambilan.text);
                           print(TglKadaluarsa.text);
                       Navigator.pop(context);

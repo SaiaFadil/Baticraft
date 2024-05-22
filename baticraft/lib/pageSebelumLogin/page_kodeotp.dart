@@ -12,7 +12,7 @@ import 'package:baticraft/src/style.dart';
 class page_kodeotp extends StatefulWidget {
   final String email;
   final EmailOTP myauth;
-  page_kodeotp({super.key, required this.email,required this.myauth});
+  page_kodeotp({super.key, required this.email, required this.myauth});
 
   @override
   State<page_kodeotp> createState() => page_kodeotpState();
@@ -24,13 +24,11 @@ class page_kodeotpState extends State<page_kodeotp> {
   bool isKeyboardActive = false;
   bool isWrong = false;
   String errorText = "";
-  
 
-  
   @override
   void initState() {
     print(widget.email);
-   
+
     super.initState();
   }
 
@@ -54,6 +52,7 @@ class page_kodeotpState extends State<page_kodeotp> {
           backgroundColor: CustomColors.secondaryColor,
           body: GestureDetector(
             onTap: () {
+            
               setState(() {
                 isWrong = false;
                 statusKeyboard = "tidak aktif";
@@ -113,22 +112,39 @@ class page_kodeotpState extends State<page_kodeotp> {
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10),
-                                      child: OTPTextField(
-                                        length: 5,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        fieldWidth: 50,
-                                        style: TextStyle(fontSize: 17),
-                                        textFieldAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        fieldStyle: FieldStyle.underline,
-                                        onCompleted: (value) {
+                                    GestureDetector(
+                                        onTap: () {
+                                          if (isKeyboardActive) {
+                                            // Jika keyboard aktif
+                                            _keyboardActiveFunction();
+                                          } else {
+                                            // Jika keyboard tidak aktif
+                                            _keyboardInactiveFunction();
+                                          }
                                           setState(() {
-                                            otp = value;
+                                            isWrong = false;
+                                            statusKeyboard = "aktif";
+                                            isOtpFocused = true;
                                           });
                                         },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: OTPTextField(
+                                          length: 5,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          fieldWidth: 50,
+                                          style: TextStyle(fontSize: 17),
+                                          textFieldAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          fieldStyle: FieldStyle.underline,
+                                          onCompleted: (value) {
+                                            setState(() {
+                                              otp = value;
+                                            });
+                                          }, 
+                                          
+                                        ),
                                       ),
                                     ),
                                     Padding(
@@ -144,8 +160,8 @@ class page_kodeotpState extends State<page_kodeotp> {
                                                   18, CustomColors.whiteColor),
                                             ),
                                             onPressed: () async {
-                                              if (await widget.myauth.verifyOTP(
-                                                      otp: otp) ==
+                                              if (await widget.myauth
+                                                      .verifyOTP(otp: otp) ==
                                                   true) {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
@@ -159,7 +175,9 @@ class page_kodeotpState extends State<page_kodeotp> {
                                                       pageBuilder: (context,
                                                               animation,
                                                               secondaryAnimation) =>
-                                                          page_atur_ulang_sandi(email: widget.email),
+                                                          page_atur_ulang_sandi(
+                                                              email:
+                                                                  widget.email),
                                                     ));
                                                 print("OTP BENAR");
                                               } else {
@@ -208,5 +226,13 @@ class page_kodeotpState extends State<page_kodeotp> {
         ),
       ),
     );
+  }
+
+  void _keyboardActiveFunction() {
+    print('Keyboard aktif');
+  }
+
+  void _keyboardInactiveFunction() {
+    print('Keyboard tidak aktif');
   }
 }

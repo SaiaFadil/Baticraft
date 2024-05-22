@@ -59,7 +59,6 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
         appName: "Baticraft",
         otpLength: 5,
         otpType: OTPType.digitsOnly);
-    showLoadingDialog(context); // Show loading dialog
 
     if (await myauth.sendOTP() == true) {
       print("BERHASIL");
@@ -88,8 +87,9 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
   }
 
   Future<void> checkEmail(String email) async {
+    showLoadingDialog(context);
     final response = await http.post(
-      Server.urlLaravel('checkEmail'), // Ganti dengan URL Laravel Anda
+      Server.urlLaravel('checkEmail'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({"email": email}),
     );
@@ -98,12 +98,14 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
       print("Email : " + emailController.text);
       SendOtp();
     } else if (response.statusCode == 404) {
+      Navigator.pop(context); // Close loading dialog
       setState(() {
         isWrong = true;
         message = 'Email belum terdaftar';
         errorText = "Email Belum Terdaftar!";
       });
     } else {
+      Navigator.pop(context); // Close loading dialog
       setState(() {
         isWrong = true;
         message = 'Gagal memeriksa email';
@@ -134,6 +136,13 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
           backgroundColor: CustomColors.secondaryColor,
           body: GestureDetector(
             onTap: () {
+              if (isKeyboardActive) {
+                // Jika keyboard aktif
+                _keyboardActiveFunction();
+              } else {
+                // Jika keyboard tidak aktif
+                _keyboardInactiveFunction();
+              }
               setState(() {
                 isWrong = false;
                 statusKeyboard = "tidak aktif";
@@ -220,9 +229,17 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
                                         controller: emailController,
                                         focusNode: emailFocusNode,
                                         onTap: () {
+                                          if (isKeyboardActive) {
+                                            // Jika keyboard aktif
+                                            _keyboardActiveFunction();
+                                          } else {
+                                            // Jika keyboard tidak aktif
+                                            _keyboardInactiveFunction();
+                                          }
                                           setState(() {
                                             isWrong = false;
                                             statusKeyboard = "aktif";
+                                            isEmailFocused = true;
                                             emailFocusNode.requestFocus();
                                           });
                                         },
@@ -329,5 +346,13 @@ class _page_lupa_katasandiState extends State<page_lupa_katasandi> {
         ),
       ),
     );
+  }
+
+  void _keyboardActiveFunction() {
+    print('Keyboard aktif');
+  }
+
+  void _keyboardInactiveFunction() {
+    print('Keyboard tidak aktif');
   }
 }

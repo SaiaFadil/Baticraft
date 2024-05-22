@@ -1,4 +1,3 @@
-import 'package:baticraft/src/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 class CustomText {

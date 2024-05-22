@@ -120,7 +120,12 @@ class _MenuDashboardState extends State<MenuDashboard> {
     getDetailInformasi();
     showProduk();
     showPesanan();
-    getDetailUser();
+      print("awal nama" +MenuDashboard.nama);
+      if (MenuDashboard.nama.isEmpty) {
+        getDetailUser();
+      } else {
+        nama = MenuDashboard.nama;
+      }
     setState(() {
       print("idddddd = " + page_login.id_user);
       showProduk();
@@ -336,9 +341,9 @@ class _MenuDashboardState extends State<MenuDashboard> {
                     CustomColors.whiteColor,
                   ),
                 ),
-                detailUser['nama'] != null
+                nama.isNotEmpty
                     ? Text(
-                        detailUser['nama'],
+                      nama,
                         style: CustomText.TextArvoBold(
                           18,
                           CustomColors.whiteColor,
@@ -346,12 +351,12 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         textAlign: TextAlign.start,
                       )
                     : Shimmer.fromColors(
-                        baseColor: Color.fromARGB(255, 104, 102, 102)!,
+                        baseColor: Color.fromARGB(255, 255, 254, 254)!,
                         highlightColor:
                             const Color.fromARGB(255, 202, 200, 200)!,
                         child: Text(
                           'Loading...',
-                          style: CustomText.TextArvo(
+                          style: CustomText.TextArvoBold(
                             14,
                             CustomColors.blackColor,
                           ),
@@ -527,7 +532,7 @@ class _MenuDashboardState extends State<MenuDashboard> {
                       ],
                     ),
                     Visibility(
-                      visible: listPesanan.isNotEmpty? true : false ,
+                      visible: listPesanan.isNotEmpty ? true : false,
                       child: Column(
                         children: [
                           Padding(
@@ -583,8 +588,9 @@ class _MenuDashboardState extends State<MenuDashboard> {
                         ],
                       ),
                     ),
-
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Padding(
                       padding: EdgeInsets.all(0),
                       child: SingleChildScrollView(
