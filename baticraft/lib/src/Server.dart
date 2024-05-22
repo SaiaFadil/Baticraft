@@ -2,6 +2,7 @@ class Server {
 
 
   static String ROUTE = "http://192.168.1.40:8000/";
+  static String ROUTE_HOSTING = "http://https://baticraft.tifnganjuk.com/";
   
   static Uri urlLaravel(url) {
     Uri Server = Uri.parse(ROUTE+"api/MobileApi/" + url); 

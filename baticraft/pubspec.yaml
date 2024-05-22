@@ -1,6 +1,6 @@
 name: baticraft
 description: "Project A1 Semester 4"
-publish_to: 'none'
+# publish_to: 'none'
 version: 1.0.0+1
 
 environment:
@@ -73,8 +73,8 @@ flutter:
       fonts:
         - asset: assets/fonts/Chewy-Regular.ttf
           weight: 700
-# flutter_icons:
-#   remove_alpha_ios: true
-#   android: true
-#   ios: true
-#   image_path: "assets/images/logoapps.png"
+flutter_icons:
+  remove_alpha_ios: true
+  android: true
+  ios: true
+  image_path: "assets/images/logo_baticraft.png"
