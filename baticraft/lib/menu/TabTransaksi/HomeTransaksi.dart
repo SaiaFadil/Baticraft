@@ -22,7 +22,6 @@ class HomeTransaksi extends StatefulWidget {
 
 class _HomeTransaksiState extends State<HomeTransaksi> {
   String _selectedOption = "kain";
-
   String jsonProdukKemeja = "{}";
   String jsonProdukBaju = "{}";
   String jsonProdukKain = "{}";
@@ -30,6 +29,7 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
   List<Map<String, dynamic>> listKemeja = [];
   List<Map<String, dynamic>> listBaju = [];
   List<Map<String, dynamic>> listKain = [];
+
   void clearProductList() {
     setState(() {
       productList.clear();
@@ -49,8 +49,8 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
   }
 
   Future showPencarianKemeja(String searchText) async {
-    final response = await http
-        .post(Server.urlLaravel("searchKemejatr"), body: {'search': searchText});
+    final response = await http.post(Server.urlLaravel("searchKemejatr"),
+        body: {'search': searchText});
     jsonProdukKemeja = response.body.toString();
     setState(() {
       listKemeja =
@@ -72,7 +72,6 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
     print("NAMANYAA " + listBaju[0]['nama']);
     print(jsonProdukBaju);
   }
-
   Future<void> showKemeja() async {
     final response = await http.get(Server.urlLaravel("getProductsKemejatr"));
     jsonProdukKemeja = response.body.toString();
@@ -82,7 +81,6 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
     });
     print(listKemeja[0]['nama']);
   }
-
   Future<void> showKaos() async {
     final response = await http.get(Server.urlLaravel("getProductsKaostr"));
     jsonProdukBaju = response.body.toString();
@@ -91,7 +89,6 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
     });
     print(listBaju[0]['nama']);
   }
-
   Future<void> showKain() async {
     final response = await http.get(Server.urlLaravel("getProductsKaintr"));
     jsonProdukKain = response.body.toString();
@@ -113,84 +110,31 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                 child: Text("Tidak Ada Produk Yang Tersisa",
                     style:
                         CustomText.TextArvoBold(16, CustomColors.blackColor)))
-            :Row(
-          children: List.generate(
-            listKemeja.length,
-            (index) => Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  print("PRINTT "+listKemeja[index].toString());
-                  addProductToList(listKemeja[index]);
-                },
-                child: Container(
-                  width: 170,
-                  child: Card(
-                    surfaceTintColor: CustomColors.whiteColor,
-                    color: CustomColors.whiteColor,
-                    elevation: 10,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          listKemeja[index]['image_path'] == null
-                              ? Shimmer.fromColors(
-                                  baseColor:
-                                      Color.fromARGB(255, 104, 102, 102)!,
-                                  highlightColor:
-                                      const Color.fromARGB(255, 202, 200, 200)!,
-                                  child: Text(
-                                    '...',
-                                    style: CustomText.TextArvo(
-                                      14,
-                                      CustomColors.blackColor,
-                                    ),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                )
-                              : Container(
-                                  child: Image.network(
-                                    fit: BoxFit.fitWidth,
-                                    height: 120,
-                                    Server.urlLaravelImageProduct(
-                                        listKemeja[index]['image_path']),
-                                  ),
-                                ),
-                          Container(
-                              padding: EdgeInsets.symmetric(horizontal: 15),
-                              child: listKemeja.isEmpty
-                                  ? Shimmer.fromColors(
-                                      baseColor:
-                                          Color.fromARGB(255, 104, 102, 102)!,
-                                      highlightColor: const Color.fromARGB(
-                                          255, 202, 200, 200)!,
-                                      child: Text(
-                                        '...',
-                                        style: CustomText.TextArvo(
-                                          14,
-                                          CustomColors.blackColor,
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    )
-                                  : Text(
-                                      listKemeja[index]['nama'],
-                                      style: CustomText.TextArvoBold(
-                                          14, CustomColors.blackColor),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                    )),
-                          Container(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Row(
+            : Row(
+                children: List.generate(
+                  listKemeja.length,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        print("PRINTT " + listKemeja[index].toString());
+                        addProductToList(listKemeja[index]);
+                      },
+                      child: Container(
+                        width: 170,
+                        child: Card(
+                          surfaceTintColor: CustomColors.whiteColor,
+                          color: CustomColors.whiteColor,
+                          elevation: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                listKemeja.isEmpty
+                                listKemeja[index]['image_path'] == null
                                     ? Shimmer.fromColors(
                                         baseColor:
                                             Color.fromARGB(255, 104, 102, 102)!,
@@ -205,28 +149,84 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                                           textAlign: TextAlign.start,
                                         ),
                                       )
-                                    : Text(
-                                        "Rp." +
-                                            listKemeja[index]['harga']
-                                                .toString(),
-                                        style: CustomText.TextArvoBold(
-                                            12, CustomColors.blackColor)),
+                                    : Container(
+                                        child: Image.network(
+                                          fit: BoxFit.fitWidth,
+                                          height: 120,
+                                          Server.urlLaravelImageProduct(
+                                              listKemeja[index]['image_path']),
+                                        ),
+                                      ),
+                                Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 15),
+                                    child: listKemeja.isEmpty
+                                        ? Shimmer.fromColors(
+                                            baseColor: Color.fromARGB(
+                                                255, 104, 102, 102)!,
+                                            highlightColor:
+                                                const Color.fromARGB(
+                                                    255, 202, 200, 200)!,
+                                            child: Text(
+                                              '...',
+                                              style: CustomText.TextArvo(
+                                                14,
+                                                CustomColors.blackColor,
+                                              ),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                          )
+                                        : Text(
+                                            listKemeja[index]['nama'],
+                                            style: CustomText.TextArvoBold(
+                                                14, CustomColors.blackColor),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.center,
+                                          )),
+                                Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      listKemeja.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: Color.fromARGB(
+                                                  255, 104, 102, 102)!,
+                                              highlightColor:
+                                                  const Color.fromARGB(
+                                                      255, 202, 200, 200)!,
+                                              child: Text(
+                                                '...',
+                                                style: CustomText.TextArvo(
+                                                  14,
+                                                  CustomColors.blackColor,
+                                                ),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            )
+                                          : Text(
+                                              "Rp." +
+                                                  listKemeja[index]['harga']
+                                                      .toString(),
+                                              style: CustomText.TextArvoBold(
+                                                  12, CustomColors.blackColor)),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
-                          )
-                        ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }
-
   Widget KumpulanKaos() {
     return Container(
       height: 230,
@@ -239,83 +239,30 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                 child: Text("Tidak Ada Produk Yang Tersisa",
                     style:
                         CustomText.TextArvoBold(16, CustomColors.blackColor)))
-            :Row(
-          children: List.generate(
-            listBaju.length,
-            (index) => Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  addProductToList(listBaju[index]);
-                },
-                child: Container(
-                  width: 170,
-                  child: Card(
-                    surfaceTintColor: CustomColors.whiteColor,
-                    color: CustomColors.whiteColor,
-                    elevation: 10,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          listBaju[index]['image_path'] == null
-                              ? Shimmer.fromColors(
-                                  baseColor:
-                                      Color.fromARGB(255, 104, 102, 102)!,
-                                  highlightColor:
-                                      const Color.fromARGB(255, 202, 200, 200)!,
-                                  child: Text(
-                                    '...',
-                                    style: CustomText.TextArvo(
-                                      14,
-                                      CustomColors.blackColor,
-                                    ),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                )
-                              : Container(
-                                  child: Image.network(
-                                    fit: BoxFit.fitWidth,
-                                    height: 120,
-                                    Server.urlLaravelImageProduct(
-                                        listBaju[index]['image_path']),
-                                  ),
-                                ),
-                          Container(
-                              padding: EdgeInsets.symmetric(horizontal: 15),
-                              child: listBaju.isEmpty
-                                  ? Shimmer.fromColors(
-                                      baseColor:
-                                          Color.fromARGB(255, 104, 102, 102)!,
-                                      highlightColor: const Color.fromARGB(
-                                          255, 202, 200, 200)!,
-                                      child: Text(
-                                        '...',
-                                        style: CustomText.TextArvo(
-                                          14,
-                                          CustomColors.blackColor,
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    )
-                                  : Text(
-                                      listBaju[index]['nama'],
-                                      style: CustomText.TextArvoBold(
-                                          14, CustomColors.blackColor),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                    )),
-                          Container(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Row(
+            : Row(
+                children: List.generate(
+                  listBaju.length,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        addProductToList(listBaju[index]);
+                      },
+                      child: Container(
+                        width: 170,
+                        child: Card(
+                          surfaceTintColor: CustomColors.whiteColor,
+                          color: CustomColors.whiteColor,
+                          elevation: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                listBaju.isEmpty
+                                listBaju[index]['image_path'] == null
                                     ? Shimmer.fromColors(
                                         baseColor:
                                             Color.fromARGB(255, 104, 102, 102)!,
@@ -330,27 +277,84 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                                           textAlign: TextAlign.start,
                                         ),
                                       )
-                                    : Text(
-                                        "Rp." +
-                                            listBaju[index]['harga'].toString(),
-                                        style: CustomText.TextArvoBold(
-                                            12, CustomColors.blackColor)),
+                                    : Container(
+                                        child: Image.network(
+                                          fit: BoxFit.fitWidth,
+                                          height: 120,
+                                          Server.urlLaravelImageProduct(
+                                              listBaju[index]['image_path']),
+                                        ),
+                                      ),
+                                Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 15),
+                                    child: listBaju.isEmpty
+                                        ? Shimmer.fromColors(
+                                            baseColor: Color.fromARGB(
+                                                255, 104, 102, 102)!,
+                                            highlightColor:
+                                                const Color.fromARGB(
+                                                    255, 202, 200, 200)!,
+                                            child: Text(
+                                              '...',
+                                              style: CustomText.TextArvo(
+                                                14,
+                                                CustomColors.blackColor,
+                                              ),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                          )
+                                        : Text(
+                                            listBaju[index]['nama'],
+                                            style: CustomText.TextArvoBold(
+                                                14, CustomColors.blackColor),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.center,
+                                          )),
+                                Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      listBaju.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: Color.fromARGB(
+                                                  255, 104, 102, 102)!,
+                                              highlightColor:
+                                                  const Color.fromARGB(
+                                                      255, 202, 200, 200)!,
+                                              child: Text(
+                                                '...',
+                                                style: CustomText.TextArvo(
+                                                  14,
+                                                  CustomColors.blackColor,
+                                                ),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            )
+                                          : Text(
+                                              "Rp." +
+                                                  listBaju[index]['harga']
+                                                      .toString(),
+                                              style: CustomText.TextArvoBold(
+                                                  12, CustomColors.blackColor)),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
-                          )
-                        ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }
-
   Widget KumpulanKain() {
     return Container(
       height: 230,
@@ -491,22 +495,38 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
 
 // Fungsi untuk menambahkan produk ke dalam list produk
   void addProductToList(Map<dynamic, dynamic> productData) {
-    bool isProductExist = productList
-        .any((product) => product.id == productData['id'].toString());
-
-    if (!isProductExist) {
-      Products newProduct = Products(
-        id: productData['id'].toString(),
-        image: productData['image_path'].toString(),
-        name: productData['nama'],
-        price: productData['harga'],
-        quantity: 1, // Jumlah awal produk adalah 1
+    try {
+      bool isProductExist = productList
+          .any((product) => product.id == productData['id'].toString());
+// 
+      if (!isProductExist) {
+        Products newProduct = Products(
+          id: productData['id'].toString(),
+          image: productData['image_path'].toString(),
+          name: productData['nama'],
+          price: int.parse(productData['harga'].toString()),
+          quantity: 1,
+        );
+        productList.add(newProduct);
+        calculateTotalPrice();
+        setState(() {});
+      } else {
+        print('Produk sudah ada dalam list');
+      }
+    } catch (e) {
+      print(e);
+      print(
+        productData['image_path'].toString(),
       );
-      productList.add(newProduct);
-      calculateTotalPrice(); // Hitung total harga setelah menambah produk baru
-      setState(() {}); // Perbarui widget setelah penambahan produk
-    } else {
-      print('Produk sudah ada dalam list');
+      print(
+        productData['nama'],
+      );
+      print(
+        productData['harga'],
+      );
+      print(
+        productData['id'].toString(),
+      );
     }
   }
 
@@ -576,38 +596,28 @@ class _HomeTransaksiState extends State<HomeTransaksi> {
                                             Radius.circular(10),
                                           ),
                                         ),
-                                        child: productList[index]
-                                                      .image  
-                                                       == null
-                                                  ? Shimmer.fromColors(
-                                                      baseColor: Color.fromARGB(
-                                                          255, 104, 102, 102)!,
-                                                      highlightColor:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              202,
-                                                              200,
-                                                              200)!,
-                                                      child: Text(
-                                                        '...',
-                                                        style:
-                                                            CustomText.TextArvo(
-                                                          14,
-                                                          CustomColors
-                                                              .blackColor,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                      ),
-                                                    )
-                                                  : Image.network(
-                                                      fit: BoxFit.fitWidth,
-                                                      height: 120,
-                                                      Server
-                                                          .urlLaravelImageProduct(
-                                                              productList[index]
-                                                                  .image),
-                                                    ),
+                                        child: productList[index].image == null
+                                            ? Shimmer.fromColors(
+                                                baseColor: Color.fromARGB(
+                                                    255, 104, 102, 102)!,
+                                                highlightColor:
+                                                    const Color.fromARGB(
+                                                        255, 202, 200, 200)!,
+                                                child: Text(
+                                                  '...',
+                                                  style: CustomText.TextArvo(
+                                                    14,
+                                                    CustomColors.blackColor,
+                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                              )
+                                            : Image.network(
+                                                fit: BoxFit.fitWidth,
+                                                height: 120,
+                                                Server.urlLaravelImageProduct(
+                                                    productList[index].image),
+                                              ),
                                       ),
                                     ),
                                     Column(

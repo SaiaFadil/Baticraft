@@ -21,6 +21,7 @@ class _RiwayatTolakState extends State<RiwayatTolak> {
   List<Map<String, dynamic>> listRiwayat = [];
   final TextEditingController cariController = TextEditingController();
   Future<void> showRiwayat() async {
+
     final response =
         await http.get(Server.urlLaravel("showRiwayatTolak"));
     jsonProdukRiwayat = response.body.toString();
@@ -29,6 +30,7 @@ class _RiwayatTolakState extends State<RiwayatTolak> {
           List<Map<String, dynamic>>.from(json.decode(jsonProdukRiwayat));
       print("id nya = " + listRiwayat[0]['id'].toString());
     });
+    print(listRiwayat[0]['created_at']);
   }
 
   @override
@@ -49,12 +51,19 @@ class _RiwayatTolakState extends State<RiwayatTolak> {
     print(jsonProdukRiwayat);
   }
 
+  
   String formatTanggal(String tanggal) {
-    // Memecah tanggal menjadi bagian-bagian
-    List<String> parts = tanggal.split(' ')[0].split('-');
-    // Menggabungkan bagian-bagian tersebut dalam format yang diinginkan
-    return '${parts[2]}/${parts[1]}/${parts[0]}';
-  }
+  // Parse the date string into a DateTime object
+  DateTime dateTime = DateTime.parse(tanggal);
+
+  // Extract the day, month, and year
+  String day = dateTime.day.toString().padLeft(2, '0');
+  String month = dateTime.month.toString().padLeft(2, '0');
+  String year = dateTime.year.toString();
+
+  // Format the date as dd/mm/yyyy
+  return '$day/$month/$year';
+}
 
   int nomor = 1;
   Widget KumpulanRiwayat() {
@@ -105,7 +114,7 @@ class _RiwayatTolakState extends State<RiwayatTolak> {
                               ),
                               Text(
                                 formatTanggal(
-                                    listRiwayat[index]['tanggal_konfirmasi']),
+                                    listRiwayat[index]['created_at']),
                                 textAlign: TextAlign.left,
                                 style: CustomText.TextArvoBold(
                                     14, CustomColors.blackColor),

@@ -40,7 +40,8 @@ class _list_pesananState extends State<list_pesanan> {
   }
 
   Future showPencarian(String searchText) async {
-    final response = await http.post(Server.urlLaravel("getCariTransactionData"),
+    final response = await http.post(
+        Server.urlLaravel("getCariTransactionData"),
         body: {'search': searchText});
     jsonProdukUser = response.body.toString();
     setState(() {
@@ -138,17 +139,22 @@ class _list_pesananState extends State<list_pesanan> {
                                             ),
                                             Text(
                                               listPesanan[index]
-                                                  ['kode_transaksi']== null?"":listPesanan[index]
-                                                  ['kode_transaksi'].toString(),
+                                                          ['kode_transaksi'] ==
+                                                      null
+                                                  ? ""
+                                                  : listPesanan[index]
+                                                          ['kode_transaksi']
+                                                      .toString(),
                                               style: CustomText.TextArvoBold(
                                                   12, CustomColors.blackColor),
                                             ),
                                           ],
                                         ),
                                         Text(
-                                          listPesanan[index]
-                                                  ['tanggal']== null?"":listPesanan[index]
-                                                  ['tanggal'].toString(),
+                                          listPesanan[index]['tanggal'] == null
+                                              ? ""
+                                              : listPesanan[index]['tanggal']
+                                                  .toString(),
                                           style: CustomText.TextArvoBold(
                                               12, CustomColors.blackColor),
                                         ),
@@ -163,8 +169,7 @@ class _list_pesananState extends State<list_pesanan> {
                                       children: [
                                         Row(
                                           children: [
-                                            listPesanan[index]['image']
-                                                    != null
+                                            listPesanan[index]['image'] != null
                                                 ? CircleAvatar(
                                                     radius:
                                                         22, // Ubah ukuran avatar
@@ -189,9 +194,12 @@ class _list_pesananState extends State<list_pesanan> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  listPesanan[index]
-                                                  ['nama']== null?"":listPesanan[index]
-                                                  ['nama'].toString(),
+                                                  listPesanan[index]['nama'] ==
+                                                          null
+                                                      ? ""
+                                                      : listPesanan[index]
+                                                              ['nama']
+                                                          .toString(),
                                                   maxLines: 1,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -204,16 +212,19 @@ class _list_pesananState extends State<list_pesanan> {
                                                 Container(
                                                   width: 200,
                                                   child: Text(
-                                                    
-                                                    listPesanan[index]
-                                                    ['nama_barang']== null?"":listPesanan[index]
-                                                    ['nama_barang'].toString(),
-                                                    
-                                                    
+                                                    listPesanan[index][
+                                                                'nama_barang'] ==
+                                                            null
+                                                        ? ""
+                                                        : listPesanan[index]
+                                                                ['nama_barang']
+                                                            .toString(),
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    style: CustomText.TextArvo(12,
-                                                        CustomColors.blackColor),
+                                                    style: CustomText.TextArvo(
+                                                        12,
+                                                        CustomColors
+                                                            .blackColor),
                                                   ),
                                                 ),
                                               ],
@@ -228,6 +239,7 @@ class _list_pesananState extends State<list_pesanan> {
                                               String id = listPesanan[index]
                                                       ['id']
                                                   .toString();
+                                              print("id : "+id);
                                               Navigator.pushReplacement(
                                                 context,
                                                 PageRouteBuilder(
@@ -243,8 +255,8 @@ class _list_pesananState extends State<list_pesanan> {
                                                           catatanCustomer: listPesanan[
                                                                           index]
                                                                       [
-                                                                      'catatan_customer']
-                                                                  == null
+                                                                      'catatan_customer'] ==
+                                                                  null
                                                               ? "Tidak ada catatan"
                                                               : listPesanan[
                                                                       index][
@@ -273,14 +285,14 @@ class _list_pesananState extends State<list_pesanan> {
                             ),
                           ),
                         ))
-              : Center(child: Text(
-                                                  "BELUM ADA PESANAN ",
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: CustomText.TextArvo(12,
-                                                      CustomColors.blackColor),
-                                                ),)
+              : Center(
+                  child: Text(
+                    "BELUM ADA PESANAN ",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: CustomText.TextArvo(12, CustomColors.blackColor),
+                  ),
+                )
         ]),
       ),
     );

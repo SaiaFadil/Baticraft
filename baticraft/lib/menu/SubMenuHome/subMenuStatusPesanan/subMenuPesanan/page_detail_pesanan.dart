@@ -39,6 +39,7 @@ class DetailPesanan extends StatelessWidget {
   // Fungsi untuk memformat tanggal ke dalam format dd/mm/yyyy
   String formatTanggal(String tanggal) {
     // Memecah tanggal menjadi bagian-bagian
+
     List<String> parts = tanggal.split(' ')[0].split('-');
     // Menggabungkan bagian-bagian tersebut dalam format yang diinginkan
     return '${parts[2]}/${parts[1]}/${parts[0]}';
@@ -61,7 +62,12 @@ class DetailPesanan extends StatelessWidget {
             textAlign: TextAlign.center),
         leading: IconButton(
           onPressed: () {
-            Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => StatusPesanan(),));
+            Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      StatusPesanan(),
+                ));
           },
           icon: Icon(Icons.arrow_back_ios),
           color: CustomColors.threertyColor,
@@ -76,6 +82,7 @@ class DetailPesanan extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
+            print(snapshot.error);
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             Map<String, dynamic> transaction = snapshot.data!;
@@ -143,15 +150,16 @@ class DetailPesanan extends StatelessWidget {
                           ),
                           Text(
                               transaction['created_at'].toString().isEmpty
-                                  ? formatTanggal(
-                                          "${transaction['created_at']}") +
-                                      "       " +
-                                      formatJam("${transaction['created_at']}")
-                                  : formatTanggal(
-                                          "${transaction['tanggal_konfirmasi']}") +
-                                      "       " +
-                                      formatJam(
-                                          "${transaction['tanggal_konfirmasi']}"),
+                                  ? "00:00:00" + "       " + "00:00:00"
+                                  : transaction['created_at'] == null
+                                      ? "00/00/0000"
+                                      : formatTanggal("${transaction['created_at']}") +
+                                                  "       " +(
+                                                  transaction['created_at'] ==
+                                              null
+                                          ? "00:00:00"
+                                          : formatJam(
+                                              "${transaction['created_at']}")),
                               style: CustomText.TextArvoBold(
                                   14, CustomColors.blackColor)),
                           SizedBox(

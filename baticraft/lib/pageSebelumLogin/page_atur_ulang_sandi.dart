@@ -480,15 +480,7 @@ class KonfirmasiAturUlang extends StatelessWidget {
                                       20, CustomColors.blackColor),
                                 ),
                               ),
-                              Container(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Text(
-                                  "Kata sandi anda berhasil di ubah\nSilahkan masuk ke akun anda",
-                                  style: CustomText.TextArvo(
-                                      18, CustomColors.blackColor),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
+                             
                               Container(
                                 padding: EdgeInsets.only(top: 10),
                                 child: Text(

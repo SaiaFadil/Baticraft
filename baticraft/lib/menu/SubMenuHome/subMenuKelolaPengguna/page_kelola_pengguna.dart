@@ -30,12 +30,7 @@ class _KelolaPenggunaState extends State<KelolaPengguna> {
     });
   }
 
-  @override
-  void initState() {
-    showData("admin");
-    // TODO: implement initState
-    super.initState();
-  }
+  
 
   Future showPencarian(String searchText, String nama) async {
     final response = await http.post(Server.urlLaravel("getCariPengguna"),
@@ -46,7 +41,12 @@ class _KelolaPenggunaState extends State<KelolaPengguna> {
     });
     print(jsonProdukUser);
   }
-
+@override
+  void initState() {
+    showData("admin");
+    // TODO: implement initState
+    super.initState();
+  }
   bool admin = true;
   bool customer = false;
   Color active = CustomColors.threertyColor;

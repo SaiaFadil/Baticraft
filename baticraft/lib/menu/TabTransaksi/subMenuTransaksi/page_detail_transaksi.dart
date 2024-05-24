@@ -57,7 +57,7 @@ class _detail_transaksiState extends State<detail_transaksi> {
     final transactionData = {
       'kode_transaksi': KodeTransaksi,
       'user_id': page_login.id_user,
-      'kasir': MenuDashboard.nama,
+      'kasir': page_login.id_user,
       'jenis_transaksi': 'langsung',
       'total_item': products.length,
       'total_harga': HomeTransaksi.totalPrice,

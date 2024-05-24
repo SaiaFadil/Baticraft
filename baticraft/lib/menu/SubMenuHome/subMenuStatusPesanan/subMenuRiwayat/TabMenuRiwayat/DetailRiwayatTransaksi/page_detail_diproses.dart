@@ -35,7 +35,7 @@ class _DetailDiprosesState extends State<DetailDiproses> {
         id: productData['id'].toString(),
         image: productData['image_path'].toString(),
         name: productData['nama_product'],
-        price: productData['harga_total'],
+        price: int.parse(productData['harga_total'].toString()),
         quantity: 1, // Jumlah awal produk adalah 1
       );
       productList.add(newProduct);
@@ -339,7 +339,7 @@ class _DetailDiprosesState extends State<DetailDiproses> {
             Map<String, dynamic> transaction = snapshot.data!;
             List<dynamic> details = transaction['details'];
 
-            totalHarga = transaction['total_harga'];
+            totalHarga = int.parse(transaction['total_harga']);
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,

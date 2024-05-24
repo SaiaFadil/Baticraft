@@ -205,6 +205,7 @@ class page_kodeotpState extends State<page_kodeotp> {
                                           _keyboardInactiveFunction();
                                         }
                                         setState(() {
+                                          isOtpFocused = true;
                                           isWrong = false;
                                           statusKeyboard = "aktif";
                                           isOtpFocused = true;
